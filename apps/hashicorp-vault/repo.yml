@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hashicorp-vault
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -17,8 +22,9 @@ spec:
     spec:
       chart: hashicorp/vault
       version: 0.31.0
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: hashicorp-vault-repo
-        namespace: hashicorp-vault
   interval: 1m0s
+  

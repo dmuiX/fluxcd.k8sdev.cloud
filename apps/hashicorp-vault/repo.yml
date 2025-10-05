@@ -1,0 +1,24 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: hashicorp-vault-repo
+  namespace: hashicorp-vault
+spec:
+  interval: 1m0s
+  url: https://helm.releases.hashicorp.com
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hashicorp-vault-release
+  namespace: hashicorp-vault
+spec:
+  chart:
+    spec:
+      chart: vault
+      sourceRef:
+        kind: HelmRepository
+        name: hashicorp-vault-repo
+        namespace: hashicorp-vault
+      version: 0.31.0
+  interval: 1m0s

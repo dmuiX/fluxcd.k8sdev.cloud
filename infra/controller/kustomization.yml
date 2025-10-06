@@ -4,3 +4,4 @@ resources:
   - cert-manager.yml
   - cilium.yml
   - longhorn.yml
+  - external-secrets.yml

@@ -4,3 +4,4 @@ resources:
   - cluster-issuer.yml
   - addresspool.yml
   - ciliuml2policy.yml
+  - hubble-gateway.yml

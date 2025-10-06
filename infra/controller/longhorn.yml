@@ -29,9 +29,9 @@ spec:
   values:
     defaultSettings:
       defaultDataPath: /var/lib/longhorn
-      defaultReplicaCount: 2 # You have 2 workers
-      createDefaultDiskLabeledNodes: false # Manual node selection
-      guaranteedInstanceManagerCPU: 12
+      defaultReplicaCount: "2"  # You have 2 workers
+      createDefaultDiskLabeledNodes: false  # Manual node selection
+      guaranteedInstanceManagerCPU: "12"
 
     persistence:
       defaultClass: true

@@ -1,0 +1,62 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: external-dns
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://kubernetes-sigs.github.io/external-dns/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  timeout: 5m0s
+  releaseName: external-dns
+  targetNamespace: external-dns
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.19.0
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+      interval: 1m0s
+  values:
+    domainFilters:
+      - k8sdev.cloud
+    sources:
+      - gateway-tlsroute
+      - gateway-httproute
+      - gateway-udproute
+    logLevel: debug
+    txtPrefix: external-dns
+    provider: cloudflare
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-token
+            key: token
+    serviceMonitor:
+      enabled: true
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+    ignoreFailures: true
+  driftDetection:
+    mode: enabled
+    ignore:
+      - paths: ["/spec/replicas"]
+  dependsOn:
+    - name: cilium

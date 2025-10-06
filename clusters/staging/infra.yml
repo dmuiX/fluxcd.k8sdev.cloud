@@ -21,7 +21,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: infra-controllers
+  - name: infra-controller
   interval: 1m0s
   sourceRef:
     kind: GitRepository

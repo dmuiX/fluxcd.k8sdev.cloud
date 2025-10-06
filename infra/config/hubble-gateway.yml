@@ -4,12 +4,19 @@ kind: Gateway
 metadata:
   name: hubble-gateway
   namespace: cilium
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: hubble.k8sdev.cloud
 spec:
   gatewayClassName: cilium
   listeners:
-    - protocol: HTTP
-      port: 80
-      name: hubble-web
+    - protocol: HTTPS
+      port: 443
+      name: hubble-https
+      tls:
+        certificateRefs:
+          - name: hubble-tls
+            kind: Secret
       allowedRoutes:
         namespaces:
           from: Same

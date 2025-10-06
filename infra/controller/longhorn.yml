@@ -1,0 +1,45 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: longhorn
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://charts.longhorn.io
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: longhorn
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  timeout: 5m0s
+  releaseName: longhorn
+  targetNamespace: longhorn
+  chart:
+    spec:
+      chart: longhorn
+      version: 1.10.0
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+      interval: 1m0s
+  values:
+    service.ui.type: LoadBalancer
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+    ignoreFailures: true
+  driftDetection:
+    mode: enabled
+    ignore:
+      - paths: ["/spec/replicas"]
+

@@ -27,7 +27,35 @@ spec:
         name: longhorn
       interval: 1m0s
   values:
-    service.ui.type: LoadBalancer
+    defaultSettings:
+      defaultDataPath: /var/lib/longhorn
+      defaultReplicaCount: 2 # You have 2 workers
+      createDefaultDiskLabeledNodes: false # Manual node selection
+      guaranteedInstanceManagerCPU: 12
+
+    persistence:
+      defaultClass: true
+      defaultClassReplicaCount: 2 # Match worker count
+      reclaimPolicy: Retain
+
+    service:
+      ui:
+        type: ClusterIP
+
+    # Schedule Longhorn manager ONLY on worker nodes
+    longhornManager:
+      nodeSelector:
+        node-role.kubernetes.io/worker: "worker"
+
+    # Schedule Longhorn driver ONLY on worker nodes
+    longhornDriver:
+      nodeSelector:
+        node-role.kubernetes.io/worker: "worker"
+
+    # Schedule Longhorn UI ONLY on worker nodes
+    longhornUI:
+      nodeSelector:
+        node-role.kubernetes.io/worker: "worker"
   install:
     createNamespace: true
     remediation:
@@ -42,4 +70,3 @@ spec:
     mode: enabled
     ignore:
       - paths: ["/spec/replicas"]
-

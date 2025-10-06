@@ -5,3 +5,4 @@ resources:
   - addresspool.yml
   - ciliuml2policy.yml
   - hubble-gateway.yml
+  - longhorn-gateway.yml

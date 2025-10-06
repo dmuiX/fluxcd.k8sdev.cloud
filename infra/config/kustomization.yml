@@ -6,3 +6,4 @@ resources:
   - ciliuml2policy.yml
   - hubble-gateway.yml
   - longhorn-gateway.yml
+  - cluster-secretstore.yml

@@ -1,4 +1,13 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: longhorn
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -29,35 +38,28 @@ spec:
   values:
     defaultSettings:
       defaultDataPath: /var/lib/longhorn
-      defaultReplicaCount: "2"  # You have 2 workers
-      createDefaultDiskLabeledNodes: false  # Manual node selection
+      defaultReplicaCount: "2"
+      createDefaultDiskLabeledNodes: "false"
       guaranteedInstanceManagerCPU: "12"
 
     persistence:
       defaultClass: true
-      defaultClassReplicaCount: 2 # Match worker count
+      defaultClassReplicaCount: 2
       reclaimPolicy: Retain
-
     service:
       ui:
         type: ClusterIP
-
-    # Schedule Longhorn manager ONLY on worker nodes
     longhornManager:
       nodeSelector:
         node-role.kubernetes.io/worker: "worker"
-
-    # Schedule Longhorn driver ONLY on worker nodes
     longhornDriver:
       nodeSelector:
         node-role.kubernetes.io/worker: "worker"
-
-    # Schedule Longhorn UI ONLY on worker nodes
     longhornUI:
       nodeSelector:
         node-role.kubernetes.io/worker: "worker"
   install:
-    createNamespace: true
+    createNamespace: false # Namespace created separately with PSA labels
     remediation:
       retries: 3
   upgrade:

@@ -31,8 +31,14 @@ spec:
       ha:
         enabled: true
         replicas: 5
+      dataStorage:
+        storageClass: longhorn
+      auditStorage:
+        storageClass: longhorn
     ui:
       enabled: true
+    storage:
+      type: longhorn
   install:
     createNamespace: true
     remediation:

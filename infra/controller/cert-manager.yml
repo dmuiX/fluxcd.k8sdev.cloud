@@ -21,9 +21,10 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cert-manager
-      createNamespace: true
       interval: 1m0s
+      targetNamespace: cert-manager
       install:
+        createNamespace: true
         remediation:
           retries: 3
       upgrade:
@@ -31,4 +32,3 @@ spec:
           retries: 3
   values:
     installCRDs: true
-    

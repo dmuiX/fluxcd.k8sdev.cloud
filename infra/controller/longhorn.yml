@@ -71,3 +71,6 @@ spec:
     mode: enabled
     ignore:
       - paths: ["/spec/replicas"]
+  dependsOn:
+    - name: cilium
+    - name: cert-manager

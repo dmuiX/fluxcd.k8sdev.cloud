@@ -30,7 +30,7 @@ spec:
   chart:
     spec:
       chart: longhorn
-      version: 1.10.0
+      version: 1.9.2
       sourceRef:
         kind: HelmRepository
         name: longhorn
@@ -41,7 +41,6 @@ spec:
       defaultReplicaCount: "2"
       createDefaultDiskLabeledNodes: "false"
       guaranteedInstanceManagerCPU: "12"
-
     persistence:
       defaultClass: true
       defaultClassReplicaCount: 2

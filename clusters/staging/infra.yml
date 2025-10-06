@@ -30,7 +30,6 @@ spec:
     name: flux-system
   path: infra/config
   prune: true
-
   patches:
     - patch: |
         - op: replace

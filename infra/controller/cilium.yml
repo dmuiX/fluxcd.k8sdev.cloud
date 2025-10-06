@@ -27,34 +27,76 @@ spec:
         name: cilium
       interval: 1m0s
   values:
-    ipam.mode: "kubernetes"
-    securityContext.capabilities.ciliumAgent: "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
-    securityContext.capabilities.cleanCiliumState: "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
-    cgroup.autoMount.enabled: "false"
-    cgroup.hostRoot: "/sys/fs/cgroup"
-    sysctlfix.enabled: "false"
-    hubble.metrics.enabled: "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction}"
-    installCRDs: "true"
-    externalIPs.enabled: "true"
-    gatewayAPI.enabled: "true"
-    gatewayAPI.enableAlpn: "true"
-    gatewayAPI.enableAppProtocol: "true"
-    gatewayAPI.secretsNamespace.name: "cilium"
-    k8sServiceHost: "localhost"
-    k8sServicePort: "7445"
-    envoy.enabled: "true"
-    envoyConfig.enabled: "true"
-    envoyConfig.secretsNamespace.name: "cilium"
-    l2announcements.enabled: "true"
-    l2podAnnouncements.enabled: "true"
-    l2podAnnouncements.interface: "ens3"
-    loadBalancer.l7.backend: "envoy"
-    debug.enabled: "true"
-    debug.verbose: "flow"
-    hubble.enabled: "true"
-    hubble.relay.enabled: "true"
-    hubble.ui.enabled: "true"
-    kubeProxyReplacement: "true"
+    ipam:
+      mode: kubernetes
+    securityContext:
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
+    cgroup:
+      autoMount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
+    kubeProxyReplacement: true
+    k8sServiceHost: localhost
+    k8sServicePort: 7445
+    sysctlfix:
+      enabled: false
+    installCRDs: true
+    externalIPs:
+      enabled: true
+    gatewayAPI:
+      enabled: true
+      enableAlpn: true
+      enableAppProtocol: true
+      secretsNamespace:
+        name: cilium
+    envoy:
+      enabled: true
+    envoyConfig:
+      enabled: true
+      secretsNamespace:
+        name: cilium
+    l2announcements:
+      enabled: true
+    l2podAnnouncements:
+      enabled: true
+      interface: ens3
+    loadBalancer:
+      l7:
+        backend: envoy
+    debug:
+      enabled: true
+      verbose: flow
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+      metrics:
+        enabled:
+          - dns
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - "httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction"
   install:
     createNamespace: true
     remediation:

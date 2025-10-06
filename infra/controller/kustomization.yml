@@ -5,3 +5,4 @@ resources:
   - cilium.yml
   - longhorn.yml
   - external-secrets.yml
+  - openbao.yml

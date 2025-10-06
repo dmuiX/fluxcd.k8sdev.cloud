@@ -1,0 +1,23 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterExternalSecret
+metadata:
+  name: cloudflare-token-extsecret
+spec:
+  externalSecretSpec:
+    refreshInterval: 15s
+    secretStoreRef:
+      kind: ClusterSecretStore
+      name: openbao-backend
+    target:
+      name: cloudflare-token
+    dataFrom:
+    - extract:
+        key: cloudflare-token
+  namespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values:
+          - cert-manager
+          - external-dns

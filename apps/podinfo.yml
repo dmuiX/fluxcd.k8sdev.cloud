@@ -29,7 +29,7 @@ spec:
   targetNamespace: podinfo
   install:
     remediation:
-      retrie: 3
+      retries: 3
     createNamespace: true
   upgrade:
     remediation:

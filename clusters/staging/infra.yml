@@ -23,17 +23,19 @@ spec:
   dependsOn:
     - name: infra-controller
   interval: 1m0s
+  retryInterval: 1m0s
+  timeout: 5m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
   path: infra/config
   prune: true
-  timeout: 5m0s
+
   patches:
     - patch: |
-          - op: replace
-            path: /spec/acme/server
-            value: https://acme-staging-v02.api.letsencrypt.org/directory
+        - op: replace
+          path: /spec/acme/server
+          value: https://acme-staging-v02.api.letsencrypt.org/directory
       target:
         kind: ClusterIssuer
         name: letsencrypt

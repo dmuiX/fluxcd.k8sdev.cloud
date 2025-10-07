@@ -7,3 +7,5 @@ resources:
   - longhorn.yml
   - external-secrets.yml
   - openbao.yml
+  - headlamp.yml
+

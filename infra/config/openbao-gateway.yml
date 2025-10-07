@@ -37,4 +37,4 @@ spec:
             value: /
       backendRefs:
         - name: openbao-frontend
-          port: 80
+          port: 8200

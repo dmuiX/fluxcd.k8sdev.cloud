@@ -31,6 +31,9 @@ spec:
       ha:
         enabled: true
         replicas: 5
+        raft:
+          enabled: true
+          setNodeId: true
       dataStorage:
         storageClass: longhorn
       auditStorage:

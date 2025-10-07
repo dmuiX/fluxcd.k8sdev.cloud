@@ -8,4 +8,4 @@ resources:
   - external-secrets.yml
   - openbao.yml
   - headlamp.yml
-
+  - kube-prometheus-stack.yml

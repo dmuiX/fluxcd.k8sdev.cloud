@@ -7,3 +7,6 @@ resources:
   - hubble-gateway.yml
   - longhorn-gateway.yml
   - cluster-secretstore.yml
+  - openbao-gateway.yml
+  - prometheus-gateway.yml
+  - grafana-gateway.yml

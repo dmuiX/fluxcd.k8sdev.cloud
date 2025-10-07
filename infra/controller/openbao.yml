@@ -30,7 +30,7 @@ spec:
     server:
       ha:
         enabled: true
-        replicas: 5
+        replicas: 2
         raft:
           enabled: true
           setNodeId: true

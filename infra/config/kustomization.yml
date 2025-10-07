@@ -1,12 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - cluster-issuer.yml
   - addresspool.yml
   - ciliuml2policy.yml
+  - cloudflare-token.yml
+  - cluster-issuer.yml
+  - cluster-secretstore.yml
+  - grafana-gateway.yml
   - hubble-gateway.yml
   - longhorn-gateway.yml
-  - cluster-secretstore.yml
   - openbao-gateway.yml
   - prometheus-gateway.yml
-  - grafana-gateway.yml

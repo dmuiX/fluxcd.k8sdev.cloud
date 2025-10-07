@@ -2,10 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - cert-manager.yml
-  - external-dns.yml
   - cilium.yml
-  - longhorn.yml
+  - external-dns.yml
   - external-secrets.yml
-  - openbao.yml
   - headlamp.yml
   - kube-prometheus-stack.yml
+  - longhorn.yml
+  - openbao.yml

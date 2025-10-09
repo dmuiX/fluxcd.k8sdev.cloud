@@ -49,9 +49,6 @@ spec:
   upgrade:
     remediation:
       retries: 3
-  test:
-    enable: true
-    ignoreFailures: true
   driftDetection:
     mode: enabled
     ignore:

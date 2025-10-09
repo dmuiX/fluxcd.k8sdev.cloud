@@ -27,7 +27,12 @@ spec:
         name: cert-manager
       interval: 1m0s
   values:
-    installCRDs: true
+    crds:
+      enabled: true
+    replicaCount: 2
+    podDisruptionBudget:
+      enabled: true
+    enableCertificateOwnerRef: true # will delete secrets when certificate ressource is deleted
   install:
     createNamespace: true
     remediation:

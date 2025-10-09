@@ -33,6 +33,10 @@ spec:
     podDisruptionBudget:
       enabled: true
     enableCertificateOwnerRef: true # will delete secrets when certificate ressource is deleted
+    config:
+      apiVersion: controller.config.cert-manager.io/v1alpha1
+      kind: ControllerConfiguration
+      enableGatewayAPI: true
   install:
     createNamespace: true
     remediation:

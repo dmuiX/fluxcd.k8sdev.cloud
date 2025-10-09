@@ -37,7 +37,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: openbao-frontend
+        - name: openbao-ui
           port: 8200
   hostnames:
     - openbao.k8sdev.cloud

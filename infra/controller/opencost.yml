@@ -1,0 +1,108 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: opencost
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://opencost.github.io/opencost-helm-chart
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opencost
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  timeout: 5m0s
+  releaseName: opencost
+  targetNamespace: opencost
+  chart:
+    spec:
+      chart: opencost
+      version: 0.18.4
+      sourceRef:
+        kind: HelmRepository
+        name: opencost
+      interval: 1m0s
+  values:
+    opencost:
+      prometheus:
+        internal:
+          namespaceName: monitoring
+          serviceName: monitoring-prometheus
+          port: 9090
+
+      dataRetention:
+        dailyResolutionDays: 30  # default: 15
+
+      exporter:
+        defaultClusterId: talos-k8sdev
+        replicas: 2
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "55Mi"
+          limits:
+            memory: "1Gi"
+        persistence:
+          enabled: true
+          storageClass: longhorn  # adjust based on your environment
+          accessMode: ReadWriteOnce
+          size: 5Gi
+
+      customPricing:
+        enabled: true
+        provider: aws
+        costModel:
+          description: Modified pricing configuration.
+          CPU: 0.031611
+          spotCPU: 0.006655
+          RAM: 0.004237
+          spotRAM: 0.000892
+          GPU: 0.95
+          storage: 0.00005479452
+          zoneNetworkEgress: 0.01
+          regionNetworkEgress: 0.01
+          internetNetworkEgress: 0.143
+          spotLabel: ""
+          spotLabelValue: ""
+          awsServiceKeyName: ""
+          awsServiceKeySecret: ""
+          awsSpotDataRegion: ""
+          awsSpotDataBucket: ""
+          awsSpotDataPrefix: ""
+          athenaBucketName: ""
+          athenaRegion: ""
+          athenaDatabase: ""
+          athenaTable: ""
+          projectID: "${ACCOUNT_ID}"
+
+      metrics:
+        kubeStateMetrics:
+          emitKsmV1Metrics: false
+          emitKsmV1MetricsOnly: false
+        serviceMonitor:
+          enabled: true
+          additionalLabels:
+            release: prometheus
+
+      ui:
+        enabled: true
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  driftDetection:
+    mode: enabled
+    ignore:
+      - paths: ["/spec/replicas"]
+  dependsOn:
+    - name: cilium
+    - name: cert-manager
+    - name: external-dns
+    - name: longhorn

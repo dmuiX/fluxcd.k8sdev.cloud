@@ -15,7 +15,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  timeout: 5m0s 
+  timeout: 5m0s
   chart:
     spec:
       chart: podinfo
@@ -47,7 +47,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: podinfo-gateway
-  namespace: monitoring
+  namespace: podinfo
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     external-dns.alpha.kubernetes.io/hostname: podinfo.k8sdev.cloud
@@ -71,11 +71,11 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: podinfo-route
-  namespace: monitoring
+  namespace: podinfo
 spec:
   parentRefs:
     - name: podinfo-gateway
-      namespace: monitoring
+      namespace: podinfo
   rules:
     - matches:
         - path:

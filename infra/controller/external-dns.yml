@@ -35,13 +35,26 @@ spec:
       - gateway-udproute
     logLevel: debug
     txtPrefix: external-dns
-    provider: cloudflare
+    # envFrom:
+    #   - secretRef:
+    #       name: pihole-password
+    provider: pi-hole
+    registry: noop
+    policy: upsert-only
+    pihole-server=: https://pihole.h-lab.org
     env:
-      - name: CF_API_TOKEN
+      - name: EXTERNAL_DNS_PIHOLE_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: cloudflare-token
-            key: token
+            name: pihole-password
+            key: password
+    # provider: cloudflare
+    # env:
+    # - name: CF_API_TOKEN
+    # valueFrom:
+    # secretKeyRef:
+    # name: cloudflare-token
+    # key: token
     serviceMonitor:
       enabled: true
   install:

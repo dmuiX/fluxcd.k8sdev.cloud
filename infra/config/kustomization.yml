@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - addresspool.yml
   - ciliuml2policy.yml
-  - cloudflare-token.yml
+  - cloudflare-token-extsecret.yml
   - cluster-issuer.yml
   - cluster-secretstore.yml
   - grafana-gateway.yml

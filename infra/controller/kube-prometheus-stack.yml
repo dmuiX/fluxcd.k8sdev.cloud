@@ -60,7 +60,4 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: cilium
-    - name: openbao
     - name: longhorn
-    - name: external-secrets
-    - name: external-dns

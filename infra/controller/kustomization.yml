@@ -6,7 +6,6 @@ resources:
   - cilium.yml
   - external-dns.yml
   - external-secrets.yml
-  - headlamp.yml
   - kube-prometheus-stack.yml
   - longhorn.yml
   - openbao.yml

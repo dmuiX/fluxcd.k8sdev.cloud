@@ -38,3 +38,5 @@ spec:
       backendRefs:
         - name: grafana-frontend
           port: 80
+  hostnames:
+    - grafana.k8sdev.cloud

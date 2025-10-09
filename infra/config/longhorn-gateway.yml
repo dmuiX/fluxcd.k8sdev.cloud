@@ -38,3 +38,5 @@ spec:
       backendRefs:
         - name: longhorn-frontend
           port: 80
+  hostnames:
+    - longhorn.k8sdev.cloud

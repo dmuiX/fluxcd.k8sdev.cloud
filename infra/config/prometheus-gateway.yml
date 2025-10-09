@@ -38,3 +38,5 @@ spec:
       backendRefs:
         - name: prometheus-frontend
           port: 80
+  hostnames:
+    - prometheus.k8sdev.cloud

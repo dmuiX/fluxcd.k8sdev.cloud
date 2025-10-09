@@ -38,3 +38,5 @@ spec:
       backendRefs:
         - name: openbao-frontend
           port: 8200
+  hostnames:
+    - openbao.k8sdev.cloud

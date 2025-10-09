@@ -38,7 +38,7 @@ spec:
     envFrom:
       - secretRef:
           name: pihole-password
-    provider: pi-hole
+    provider: pihole
     registry: noop
     policy: upsert-only
     pihole-server=: https://pihole.h-lab.org

@@ -82,3 +82,5 @@ spec:
       backendRefs:
         - name: podinfo
           port: 9898
+  hostnames:
+    - podinfo.k8sdev.cloud

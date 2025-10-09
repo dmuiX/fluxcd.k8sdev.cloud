@@ -15,7 +15,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  timeout: 5m0s
+  timeout: 5m0s 
   chart:
     spec:
       chart: podinfo
@@ -57,7 +57,9 @@ spec:
     - protocol: HTTPS
       port: 443
       name: podinfo-https
+      hostname: podinfo.k8sdev.cloud
       tls:
+        mode: Terminate
         certificateRefs:
           - name: podinfo-tls
             kind: Secret

@@ -13,10 +13,11 @@ spec:
     - protocol: HTTPS
       port: 443
       name: hubble-https
+      hostname: hubble.k8sdev.cloud
       tls:
+        mode: Terminate
         certificateRefs:
           - name: hubble-tls
-            kind: Secret
       allowedRoutes:
         namespaces:
           from: Same

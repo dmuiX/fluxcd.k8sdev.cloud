@@ -13,10 +13,11 @@ spec:
     - protocol: HTTPS
       port: 443
       name: prometheus-https
+      hostname: prometheus.k8sdev.cloud
       tls:
+        mode: Terminate
         certificateRefs:
           - name: prometheus-tls
-            kind: Secret
       allowedRoutes:
         namespaces:
           from: Same

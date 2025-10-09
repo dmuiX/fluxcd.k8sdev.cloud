@@ -13,10 +13,11 @@ spec:
     - protocol: HTTPS
       port: 443
       name: openbao-https
+      hostname: openbao.k8sdev.cloud
       tls:
+        mode: Terminate
         certificateRefs:
           - name: openbao-tls
-            kind: Secret
       allowedRoutes:
         namespaces:
           from: Same

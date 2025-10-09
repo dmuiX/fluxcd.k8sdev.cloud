@@ -13,10 +13,11 @@ spec:
     - protocol: HTTPS
       port: 443
       name: grafana-https
+      hostname: grafana.k8sdev.cloud
       tls:
+        mode: Terminate
         certificateRefs:
           - name: grafana-tls
-            kind: Secret
       allowedRoutes:
         namespaces:
           from: Same

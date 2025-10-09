@@ -13,10 +13,11 @@ spec:
     - protocol: HTTPS
       port: 443
       name: longhorn-https
+      hostname: longhorn.k8sdev.cloud
       tls:
+        mode: Terminate
         certificateRefs:
           - name: longhorn-tls
-            kind: Secret
       allowedRoutes:
         namespaces:
           from: Same

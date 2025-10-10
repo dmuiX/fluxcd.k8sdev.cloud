@@ -74,6 +74,8 @@ spec:
         name: cilium
     l2announcements:
       enabled: true
+    dnsproxy:
+      enableTransparentMode: false
   install:
     createNamespace: true
     remediation:

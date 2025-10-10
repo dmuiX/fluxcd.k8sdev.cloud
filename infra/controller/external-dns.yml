@@ -41,7 +41,6 @@ spec:
     provider: pihole
     registry: noop
     policy: upsert-only
-    
     # env:
     #   - name: EXTERNAL_DNS_PIHOLE_PASSWORD
     #     valueFrom:

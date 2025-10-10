@@ -34,7 +34,7 @@ spec:
           serviceName: monitoring-prometheus
           port: 9090
       dataRetention:
-        dailyResolutionDays: 30  # default: 15
+        dailyResolutionDays: 30 # default: 15
       exporter:
         defaultClusterId: talos-k8sdev
         replicas: 2
@@ -46,7 +46,7 @@ spec:
             memory: "1Gi"
         persistence:
           enabled: true
-          storageClass: longhorn  # adjust based on your environment
+          storageClass: longhorn # adjust based on your environment
           accessMode: ReadWriteOnce
           size: 5Gi
       customPricing:

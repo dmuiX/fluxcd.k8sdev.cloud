@@ -62,6 +62,7 @@ spec:
     remediation:
       retries: 3
   upgrade:
+    force: true
     remediation:
       retries: 3
   test:

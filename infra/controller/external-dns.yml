@@ -37,11 +37,11 @@ spec:
     txtPrefix: external-dns
     envFrom:
       - secretRef:
-          name: pihole-password
+          name: pihole-password # contains EXTERNAL_DNS_PIHOLE_PASSWORD, EXTERNAL_DNS_PIHOLE_API_VERSION, EXTERNAL_DNS_PIHOLE_SERVER
     provider: pihole
     registry: noop
     policy: upsert-only
-    pihole-server=: https://pihole.h-lab.org
+    
     # env:
     #   - name: EXTERNAL_DNS_PIHOLE_PASSWORD
     #     valueFrom:

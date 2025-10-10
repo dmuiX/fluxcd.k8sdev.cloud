@@ -4,11 +4,11 @@ kind: Kustomization
 resources:
   - addresspool.yml
   - ciliuml2policy.yml
-  - cloudflare-token-extsecret.yml
   - cluster-issuer.yml
   - cluster-secretstore.yml
+  - extsecret-cloudflare-token.yml
+  - extsecret-openbao-token.yml
   - grafana-gateway.yml
-  - hubble-gateway.yml
   - longhorn-gateway.yml
   - openbao-gateway.yml
   - prometheus-gateway.yml

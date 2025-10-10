@@ -70,13 +70,10 @@ spec:
     loadBalancer:
       l7:
         backend: envoy
-    envoyConfig:
-      enabled: true
       secretsNamespace:
         name: cilium
     l2announcements:
       enabled: true
-
   install:
     createNamespace: true
     remediation:

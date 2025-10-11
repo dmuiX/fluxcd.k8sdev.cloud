@@ -79,18 +79,18 @@ spec:
     force: true
     remediation:
       retries: 3
-  driftDetection:
-    mode: enabled
-    ignore:
-      # HPA-managed replicas
-      - paths: ["/spec/replicas"]
-        target:
-          kind: Deployment
-      # Certificate timestamps that change
-      - paths: ["/status"]
-        target:
-          kind: Certificate
-          group: cert-manager.io
+  # driftDetection:
+  #   mode: enabled
+  #   ignore:
+  #     # HPA-managed replicas
+  #     - paths: ["/spec/replicas"]
+  #       target:
+  #         kind: Deployment
+  #     # Certificate timestamps that change
+  #     - paths: ["/status"]
+  #       target:
+  #         kind: Certificate
+  #         group: cert-manager.io
   dependsOn:
     - name: cilium
     - name: cert-manager

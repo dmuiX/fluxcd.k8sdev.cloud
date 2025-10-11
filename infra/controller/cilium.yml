@@ -76,9 +76,6 @@ spec:
       enabled: true
     hubble:
       enabled: false
-    bpf:
-      masquerade: true
-      hostLegcayyRouting: true # Makes Cilium compatible with Talos DNS and makes the long dns lookups (hopefully) go away
   install:
     createNamespace: true
     remediation:

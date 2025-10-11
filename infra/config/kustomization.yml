@@ -7,7 +7,6 @@ resources:
   - cluster-issuer.yml
   - cluster-secretstore.yml
   - extsecret-cloudflare-token.yml
-  - extsecret-openbao-token.yml
   - grafana-gateway.yml
   - longhorn-gateway.yml
   - openbao-gateway.yml

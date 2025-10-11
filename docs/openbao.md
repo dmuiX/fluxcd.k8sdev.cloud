@@ -49,10 +49,44 @@ echo "Root Token:"
 grep "Initial Root Token" openbao-keys.txt | awk '{print $NF}'
 ```
 
+## if something goes wrong delete the pvc
+
+kubens openbao
+k scale statefulset openbao --replicas 0
+k delete pvc data-openbao-0 data-openbao-1  
+k delete pv pvnames!
+k scale statefulset openbao --replicas 2
+k rollout restart deployment openbao
 
 ## setup a secretstore
 
 1. then login into the ui with the root token
-2. # Enable KV v2 at the path "secret"
-kubectl exec -n openbao openbao-0 -- bao secrets enable -path=secret kv-v2
-3. 
+2. in the Gui add a new secret engine:
+   1. name: kv
+   2. pretty much defaults
+3. go to Policies and add a new ACL-Policy called external-secrets-policy with the following values:
+    path "kv/data/*" {
+        capabilities = ["read", "list"]
+    }
+    path "kv/metadata/*" {
+        capabilities = ["list"]
+    }
+4. Access add new authentication methode kubernetes with the following values:
+    Alias name source                   serviceaccount_name
+    Audience
+    Bound service account names         external-secrets
+    Bound service account namespace selector
+    Bound service account namespaces    external-secrets
+    Generated Token's Policies          external-secrets-policy
+    Generated Token's Initial TTL       24h (86400)
+5. add to the clustersecretstore
+      auth:
+        kubernetes:
+          mountPath: "kubernetes"
+          role: "external-secrets"
+          serviceAccountRef:
+            name: "external-secrets"
+            namespace: "external-secrets"
+            
+            The last two must be the serviceaccount of external-secrets
+

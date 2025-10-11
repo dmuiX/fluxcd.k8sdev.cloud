@@ -5,7 +5,7 @@ metadata:
   name: opencost
   namespace: flux-system
 spec:
-  interval: 1m0s
+  interval: 24h
   url: https://opencost.github.io/opencost-helm-chart
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -25,7 +25,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: opencost
-      interval: 1m0s
+      interval: 6h
   values:
     opencost:
       prometheus:
@@ -93,10 +93,21 @@ spec:
     force: true
     remediation:
       retries: 3
+  test:
+    enable: true
+    ignoreFailures: false
   driftDetection:
     mode: enabled
     ignore:
+      # HPA-managed replicas
       - paths: ["/spec/replicas"]
+        target:
+          kind: Deployment
+      # Certificate timestamps that change
+      - paths: ["/status"]
+        target:
+          kind: Certificate
+          group: cert-manager.io
   dependsOn:
     - name: cilium
     - name: cert-manager

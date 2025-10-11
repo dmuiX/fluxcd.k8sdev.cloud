@@ -34,10 +34,10 @@ spec:
       dataStorage:
         accessMode: ReadWriteMany
         storageClass: longhorn
-      extraSecretEnvironmentVars:
-        - envName: STATIC_UNSEAL_KEY
-          secretName: unseal-keys
-          secretKey: key
+      # extraSecretEnvironmentVars:
+      #   - envName: STATIC_UNSEAL_KEY
+      #     secretName: unseal-keys
+      #     secretKey: key
       ha:
         enabled: true
         raft:

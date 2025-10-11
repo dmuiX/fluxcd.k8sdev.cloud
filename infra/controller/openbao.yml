@@ -37,7 +37,7 @@ spec:
       extraSecretEnvironmentVars:
         - envName: STATIC_UNSEAL_KEY
           secretName: unseal-keys
-          secretKey: key
+          secretKey: static-key
       ha:
         enabled: true
         raft:

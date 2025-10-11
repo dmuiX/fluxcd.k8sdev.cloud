@@ -13,4 +13,7 @@ using apiVersion: gateway.networking.k8s.io/v1 seems to be enough
 
 and therefore installing the standard crds of gateway is also enough:
 
-https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+
+k apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+k apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
+

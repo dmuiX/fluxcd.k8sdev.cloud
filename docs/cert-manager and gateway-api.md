@@ -16,4 +16,3 @@ and therefore installing the standard crds of gateway is also enough:
 
 k apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 k apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
-

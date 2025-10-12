@@ -44,9 +44,11 @@ kubectl exec -n openbao openbao-1 -- bao status
 # 9. Check cluster peers
 kubectl exec -n openbao openbao-0 -- bao operator raft list-peers
 
-# 10. Extract root token for login
+# 10. Extract root token for login and unseal keys
 echo "Root Token:"
 grep "Initial Root Token" openbao-keys.txt | awk '{print $NF}'
+
+grep "Unseal Key" openbao-keys.txt | head -5 | awk '{print $NF}' 
 ```
 
 ## if something goes wrong delete the pvc
@@ -71,7 +73,10 @@ k rollout restart deployment openbao
     path "kv/metadata/*" {
         capabilities = ["list"]
     }
-4. Access add new authentication methode kubernetes with the following values:
+4. Click on Access & Add new authentication method kubernetes:
+    Set Kubernetes host: `https://kubernetes.default.svc:443`
+    Leave Kubernetes CA Certificate and Token Reviewer JWT empty (auto-detects from pod)
+5. Add a role to the kubernetes auth method with the following values
     Alias name source                   serviceaccount_name
     Audience
     Bound service account names         external-secrets
@@ -79,7 +84,7 @@ k rollout restart deployment openbao
     Bound service account namespaces    external-secrets
     Generated Token's Policies          external-secrets-policy
     Generated Token's Initial TTL       24h (86400)
-5. add to the clustersecretstore
+6. add to the clustersecretstore
       auth:
         kubernetes:
           mountPath: "kubernetes"

@@ -1,4 +1,9 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openbao
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -72,7 +77,7 @@ spec:
     ui:
       enabled: true
   install:
-    createNamespace: true
+    createNamespace: false
     remediation:
       retries: 3
   upgrade:

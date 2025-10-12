@@ -39,17 +39,17 @@ spec:
       - name: EXTERNAL_DNS_PIHOLE_SERVER
         valueFrom:
           secretKeyRef:
-            name: pihole-password
+            name: pihole
             key: EXTERNAL_DNS_PIHOLE_SERVER
       - name: EXTERNAL_DNS_PIHOLE_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: pihole-password
+            name: pihole
             key: EXTERNAL_DNS_PIHOLE_PASSWORD
       - name: EXTERNAL_DNS_PIHOLE_API_VERSION
         valueFrom:
           secretKeyRef:
-            name: pihole-password
+            name: pihole
             key: EXTERNAL_DNS_PIHOLE_API_VERSION
     provider: pihole
     registry: noop

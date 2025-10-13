@@ -39,16 +39,28 @@ spec:
       dataStorage:
         accessMode: ReadWriteMany
         storageClass: longhorn
-      extraSecretEnvironmentVars:
-        - envName: STATIC_UNSEAL_KEY
-          secretName: unseal-keys
-          secretKey: static-key
+      # --- Define the Volume to be mounted from the Secret ---
+      extraVolumes:
+        - name: unseal-key-volume # A logical name for the volume
+          secret:
+            # The name of the Kubernetes Secret resource to use
+            secretName: openbao-unseal-key
+            # Explicitly state which keys from the secret to mount
+            # This makes the configuration very clear and prevents other keys
+            # in the secret from being mounted accidentally.
+            items:
+              - key: unseal-key # The data key within the secret
+                path: unseal-key # The filename to create inside the volume
+      # --- Mount the Volume into the Container ---
+      extraVolumeMounts:
+        - name: unseal-key-volume # Must match the volume name above
+          mountPath: /openbao/secrets # The directory inside the pod
+          readOnly: true
       ha:
         enabled: true
         raft:
           enabled: true
           setNodeId: true
-        replicas: 2
         config: |
           ui = true
 
@@ -62,8 +74,8 @@ spec:
 
           # Example configuration for using auto-unseal using static ENV keys.
           seal "static" {
-            current_key_id = 20251011
-            current_key = "env:STATIC_UNSEAL_KEY"
+            current_key_id = "20251013"
+            current_key = "file:///openbao/secrets/unseal-key"
             disabled        = "false"
           }
 

@@ -121,6 +121,10 @@ spec:
           kind: Certificate
           group: cert-manager.io
   dependsOn:
-    - name: cilium
     - name: cert-manager
+    - name: cilium
     - name: longhorn
+    - name: external-dns
+    - name: openbao
+    - name: external-secrets
+    - name: kube-prometheus-stack

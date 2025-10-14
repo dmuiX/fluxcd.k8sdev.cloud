@@ -93,3 +93,4 @@ spec:
           group: cert-manager.io
   dependsOn:
     - name: cilium
+    - name: cert-manager

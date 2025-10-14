@@ -41,7 +41,8 @@ spec:
         storageClass: longhorn
       # --- Define the Volume to be mounted from the Secret ---
       extraVolumes:
-        - name: unseal-key-volume # A logical name for the volume
+        # A logical name for the volume
+        - name: unseal-key-volume
           secret:
             # The name of the Kubernetes Secret resource to use
             secretName: openbao-unseal-key
@@ -49,12 +50,15 @@ spec:
             # This makes the configuration very clear and prevents other keys
             # in the secret from being mounted accidentally.
             items:
-              - key: unseal-key # The data key within the secret
-                path: unseal-key # The filename to create inside the volume
+              # The data key within the secret
+              - key: unseal-key
+                # The filename to create inside the volume
+                path: unseal-key
       # --- Mount the Volume into the Container ---
       extraVolumeMounts:
-        - name: unseal-key-volume # Must match the volume name above
-          mountPath: /openbao/secrets # The directory inside the pod
+        - name: unseal-key-volume
+          # The directory inside the pod
+          mountPath: /openbao/secrets
           readOnly: true
       ha:
         enabled: true
@@ -96,18 +100,18 @@ spec:
     force: true
     remediation:
       retries: 3
-  # driftDetection:
-  #   mode: enabled
-  #   ignore:
-  #     # HPA-managed replicas
-  #     - paths: ["/spec/replicas"]
-  #       target:
-  #         kind: Deployment
-  #     # Certificate timestamps that change
-  #     - paths: ["/status"]
-  #       target:
-  #         kind: Certificate
-  #         group: cert-manager.io
+  driftDetection:
+    mode: enabled
+    ignore:
+      # HPA-managed replicas
+      - paths: ["/spec/replicas"]
+        target:
+          kind: Deployment
+      # Certificate timestamps that change
+      - paths: ["/status"]
+        target:
+          kind: Certificate
+          group: cert-manager.io
   dependsOn:
     - name: cilium
     - name: cert-manager

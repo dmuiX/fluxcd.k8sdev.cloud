@@ -43,6 +43,32 @@ spec:
         enabled: true
     fullnameOverride: monitoring
     namespaceOverride: monitoring
+    prometheus:
+      prometheusSpec:
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+    grafana:
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "128Mi"
+        limits:
+          cpu: "300m"
+          memory: "256Mi"
+    alertmanager:
+      alertmanagerSpec:
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
   install:
     createNamespace: false
     remediation:

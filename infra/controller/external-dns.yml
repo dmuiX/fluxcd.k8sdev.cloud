@@ -61,6 +61,13 @@ spec:
     policy: upsert-only
     serviceMonitor:
       enabled: true
+    resources:
+      requests:
+        cpu: "25m"
+        memory: "64Mi"
+      limits:
+        cpu: "100m"
+        memory: "128Mi"
   install:
     createNamespace: false
     remediation:

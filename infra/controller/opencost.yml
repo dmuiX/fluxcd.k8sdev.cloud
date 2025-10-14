@@ -90,6 +90,13 @@ spec:
             release: prometheus
       ui:
         enabled: true
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "256Mi"
+        limits:
+          cpu: "500m"
+          memory: "1Gi"
   install:
     createNamespace: false
     remediation:

@@ -40,7 +40,7 @@ spec:
         accessMode: ReadWriteMany
         storageClass: longhorn
       # --- Define the Volume to be mounted from the Secret ---
-      extraVolumes:
+      volumes:
         # A logical name for the volume
         - name: unseal-key-volume
           secret:
@@ -55,7 +55,7 @@ spec:
                 # The filename to create inside the volume
                 path: unseal-key
       # --- Mount the Volume into the Container ---
-      extraVolumeMounts:
+      volumeMounts:
         - name: unseal-key-volume
           # The directory inside the pod
           mountPath: /openbao/secrets

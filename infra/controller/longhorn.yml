@@ -56,14 +56,29 @@ spec:
         limits:
           cpu: "500m"
           memory: "1Gi"
-      nodeSelector:
-        node-role.kubernetes.io/worker: "worker"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
     longhornDriver:
-      nodeSelector:
-        node-role.kubernetes.io/worker: "worker"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
     longhornUI:
-      nodeSelector:
-        node-role.kubernetes.io/worker: "worker"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
   install:
     createNamespace: false # Namespace created separately with PSA labels
     remediation:

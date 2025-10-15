@@ -19,8 +19,6 @@ metadata:
   name: openbao
   namespace: flux-system
 spec:
-  interval: 10m0s
-  timeout: 5m0s
   releaseName: openbao
   targetNamespace: openbao
   chart:
@@ -97,26 +95,6 @@ spec:
         memory: "256Mi"
     ui:
       enabled: true
-  install:
-    createNamespace: false
-    remediation:
-      retries: 3
-  upgrade:
-    force: true
-    remediation:
-      retries: 3
-  driftDetection:
-    mode: enabled
-    ignore:
-      # HPA-managed replicas
-      - paths: ["/spec/replicas"]
-        target:
-          kind: Deployment
-      # Certificate timestamps that change
-      - paths: ["/status"]
-        target:
-          kind: Certificate
-          group: cert-manager.io
   dependsOn:
     - name: cilium
     - name: cert-manager

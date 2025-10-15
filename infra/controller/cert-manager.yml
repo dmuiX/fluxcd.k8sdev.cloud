@@ -19,8 +19,6 @@ metadata:
   name: cert-manager
   namespace: flux-system
 spec:
-  interval: 10m0s
-  timeout: 5m0s
   releaseName: cert-manager
   targetNamespace: cert-manager
   chart:
@@ -49,26 +47,3 @@ spec:
       limits:
         cpu: "200m"
         memory: "128Mi"
-  install:
-    createNamespace: false
-    remediation:
-      retries: 3
-  upgrade:
-    force: true
-    remediation:
-      retries: 3
-  test:
-    enable: true
-    ignoreFailures: false
-  driftDetection:
-    mode: enabled
-    ignore:
-      # HPA-managed replicas
-      - paths: ["/spec/replicas"]
-        target:
-          kind: Deployment
-      # Certificate timestamps that change
-      - paths: ["/status"]
-        target:
-          kind: Certificate
-          group: cert-manager.io

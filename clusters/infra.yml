@@ -14,6 +14,46 @@ spec:
   path: infra/controller
   prune: true
   wait: true
+  patches:
+    - patch: |-
+        - op: add
+          path: /spec/interval
+          value: 10m0s
+        - op: add
+          path: /spec/timeout
+          value: 5m0s
+        - op: add
+          path: /spec/driftDetection
+          value:
+            mode: warn
+            ignore:
+              - paths: ["/spec/replicas"]
+                target:
+                  kind: Deployment
+              - paths: ["/status"]
+                target:
+                  kind: Certificate
+                  group: cert-manager.io
+        - op: add
+          path: /spec/install
+          value:
+            createNamespace: false
+            remediation:
+              retries: 3
+        - op: add
+          path: /spec/upgrade
+          value:
+            force: true
+            remediation:
+              retries: 3
+        - op: add
+          path: /spec/test
+          value:
+            enable: true
+            ignoreFailures: false
+      target:
+        kind: HelmRelease
+        group: helm.toolkit.fluxcd.io
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

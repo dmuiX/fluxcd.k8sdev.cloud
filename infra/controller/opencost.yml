@@ -19,8 +19,6 @@ metadata:
   name: opencost
   namespace: flux-system
 spec:
-  interval: 10m0s
-  timeout: 5m0s
   releaseName: opencost
   targetNamespace: opencost
   chart:
@@ -92,29 +90,6 @@ spec:
         requests:
           cpu: "100m"
           memory: "256Mi"
-  install:
-    createNamespace: false
-    remediation:
-      retries: 3
-  upgrade:
-    force: true
-    remediation:
-      retries: 3
-  test:
-    enable: true
-    ignoreFailures: false
-  driftDetection:
-    mode: enabled
-    ignore:
-      # HPA-managed replicas
-      - paths: ["/spec/replicas"]
-        target:
-          kind: Deployment
-      # Certificate timestamps that change
-      - paths: ["/status"]
-        target:
-          kind: Certificate
-          group: cert-manager.io
   dependsOn:
     - name: cert-manager
     - name: cilium

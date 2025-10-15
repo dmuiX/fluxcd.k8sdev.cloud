@@ -5,8 +5,8 @@ metadata:
   name: infra-controller
   namespace: flux-system
 spec:
-  interval: 1m0s
-  retryInterval: 1m0s
+  interval: 5m0s
+  retryInterval: 2m0s
   timeout: 5m0s
   sourceRef:
     kind: GitRepository
@@ -40,12 +40,14 @@ spec:
             createNamespace: false
             remediation:
               retries: 3
+            crds: CreateReplace
         - op: add
           path: /spec/upgrade
           value:
             force: true
             remediation:
               retries: 3
+            crds: Skip
         - op: add
           path: /spec/test
           value:

@@ -94,9 +94,6 @@ spec:
       requests:
         cpu: "100m"
         memory: "256Mi"
-      limits:
-        cpu: "500m"
-        memory: "512Mi"
     ui:
       enabled: true
   install:

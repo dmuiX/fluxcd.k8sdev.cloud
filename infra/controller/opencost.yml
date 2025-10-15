@@ -47,8 +47,6 @@ spec:
           requests:
             cpu: "10m"
             memory: "55Mi"
-          limits:
-            memory: "1Gi"
         persistence:
           enabled: true
           storageClass: longhorn # adjust based on your environment
@@ -94,9 +92,6 @@ spec:
         requests:
           cpu: "100m"
           memory: "256Mi"
-        limits:
-          cpu: "500m"
-          memory: "1Gi"
   install:
     createNamespace: false
     remediation:

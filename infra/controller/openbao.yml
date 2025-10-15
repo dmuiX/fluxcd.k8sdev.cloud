@@ -79,7 +79,6 @@ spec:
           seal "static" {
             current_key_id = "20251013"
             current_key = "file:///openbao/secrets/unseal-key"
-            disabled        = "false"
           }
 
           # Example configuration for enabling Prometheus metrics.

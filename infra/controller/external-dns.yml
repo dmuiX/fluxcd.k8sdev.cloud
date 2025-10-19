@@ -66,3 +66,4 @@ spec:
   dependsOn:
     - name: cilium
     - name: cert-manager
+    - name: kube-prometheus-stack

@@ -77,4 +77,3 @@ spec:
   dependsOn:
     - name: cilium
     - name: cert-manager
-    - name: external-dns

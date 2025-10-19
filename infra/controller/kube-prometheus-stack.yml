@@ -62,6 +62,5 @@ spec:
     - name: cert-manager
     - name: cilium
     - name: longhorn
-    - name: external-dns
     - name: openbao
     - name: external-secrets

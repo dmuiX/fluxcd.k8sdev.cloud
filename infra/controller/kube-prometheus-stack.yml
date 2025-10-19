@@ -23,6 +23,8 @@ metadata:
   name: kube-prometheus-stack
   namespace: flux-system
 spec:
+  interval: 10m0s
+  timeout: 5m0s
   releaseName: kube-prometheus-stack
   targetNamespace: monitoring
   chart:

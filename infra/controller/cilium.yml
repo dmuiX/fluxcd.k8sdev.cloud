@@ -19,6 +19,8 @@ metadata:
   name: cilium
   namespace: flux-system
 spec:
+  interval: 10m0s
+  timeout: 5m0s
   releaseName: cilium
   targetNamespace: cilium
   chart:

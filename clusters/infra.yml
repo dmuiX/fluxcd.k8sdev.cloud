@@ -17,12 +17,6 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: /spec/interval
-          value: 10m0s
-        - op: add
-          path: /spec/timeout
-          value: 5m0s
-        - op: add
           path: /spec/driftDetection
           value:
             mode: warn

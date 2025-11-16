@@ -1,6 +1,6 @@
 # fluxcd.k8sdev.cloud
 
-This repo deploys automatically apps with fluxcd.
+This repo deploys automatically infra and apps with fluxcd.
 They are deployed in this order:
 1. cert-manager
 2. cilium

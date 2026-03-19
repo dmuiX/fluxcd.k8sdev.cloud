@@ -41,22 +41,12 @@ spec:
     logLevel: debug
     txtPrefix: external-dns
     env:
-      - name: EXTERNAL_DNS_PIHOLE_SERVER
+      - name: CF_API_TOKEN
         valueFrom:
           secretKeyRef:
-            name: pihole
-            key: EXTERNAL_DNS_PIHOLE_SERVER
-      - name: EXTERNAL_DNS_PIHOLE_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: pihole
-            key: EXTERNAL_DNS_PIHOLE_PASSWORD
-      - name: EXTERNAL_DNS_PIHOLE_API_VERSION
-        valueFrom:
-          secretKeyRef:
-            name: pihole
-            key: EXTERNAL_DNS_PIHOLE_API_VERSION
-    provider: pihole
+            name: cloudflare-token
+            key: token
+    provider: cloudflare
     registry: noop
     policy: upsert-only
     serviceMonitor:

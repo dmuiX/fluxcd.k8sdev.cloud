@@ -6,14 +6,14 @@ metadata:
   namespace: openbao
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    external-dns.alpha.kubernetes.io/hostname: openbao.h-lab.org
+    external-dns.alpha.kubernetes.io/hostname: openbao.k8sdev.cloud
 spec:
   gatewayClassName: cilium
   listeners:
     - protocol: HTTPS
       port: 443
       name: openbao-https
-      hostname: openbao.h-lab.org
+      hostname: openbao.k8sdev.cloud
       tls:
         mode: Terminate
         certificateRefs:
@@ -40,4 +40,4 @@ spec:
         - name: openbao-ui
           port: 8200
   hostnames:
-    - openbao.h-lab.org
+    - openbao.k8sdev.cloud

@@ -6,14 +6,14 @@ metadata:
   namespace: longhorn
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    external-dns.alpha.kubernetes.io/hostname: longhorn.h-lab.org
+    external-dns.alpha.kubernetes.io/hostname: longhorn.k8sdev.cloud
 spec:
   gatewayClassName: cilium
   listeners:
     - protocol: HTTPS
       port: 443
       name: longhorn-https
-      hostname: longhorn.h-lab.org
+      hostname: longhorn.k8sdev.cloud
       tls:
         mode: Terminate
         certificateRefs:
@@ -40,4 +40,4 @@ spec:
         - name: longhorn-frontend
           port: 80
   hostnames:
-    - longhorn.h-lab.org
+    - longhorn.k8sdev.cloud

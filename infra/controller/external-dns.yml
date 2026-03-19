@@ -33,7 +33,7 @@ spec:
       interval: 6h
   values:
     domainFilters:
-      - h-lab.org
+      - k8sdev.cloud
     sources:
       - gateway-tlsroute
       - gateway-httproute

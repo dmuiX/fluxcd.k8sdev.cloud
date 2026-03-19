@@ -52,14 +52,14 @@ metadata:
   namespace: podinfo
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    external-dns.alpha.kubernetes.io/hostname: podinfo.h-lab.org
+    external-dns.alpha.kubernetes.io/hostname: podinfo.k8sdev.cloud
 spec:
   gatewayClassName: cilium
   listeners:
     - protocol: HTTPS
       port: 443
       name: podinfo-https
-      hostname: podinfo.h-lab.org
+      hostname: podinfo.k8sdev.cloud
       tls:
         mode: Terminate
         certificateRefs:
@@ -87,4 +87,4 @@ spec:
         - name: podinfo
           port: 9898
   hostnames:
-    - podinfo.h-lab.org
+    - podinfo.k8sdev.cloud

@@ -80,7 +80,7 @@ spec:
     l2announcements:
       enabled: true
     hubble:
-      enabled: false
+      enabled: true
     resources:
       requests:
         cpu: "100m"

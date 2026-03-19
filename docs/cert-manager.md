@@ -1,0 +1,2 @@
+cert-manager needs direct access to the domain where it creates the txt record. 
+That means bes way is to use a recursivedns to cloudflare then it always has that access no matter what nameservers I use for the rest of the cluster.

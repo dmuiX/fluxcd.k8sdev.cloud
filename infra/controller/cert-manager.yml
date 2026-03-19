@@ -49,3 +49,4 @@ spec:
       limits:
         cpu: "200m"
         memory: "128Mi"
+    dns01RecursiveNameservers: "1.1.1.1:53,9.9.9.9:53"

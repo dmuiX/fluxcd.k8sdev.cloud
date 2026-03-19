@@ -6,14 +6,14 @@ metadata:
   namespace: monitoring
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    external-dns.alpha.kubernetes.io/hostname: grafana.k8sdev.cloud
+    external-dns.alpha.kubernetes.io/hostname: grafana.h-lab.org
 spec:
   gatewayClassName: cilium
   listeners:
     - protocol: HTTPS
       port: 443
       name: grafana-https
-      hostname: grafana.k8sdev.cloud
+      hostname: grafana.h-lab.org
       tls:
         mode: Terminate
         certificateRefs:
@@ -40,4 +40,4 @@ spec:
         - name: kube-prometheus-stack-grafana
           port: 80
   hostnames:
-    - grafana.k8sdev.cloud
+    - grafana.h-lab.org

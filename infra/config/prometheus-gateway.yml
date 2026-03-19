@@ -6,14 +6,14 @@ metadata:
   namespace: monitoring
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    external-dns.alpha.kubernetes.io/hostname: prometheus.k8sdev.cloud
+    external-dns.alpha.kubernetes.io/hostname: prometheus.h-lab.org
 spec:
   gatewayClassName: cilium
   listeners:
     - protocol: HTTPS
       port: 443
       name: prometheus-https
-      hostname: prometheus.k8sdev.cloud
+      hostname: prometheus.h-lab.org
       tls:
         mode: Terminate
         certificateRefs:
@@ -40,4 +40,4 @@ spec:
         - name: prometheus-frontend
           port: 80
   hostnames:
-    - prometheus.k8sdev.cloud
+    - prometheus.h-lab.org

@@ -39,13 +39,6 @@ spec:
       dataStorage:
         accessMode: ReadWriteMany
         storageClass: longhorn
-      postStart: # unseals cluster automaticcaly using a cluster secret
-        - /bin/sh
-        - -c
-        - |
-          sleep 5
-          until bao status 2>&1 | grep -q "Sealed"; do sleep 2; done
-          bao operator unseal "$(cat /openbao/secrets/unseal-key)"
       # --- Define the Volume to be mounted from the Secret ---
       volumes:
         # A logical name for the volume
@@ -72,38 +65,38 @@ spec:
         raft:
           enabled: true
           setNodeId: true
-        config: |
-          ui = true
+          config: |
+            ui = true
 
-          listener "tcp" {
-            tls_disable = 1
-            address = "[::]:8200"
-            cluster_address = "[::]:8201"
-          }
-
-          service_registration "kubernetes" {}
-
-          # Example configuration for using auto-unseal using static ENV keys.
-          seal "static" {
-            current_key_id = "20251013"
-            current_key = "file:///openbao/secrets/unseal-key"
-          }
-
-          # Example configuration for enabling Prometheus metrics.
-          # If you are using Prometheus Operator you can enable a ServiceMonitor resource below.
-          # You may wish to enable unauthenticated metrics in the listener block above.
-          telemetry {
-            prometheus_retention_time = "30s"
-            disable_hostname = true
-          }
-
-          # Is joining the Nodes automatically
-          storage "raft" {
-            retry_join {
-              auto_join = "provider=k8s namespace=openbao label_selector=\"app.kubernetes.io/name=openbao,component=server\""
-              auto_join_scheme = "http"
+            listener "tcp" {
+              tls_disable = 1
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
             }
-          }
+
+            service_registration "kubernetes" {}
+
+            # Example configuration for using auto-unseal using static ENV keys.
+            seal "static" {
+              current_key_id = "20260323"
+              current_key = "file:///openbao/secrets/unseal-key"
+            }
+
+            # Example configuration for enabling Prometheus metrics.
+            # If you are using Prometheus Operator you can enable a ServiceMonitor resource below.
+            # You may wish to enable unauthenticated metrics in the listener block above.
+            telemetry {
+              prometheus_retention_time = "30s"
+              disable_hostname = true
+            }
+
+            # Is joining the Nodes automatically
+            storage "raft" {
+              retry_join {
+                auto_join = "provider=k8s namespace=openbao label_selector=\"app.kubernetes.io/name=openbao,component=server\""
+                auto_join_scheme = "http"
+              }
+            }
       resources:
       requests:
         cpu: "100m"

@@ -92,6 +92,7 @@ spec:
 
             # Is joining the Nodes automatically
             storage "raft" {
+              path = "/openbao/data"
               retry_join {
                 auto_join = "provider=k8s namespace=openbao label_selector=\"app.kubernetes.io/name=openbao,component=server\""
                 auto_join_scheme = "http"

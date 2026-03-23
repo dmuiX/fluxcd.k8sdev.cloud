@@ -100,13 +100,8 @@ spec:
           # Is joining the Nodes automatically
           storage "raft" {
             retry_join {
-              leader_api_addr = "http://openbao-0.openbao-internal:8200"
-            }
-            retry_join {
-              leader_api_addr = "http://openbao-1.openbao-internal:8200"
-            }
-            retry_join {
-              leader_api_addr = "http://openbao-2.openbao-internal:8200"
+              auto_join = "provider=k8s namespace=openbao label_selector=\"app.kubernetes.io/name=openbao,component=server\""
+              auto_join_scheme = "http"
             }
           }
       resources:

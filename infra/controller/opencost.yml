@@ -32,6 +32,7 @@ spec:
         name: opencost
       interval: 6h
   values:
+    replicas: 3
     opencost:
       prometheus:
         internal:

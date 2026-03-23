@@ -1,97 +1,164 @@
-# openbao
+# OpenBao
 
-## neet to define a static-key beforehand
+## Prerequisites
 
-static_key=$(openssl rand -base64 32 | tee /dev/tty)
+- `seal "static"` in `ha.raft.config` → Auto-Unseal (no manual unsealing required)
+- `retry_join` with `auto_join` in `ha.raft.config` → Auto-Join (no manual raft join required)
+- Static key must exist as K8s Secret **before** init
 
-kubectl create secret generic unseal-keys -n openbao --from-literal=static-key="${static_-key}" --dry-run=client -o yaml | kubectl apply -f -
-
-## need to run that script to initialize the raft backend
-
-script doesnt work very well here the manual approach:
+## 1. Generate Static Key and Create Secret
 
 ```bash
-# 0. Check if already initialized
-kubectl exec -n openbao openbao-0 -- bao status
+# Generate random 32-byte key
+static_key=$(openssl rand -base64 32 | tee /dev/tty)
 
-# 1. If not initialized, initialize and save keys
-kubectl exec -n openbao openbao-0 -- bao operator init | tee openbao-keys.txt
-chmod 600 openbao-keys.txt
-echo "Keys saved to openbao-keys.txt"
-
-# 2. Display the keys
-cat openbao-keys.txt
-
-# 3. Unseal leader with first 3 keys
-grep "Unseal Key" openbao-keys.txt | head -3 | awk '{print $NF}' | while read key; do kubectl exec -n openbao openbao-0 -- bao operator unseal "$key"; done
-
-# 4. Verify leader is unsealed
-kubectl exec -n openbao openbao-0 -- bao status
-
-# 5. Join second node
-kubectl exec -n openbao openbao-1 -- bao operator raft join http://openbao-0.openbao-internal:8200
-
-# 6. Wait a few seconds
-sleep 5
-
-# 7. Unseal second node (same 3 keys)
-grep "Unseal Key" openbao-keys.txt | head -3 | awk '{print $NF}' | while read key; do kubectl exec -n openbao openbao-1 -- bao operator unseal "$key"; done
-
-# 8. Verify both unsealed
-kubectl exec -n openbao openbao-0 -- bao status
-kubectl exec -n openbao openbao-1 -- bao status
-
-# 9. Check cluster peers
-kubectl exec -n openbao openbao-0 -- bao operator raft list-peers
-
-# 10. Extract root token for login and unseal keys
-echo "Root Token:"
-grep "Initial Root Token" openbao-keys.txt | awk '{print $NF}'
-
-grep "Unseal Key" openbao-keys.txt | head -5 | awk '{print $NF}' 
+# Create K8s secret
+kubectl create secret generic openbao-unseal-key \
+  -n openbao \
+  --from-literal=unseal-key="${static_key}" \
+  --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-## if something goes wrong delete the pvc
+> Back up this key separately (password manager)! It's required for auto-unseal on every start.
 
-kubens openbao
-k scale statefulset openbao --replicas 0
-k delete pvc data-openbao-0 data-openbao-1  
-k delete pv pvnames!
-k scale statefulset openbao --replicas 2
-k rollout restart deployment openbao
+## 2. Initialize Cluster
 
-## setup a secretstore
+```bash
+# Check if already initialized
+kubectl exec -n openbao openbao-0 -- bao status
 
-1. then login into the ui with the root token
-2. in the Gui add a new secret engine:
-   1. name: kv
-   2. pretty much defaults
-3. go to Policies and add a new ACL-Policy called external-secrets-policy with the following values:
-    path "kv/data/*" {
-        capabilities = ["read", "list"]
-    }
-    path "kv/metadata/*" {
-        capabilities = ["list"]
-    }
-4. Click on Access & Add new authentication method kubernetes:
-    Set Kubernetes host: `https://kubernetes.default.svc:443`
-    Leave Kubernetes CA Certificate and Token Reviewer JWT empty (auto-detects from pod)
-5. Add a role to the kubernetes auth method with the following values
-    Alias name source                   serviceaccount_name
-    Audience
-    Bound service account names         external-secrets
-    Bound service account namespace selector
-    Bound service account namespaces    external-secrets
-    Generated Token's Policies          external-secrets-policy
-    Generated Token's Initial TTL       24h (86400)
-6. add to the clustersecretstore
-      auth:
-        kubernetes:
-          mountPath: "kubernetes"
-          role: "external-secrets"
-          serviceAccountRef:
-            name: "external-secrets"
-            namespace: "external-secrets"
-            
-            The last two must be the serviceaccount of external-secrets
+# Initialize (seal "static" → recovery keys instead of unseal keys)
+kubectl exec -n openbao openbao-0 -- bao operator init \
+  -recovery-shares=1 \
+  -recovery-threshold=1 | tee openbao-keys.txt
 
+chmod 600 openbao-keys.txt
+
+# Display root token
+echo "Root Token:"
+grep "Initial Root Token" openbao-keys.txt | awk '{print $NF}'
+```
+
+> After init, the leader auto-unseals via `seal "static"`.
+> Other nodes auto-join via `retry_join` and auto-unseal as well.
+
+## 3. Verify Cluster
+
+```bash
+# All nodes should be unsealed
+kubectl exec -n openbao openbao-0 -- bao status
+kubectl exec -n openbao openbao-1 -- bao status
+kubectl exec -n openbao openbao-2 -- bao status
+
+# Check raft peers (root token required)
+BAO_TOKEN=<root-token-here>
+kubectl exec -n openbao openbao-0 -- sh -c "BAO_TOKEN=$BAO_TOKEN bao operator raft list-peers"
+```
+
+## 4. Troubleshooting: Full Cluster Reset
+
+```bash
+# Scale to 0
+kubectl scale statefulset openbao -n openbao --replicas 0
+
+# Delete all PVCs
+kubectl delete pvc data-openbao-0 data-openbao-1 data-openbao-2 -n openbao
+
+# Delete PVs manually if needed
+# kubectl delete pv <pv-names>
+
+# Scale back to 3
+kubectl scale statefulset openbao -n openbao --replicas 3
+
+# Then continue from step 2 (init)
+```
+
+## 5. Configure SecretStore (External Secrets)
+
+1. Log into the UI with the root token.
+2. Add a new Secret Engine:
+   - Name: `kv`
+   - Keep defaults
+3. Under **Policies**, create a new ACL policy `external-secrets-policy`:
+
+   ```hcl
+   path "kv/data/*" {
+       capabilities = ["read", "list"]
+   }
+   path "kv/metadata/*" {
+       capabilities = ["list"]
+   }
+   ```
+
+4. Under **Access**, add a new Authentication Method `kubernetes`:
+   - Kubernetes host: `https://kubernetes.default.svc:443`
+   - Leave CA Certificate and Token Reviewer JWT empty (auto-detected from pod)
+
+5. Create a role for the kubernetes auth method:
+
+   | Field | Value |
+   | ----- | ----- |
+   | Alias name source | `serviceaccount_name` |
+   | Bound service account names | `external-secrets` |
+   | Bound service account namespaces | `external-secrets` |
+   | Generated Token's Policies | `external-secrets-policy` |
+   | Generated Token's Initial TTL | `24h` (86400) |
+
+6. Add to ClusterSecretStore:
+
+   ```yaml
+   auth:
+     kubernetes:
+       mountPath: "kubernetes"
+       role: "external-secrets"
+       serviceAccountRef:
+         name: "external-secrets"
+         namespace: "external-secrets"
+   ```
+
+   > `name` and `namespace` must match the external-secrets ServiceAccount.
+
+## 6. Known Issues & Lessons Learned
+
+### `ha.config` vs `ha.raft.config`
+
+When `ha.raft.enabled: true`, the Helm chart uses `ha.raft.config` — NOT `ha.config`. Putting your config in `ha.config` silently results in a default/empty ConfigMap. Always verify the rendered ConfigMap matches your expected config.
+
+### Raft requires 3+ replicas for quorum
+
+2 replicas = no fault tolerance. If one node goes down, quorum is lost and the cluster is stuck. Always use 3 (or 5) replicas. The Helm chart defaults to 3 — don't override to 2.
+
+### HTTP vs HTTPS mismatch on `retry_join`
+
+If `tls_disable = 1` is set in the listener, `retry_join` addresses must use `http://`, not `https://`. Mismatched scheme causes: `"http: server gave HTTP response to HTTPS client"`.
+
+### `storage "raft"` needs `path`
+
+The `path = "/openbao/data"` field is required in the `storage "raft"` block. Without it: `"error initializing storage of type raft: 'path' must be set"`. Easy to miss when only adding `retry_join`.
+
+### `raft storage autopilot is not initialized`
+
+This error during unseal of a joining node can indicate corrupted Raft state. Fix: delete PVC for the affected node (scale down first!), let it rejoin fresh. If persistent across nodes, full cluster reset may be needed (see step 4).
+
+### Sealed nodes don't listen on port 8201
+
+The Raft cluster port (8201) only opens after unseal. A sealed node shows port 8200 (API) open but 8201 (cluster) closed. This causes `"failed to make requestVote RPC: connection refused"` between nodes.
+
+### UI service round-robins unseal requests
+
+The OpenBao UI service targets all pods. Manual unseal via UI sends requests to random pods — you may unseal different nodes unintentionally. For manual unseal, always use `kubectl exec` targeting specific pods.
+
+### Token env variable in `kubectl exec`
+
+Use double quotes to expand `$BAO_TOKEN` in your local shell:
+```bash
+# Wrong — single quotes don't expand
+kubectl exec -n openbao openbao-0 -- sh -c 'BAO_TOKEN=$BAO_TOKEN bao operator raft list-peers'
+
+# Correct — double quotes expand locally
+kubectl exec -n openbao openbao-0 -- sh -c "BAO_TOKEN=$BAO_TOKEN bao operator raft list-peers"
+```
+
+### Flux doesn't recreate deleted ConfigMaps
+
+Helm's 3-way merge compares desired state with the last release — not with live state. A manually deleted ConfigMap won't be recreated unless you force a change. Fix: add a dummy annotation to trigger a Helm upgrade, or delete the Helm release secret and reconcile.

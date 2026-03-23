@@ -62,7 +62,6 @@ spec:
           readOnly: true
       ha:
         enabled: true
-        replicas: 2
         raft:
           enabled: true
           setNodeId: true

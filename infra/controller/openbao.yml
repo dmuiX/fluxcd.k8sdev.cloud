@@ -100,8 +100,8 @@ spec:
             }
       resources:
       requests:
-        cpu: "100m"
-        memory: "256Mi"
+        cpu: 100m
+        memory: 256Mi
     ui:
       enabled: true
   dependsOn:

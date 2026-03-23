@@ -34,7 +34,7 @@ spec:
   values:
     crds:
       enabled: true
-    replicaCount: 2
+    replicaCount: 3
     podDisruptionBudget:
       enabled: true
     enableCertificateOwnerRef: true # will delete secrets when certificate ressource is deleted
@@ -44,9 +44,9 @@ spec:
       enableGatewayAPI: true
     resources:
       requests:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: 50m
+        memory: 64Mi
       limits:
-        cpu: "200m"
-        memory: "128Mi"
-    dns01RecursiveNameservers: "1.1.1.1:53,9.9.9.9:53"
+        cpu: 200m
+        memory: 128Mi
+    dns01RecursiveNameservers: 1.1.1.1:53,9.9.9.9:53

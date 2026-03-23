@@ -38,9 +38,9 @@ spec:
   values:
     defaultSettings:
       defaultDataPath: /var/lib/longhorn
-      defaultReplicaCount: "2"
+      defaultReplicaCount: 3
       createDefaultDiskLabeledNodes: "false"
-      guaranteedInstanceManagerCPU: "12"
+      guaranteedInstanceManagerCPU: 12
     persistence:
       defaultClass: true
       defaultClassReplicaCount: 2
@@ -51,8 +51,8 @@ spec:
     longhornManager:
       resources:
         requests:
-          cpu: "100m"
-          memory: "256Mi"
+          cpu: 100m
+          memory: 256Mi
   dependsOn:
     - name: cilium
     - name: cert-manager

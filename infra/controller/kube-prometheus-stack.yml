@@ -47,19 +47,19 @@ spec:
       prometheusSpec:
         resources:
           requests:
-            cpu: "200m"
-            memory: "512Mi"
+            cpu: 200m
+            memory: 512Mi
     grafana:
       resources:
         requests:
-          cpu: "100m"
-          memory: "128Mi"
+          cpu: 100m
+          memory: 128Mi
     alertmanager:
       alertmanagerSpec:
         resources:
           requests:
-            cpu: "50m"
-            memory: "64Mi"
+            cpu: 50m
+            memory: 64Mi
   dependsOn:
     - name: cert-manager
     - name: cilium

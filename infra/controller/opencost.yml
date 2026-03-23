@@ -42,11 +42,11 @@ spec:
         dailyResolutionDays: 30 # default: 15
       exporter:
         defaultClusterId: talos-k8sdev
-        replicas: 2
+        replicas: 3
         resources:
           requests:
-            cpu: "10m"
-            memory: "55Mi"
+            cpu: 10m
+            memory: 55Mi
         persistence:
           enabled: true
           storageClass: longhorn # adjust based on your environment

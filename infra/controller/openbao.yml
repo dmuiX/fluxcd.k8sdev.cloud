@@ -39,6 +39,13 @@ spec:
       dataStorage:
         accessMode: ReadWriteMany
         storageClass: longhorn
+      postStart: # unseals cluster automaticcaly using a cluster secret
+        - /bin/sh
+        - -c
+        - |
+          sleep 5
+          until bao status 2>&1 | grep -q "Sealed"; do sleep 2; done
+          bao operator unseal "$(cat /openbao/secrets/unseal-key)"
       # --- Define the Volume to be mounted from the Secret ---
       volumes:
         # A logical name for the volume
@@ -88,6 +95,19 @@ spec:
           telemetry {
             prometheus_retention_time = "30s"
             disable_hostname = true
+          }
+
+          # Is joining the Nodes automatically
+          storage "raft" {
+            retry_join {
+              leader_api_addr = "http://openbao-0.openbao-internal:8200"
+            }
+            retry_join {
+              leader_api_addr = "http://openbao-1.openbao-internal:8200"
+            }
+            retry_join {
+              leader_api_addr = "http://openbao-2.openbao-internal:8200"
+            }
           }
       resources:
       requests:

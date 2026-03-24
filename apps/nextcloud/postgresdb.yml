@@ -1,0 +1,14 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-cluster
+spec:
+  instances: 3
+  bootstrap:
+    initdb:
+      database: nextcloud
+      owner: nextcloud
+      dataChecksums: true
+  storage:
+    size: 1Gi

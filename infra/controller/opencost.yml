@@ -31,6 +31,17 @@ spec:
         kind: HelmRepository
         name: opencost
       interval: 6h
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: PersistentVolumeClaim
+              name: opencost-pvc
+            patch: |
+              - op: add
+                path: /metadata/annotations/helm.sh~1resource-policy
+                value: keep
   values:
     replicas: 3
     opencost:

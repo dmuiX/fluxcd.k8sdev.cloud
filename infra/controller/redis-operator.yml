@@ -26,7 +26,7 @@ spec:
   chart:
     spec:
       chart: redis-operator
-      version: 1.20.0
+      version: 0.24.0
       sourceRef:
         kind: HelmRepository
         name: redis-operator
@@ -37,16 +37,3 @@ spec:
     replicaCount: 3
     podDisruptionBudget:
       enabled: true
-    enableCertificateOwnerRef: true # will delete secrets when certificate ressource is deleted
-    config:
-      apiVersion: controller.config.redis-operator.io/v1alpha1
-      kind: ControllerConfiguration
-      enableGatewayAPI: true
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 128Mi
-    dns01RecursiveNameservers: 1.1.1.1:53,9.9.9.9:53

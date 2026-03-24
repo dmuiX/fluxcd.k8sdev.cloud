@@ -36,13 +36,6 @@ kubectl create secret generic openbao-unseal-key \
   --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-```bash
-# you can red the secret from k8s if you did not save it before with:
- k get secrets -n openbao openbao-unseal-key -o json | jq -r '.data."unseal-key"' | base64 -d
-
-# jq does not like the - and you need -r bc bas64 will interpret the "" wrong!
-```
-
 > Back up this key in your password manager! Without it, the cluster cannot auto-unseal.
 
 ## 2. Initialize Cluster
@@ -127,12 +120,11 @@ kubectl scale statefulset openbao -n openbao --replicas 3
 
    | Field | Value |
    | ----- | ----- |
-   | Role | `external-secrets` |
    | Alias name source | `serviceaccount_name` |
    | Bound service account names | `external-secrets` |
    | Bound service account namespaces | `external-secrets` |
    | Generated Token's Policies | `external-secrets-policy` |
-   | Generated Token's Initial TTL | `1h` (3600) |
+   | Generated Token's Initial TTL | `24h` (86400) |
 
 6. Add to ClusterSecretStore:
 
@@ -181,7 +173,6 @@ The OpenBao UI service targets all pods. Manual unseal via UI sends requests to 
 ### Token env variable in `kubectl exec`
 
 Use double quotes to expand `$BAO_TOKEN` in your local shell:
-
 ```bash
 # Wrong — single quotes don't expand
 kubectl exec -n openbao openbao-0 -- sh -c 'BAO_TOKEN=$BAO_TOKEN bao operator raft list-peers'
@@ -193,3 +184,29 @@ kubectl exec -n openbao openbao-0 -- sh -c "BAO_TOKEN=$BAO_TOKEN bao operator ra
 ### Flux doesn't recreate deleted ConfigMaps
 
 Helm's 3-way merge compares desired state with the last release — not with live state. A manually deleted ConfigMap won't be recreated unless you force a change. Fix: add a dummy annotation to trigger a Helm upgrade, or delete the Helm release secret and reconcile.
+
+### jq fails on keys with hyphens
+
+`jq '.data.unseal-key'` fails because jq interprets `-` as a minus operator. Quote the key:
+```bash
+# Wrong
+jq '.data.unseal-key'
+
+# Correct
+jq '.data."unseal-key"'
+```
+
+### jq output includes quotes — use `-r` for piping
+
+`jq` wraps string output in quotes by default, which breaks piping to `base64 -d`. Use `-r` for raw output:
+```bash
+# Wrong — passes "dGVzdA==" (with quotes) to base64
+kubectl get secret ... -o json | jq '.data."unseal-key"' | base64 -d
+
+# Correct — passes raw dGVzdA== to base64
+kubectl get secret ... -o json | jq -r '.data."unseal-key"' | base64 -d
+```
+
+### Static key is double base64-encoded in K8s
+
+`openssl rand -base64 32` outputs a base64 string. Kubernetes encodes secret values in base64 again. So `kubectl get secret -o json` shows double-encoded data. One `base64 -d` gives you back the original base64 key — that's correct, not an error.

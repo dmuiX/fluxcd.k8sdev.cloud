@@ -33,3 +33,9 @@ spec:
       interval: 6h
   values:
     replicaCount: 3
+  dependsOn:
+    - name: cert-manager
+    - name: cilium
+    - name: longhorn
+    - name: openbao
+    - name: external-secrets

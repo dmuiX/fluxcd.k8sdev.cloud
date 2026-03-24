@@ -1,6 +1,8 @@
 # fluxcd.k8sdev.cloud
 
-A GitOps-managed Kubernetes home lab cluster using [FluxCD](https://fluxcd.io/). This repo serves as a reference for a fully automated cluster setup with secrets management, observability, storage, and networking — no manual kubectl apply after bootstrapping.
+A GitOps-managed Kubernetes playground cluster using [FluxCD](https://fluxcd.io/) — built to learn Kubernetes and get hands-on experience with running a production-grade cluster. This repo serves as a reference for a fully automated cluster setup with secrets management, observability, storage, and networking — no manual kubectl apply after bootstrapping.
+
+The cluster itself is built with Talos Linux and provisioned in [k8s-cluster-talos](https://github.com/dmuiX/k8s-cluster-talos).
 
 ## Why Cilium for everything?
 
@@ -116,7 +118,7 @@ Things that broke and why — in case this repo saves someone else the debugging
 
 ### Don't set CPU limits on infrastructure components
 
-Added resource limits to everything early on (Cilium, OpenBao, Prometheus, etc.) — nothing came back up. Infrastructure components have spiky CPU usage especially at startup. Requests are fine, limits are not. Removed all CPU limits, kept only memory requests.
+Added CPU limits to everything early on — Longhorn and Prometheus kept hanging and getting throttled, especially under load. Infrastructure components have spiky CPU usage. Requests are fine, limits are not. Removed all CPU limits, kept only memory requests.
 
 ### HelmRelease dependency order matters
 
@@ -132,7 +134,7 @@ Tried passing the static unseal key via `extraSecretEnvironmentVars` — OpenBao
 
 ### Longhorn must not run on control-plane nodes
 
-Longhorn tried to schedule on control-plane nodes which caused problems. `nodeSelector` with a worker label didn't work reliably — switched to a node affinity rule that explicitly excludes nodes with the `control-plane` taint (`DoesNotExist`).
+This cluster runs control-plane-only nodes (no dedicated workers), so Longhorn runs on control-planes by default. On clusters with dedicated workers, Longhorn should be restricted to worker nodes. `nodeSelector` with a worker label didn't work reliably — a node affinity rule that excludes `control-plane` nodes via `DoesNotExist` is more robust.
 
 ### kube-prometheus-stack needs Pod Security Admission exemption
 
@@ -149,6 +151,10 @@ Every HelmRelease needed the same boilerplate: `interval`, `timeout`, `driftDete
 ### CRDs: CreateReplace on install, Skip on upgrade
 
 CRD handling needs different strategies depending on the operation: `crds: CreateReplace` on install (to actually apply them), `crds: Skip` on upgrade (to avoid overwriting CRDs that other controllers may depend on). Getting this wrong causes silent CRD drift.
+
+### Drift detection needs ignore rules
+
+Enabling `driftDetection` immediately caused false positives — Flux flagged legitimate changes as drift: `/spec/replicas` modified by HPA, and `/status` on cert-manager Certificates written back by the controller. Fix: add ignore rules for both. Also set `mode: warn` instead of `enabled` so drift is logged but doesn't block reconciliation. Both rules are now applied globally via a Kustomization patch in `clusters/infra.yml` instead of repeating them in every HelmRelease.
 
 ### Longhorn storage needs ReadWriteMany
 

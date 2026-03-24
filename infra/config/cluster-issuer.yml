@@ -8,7 +8,7 @@ spec:
     # The ACME server URL will be overriden by server
     server: https://acme-v02.api.letsencrypt.org/directory
     # Email address used for ACME registration
-    email: daniel.ullrich@sproton.me
+    email: showier.cacaos49@icloud.com
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: letsencrypt

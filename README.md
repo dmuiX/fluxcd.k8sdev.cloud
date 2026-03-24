@@ -1,10 +1,10 @@
-# fluxcd.k8sdev.cloud
+# 🚀 Production Grade K8s Cluster — infra & apps deployed automatically via FluxCD
 
 A GitOps-managed Kubernetes playground cluster using [FluxCD](https://fluxcd.io/) — built to learn Kubernetes and get hands-on experience with running a production-grade cluster. This repo serves as a reference for a fully automated cluster setup with secrets management, observability, storage, and networking — no manual kubectl apply after bootstrapping.
 
 The cluster itself is built with Talos Linux and provisioned in [k8s-cluster-talos](https://github.com/dmuiX/k8s-cluster-talos).
 
-## Why Cilium for everything?
+## 🌐 Why Cilium for everything?
 
 One component that covers the full networking stack — no need to combine multiple tools:
 
@@ -13,7 +13,7 @@ One component that covers the full networking stack — no need to combine multi
 - **L2 Announcements** — announces LoadBalancer IPs via ARP to the local network, replaces MetalLB
 - **Gateway API** — ingress/routing without a separate ingress controller
 
-## Why OpenBao over Sealed Secrets?
+## 🔐 Why OpenBao over Sealed Secrets?
 
 Sealed Secrets encrypts secrets per-cluster and stores the ciphertext in Git. OpenBao (open-source Vault fork) keeps secrets completely out of Git and provides a central UI to manage them. The tradeoff is more setup complexity upfront, but day-to-day handling is simpler — add or update a secret in one place, External Secrets syncs it into the cluster automatically. External Secrets is the bridge that makes this work: it reads from OpenBao and creates the Kubernetes Secrets that workloads actually consume.
 
@@ -21,29 +21,29 @@ This repo went through both alternatives first: started with HashiCorp Vault, bu
 
 Setting up OpenBao on Kubernetes has quite a few gotchas (raft config, auto-unseal, HTTP vs HTTPS mismatches...). If you're doing this yourself: **[read the docs first](docs/openbao.md)**.
 
-## Why Longhorn?
+## 💾 Why Longhorn?
 
 On-prem cluster running on VMs — no cloud storage provider available. Longhorn is the simplest way to expose local node storage as a proper CSI-backed StorageClass with replication across nodes. No external storage infrastructure needed.
 
-## Why kube-prometheus-stack?
+## 📊 Why kube-prometheus-stack?
 
 The standard solution for Kubernetes monitoring. Prometheus + Grafana + Alertmanager in one Helm chart, with pre-built dashboards for the whole cluster out of the box.
 
-## Why cert-manager and External DNS?
+## 🔒 Why cert-manager and External DNS?
 
 Two annotations on a Gateway and you get a DNS record and a valid TLS certificate — fully automated, fully GitOps. No manual DNS or certificate management needed when deploying a new app.
 
-## Why CloudNative PG and Redis Operator?
+## 🗄️ Why CloudNative PG and Redis Operator?
 
 Declarative database provisioning via GitOps — define a PostgreSQL cluster or Redis instance as a YAML manifest and the operator handles the rest. No manual database setup outside of Git.
 
-## Why FluxCD over ArgoCD?
+## 🔄 Why FluxCD over ArgoCD?
 
 - Lower memory footprint
 - Great GUI integration via [Headlamp](https://headlamp.dev/) (FluxCD plugin) and the [Weaveworks GitOps VSCode extension](https://marketplace.visualstudio.com/items?itemName=Weaveworks.vscode-gitops-tools)
 - ArgoCD got annoying
 
-## Stack
+## 🧱 Stack
 
 | Component | Purpose | Why |
 | --------- | ------- | --- |
@@ -59,14 +59,14 @@ Declarative database provisioning via GitOps — define a PostgreSQL cluster or 
 | [CloudNative PG](https://cloudnative-pg.io/) | PostgreSQL operator | Manages PostgreSQL clusters declaratively |
 | [Redis Operator](https://github.com/spotahome/redis-operator) | Redis operator | Manages Redis instances declaratively |
 
-## Apps
+## 📦 Apps
 
 | App | Stack | Why |
 | --- | ----- | --- |
 | [Nextcloud](https://nextcloud.com/) | PostgreSQL (CloudNative PG) + Redis | Self-hosted file sync, but mainly to test CloudNative PG and Redis Operator in practice |
 | [podinfo](https://github.com/stefanprodan/podinfo) | — | Smoke test — verifies DNS, certs, routing, and the overall stack work end-to-end |
 
-## Repository Structure
+## 📁 Repository Structure
 
 ```text
 clusters/        # Flux entrypoint — reconciles infra and apps
@@ -85,7 +85,7 @@ infra-controller → infra-config → apps
 
 `infra-controller` and `infra-config` are split because config resources (e.g. `ClusterIssuer`, `ClusterSecretStore`, Gateways) depend on the CRDs that controllers install. Without the split, Flux would try to apply config before the CRDs exist and fail.
 
-## Deployment Order
+## 📋 Deployment Order
 
 Flux deploys infrastructure in dependency order:
 
@@ -101,7 +101,7 @@ Flux deploys infrastructure in dependency order:
 
 External DNS is deployed independently outside this order — it requires a `pihole` secret that must be created manually before bootstrapping (see [docs/external-dns.md](docs/external-dns.md)).
 
-## Secrets Strategy
+## 🔑 Secrets Strategy
 
 No secrets are stored in this repo. The flow is:
 
@@ -112,7 +112,7 @@ No secrets are stored in this repo. The flow is:
 
 OpenBao uses a static key for auto-unseal stored as a Kubernetes Secret — the cluster fully recovers after restarts without manual unsealing. See [docs/openbao.md](docs/openbao.md) for the full setup guide.
 
-## Learnings
+## 💡 Learnings
 
 Things that broke and why — in case this repo saves someone else the debugging time.
 
@@ -168,7 +168,7 @@ The transparent DNS proxy in Cilium interfered with DNS routing. Needs to be exp
 
 Started with HashiCorp Vault, switched after the BSL license change. Tried Sealed Secrets in between — encrypts secrets and stores them in Git, works fine, but managing everything through a central UI outside of Git is nicer day-to-day. Landed on OpenBao (open-source Vault fork) + External Secrets.
 
-## Docs
+## 📝 Docs
 
 - [cert-manager](docs/cert-manager.md)
 - [cert-manager & Gateway API](docs/cert-manager%20and%20gateway-api.md)

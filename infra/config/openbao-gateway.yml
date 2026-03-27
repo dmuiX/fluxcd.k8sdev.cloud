@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: openbao-gateway
+  name: openbao
   namespace: openbao
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
@@ -29,7 +29,7 @@ metadata:
   namespace: openbao
 spec:
   parentRefs:
-    - name: openbao-gateway
+    - name: openbao
       namespace: openbao
   rules:
     - matches:

@@ -55,6 +55,12 @@ spec:
             memory: 512Mi
         serviceName: prometheus
     grafana:
+      additionalDataSources:
+        - name: Loki
+          type: loki
+          url: http://loki.monitoring:3100
+          access: proxy
+          isDefault: false
       resources:
         requests:
           cpu: 100m

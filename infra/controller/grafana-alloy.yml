@@ -11,9 +11,54 @@ spec:
   targetNamespace: monitoring
   chart:
     spec:
-      chart: grafana-alloy
+      chart: alloy
       version: 1.6.2
       sourceRef:
         kind: HelmRepository
         name: grafana
       interval: 6h
+  values:
+    alloy:
+      configMap:
+        content: |
+          // Discover all pods for log collection
+          discovery.kubernetes "pods" {
+            role = "pod"
+          }
+
+          // Relabel to extract metadata
+          discovery.relabel "pods" {
+            targets = discovery.kubernetes.pods.targets
+
+            rule {
+              source_labels = ["__meta_kubernetes_namespace"]
+              target_label  = "namespace"
+            }
+            rule {
+              source_labels = ["__meta_kubernetes_pod_name"]
+              target_label  = "pod"
+            }
+            rule {
+              source_labels = ["__meta_kubernetes_pod_container_name"]
+              target_label  = "container"
+            }
+            rule {
+              source_labels = ["__meta_kubernetes_pod_node_name"]
+              target_label  = "node"
+            }
+          }
+
+          // Collect logs from discovered pods
+          loki.source.kubernetes "pods" {
+            targets    = discovery.relabel.pods.output
+            forward_to = [loki.write.default.receiver]
+          }
+
+          // Send logs to Loki
+          loki.write "default" {
+            endpoint {
+              url = "http://loki.monitoring:3100/loki/api/v1/push"
+            }
+          }
+  dependsOn:
+    - name: loki

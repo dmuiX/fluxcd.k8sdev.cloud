@@ -1,0 +1,179 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-hubble-http
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  hubble-http.json: |
+    {
+      "annotations": { "list": [] },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "links": [],
+      "panels": [
+        {
+          "title": "Request Rate by Workload",
+          "type": "timeseries",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "targets": [
+            {
+              "expr": "sum(rate(hubble_http_requests_total{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (destination_workload, response_code)",
+              "legendFormat": "{{destination_workload}} - {{response_code}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "custom": { "fillOpacity": 10, "lineWidth": 2 }
+            }
+          }
+        },
+        {
+          "title": "Error Rate (5xx) by Workload",
+          "type": "timeseries",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "targets": [
+            {
+              "expr": "100 - sum(rate(hubble_http_requests_total{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\", response_code!~\"5.*\"}[$__rate_interval])) / sum(rate(hubble_http_requests_total{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) * 100",
+              "legendFormat": "{{destination_workload}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "custom": { "fillOpacity": 10, "lineWidth": 2 },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "red", "value": 1 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "Latency P99 by Workload",
+          "type": "timeseries",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.99, sum(rate(hubble_http_request_duration_seconds_bucket{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (le, destination_workload))",
+              "legendFormat": "p99 {{destination_workload}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": { "fillOpacity": 10, "lineWidth": 2 },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 0.25 },
+                  { "color": "red", "value": 0.5 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "Latency P50 / P95 / P99",
+          "type": "timeseries",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.50, sum(rate(hubble_http_request_duration_seconds_bucket{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (le))",
+              "legendFormat": "p50"
+            },
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(hubble_http_request_duration_seconds_bucket{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (le))",
+              "legendFormat": "p95"
+            },
+            {
+              "expr": "histogram_quantile(0.99, sum(rate(hubble_http_request_duration_seconds_bucket{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (le))",
+              "legendFormat": "p99"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": { "fillOpacity": 10, "lineWidth": 2 }
+            }
+          }
+        },
+        {
+          "title": "Requests by Response Code",
+          "type": "piechart",
+          "gridPos": { "h": 8, "w": 8, "x": 0, "y": 16 },
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "targets": [
+            {
+              "expr": "sum(increase(hubble_http_requests_total{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (response_code)",
+              "legendFormat": "{{response_code}}"
+            }
+          ]
+        },
+        {
+          "title": "Request Rate by Source Workload",
+          "type": "timeseries",
+          "gridPos": { "h": 8, "w": 16, "x": 8, "y": 16 },
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "targets": [
+            {
+              "expr": "sum(rate(hubble_http_requests_total{destination_workload_namespace=~\"$namespace\", destination_workload=~\"$workload\"}[$__rate_interval])) by (source_workload)",
+              "legendFormat": "{{source_workload}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "custom": { "fillOpacity": 10, "lineWidth": 2 }
+            }
+          }
+        }
+      ],
+      "schemaVersion": 39,
+      "tags": ["hubble", "cilium", "flagger", "canary"],
+      "templating": {
+        "list": [
+          {
+            "name": "datasource",
+            "type": "datasource",
+            "query": "prometheus",
+            "current": { "selected": true, "text": "Prometheus", "value": "prometheus" }
+          },
+          {
+            "name": "namespace",
+            "type": "query",
+            "datasource": { "type": "prometheus", "uid": "${datasource}" },
+            "query": "label_values(hubble_http_requests_total, destination_workload_namespace)",
+            "refresh": 2,
+            "includeAll": true,
+            "multi": false,
+            "current": { "selected": false, "text": "podinfo", "value": "podinfo" }
+          },
+          {
+            "name": "workload",
+            "type": "query",
+            "datasource": { "type": "prometheus", "uid": "${datasource}" },
+            "query": "label_values(hubble_http_requests_total{destination_workload_namespace=~\"$namespace\"}, destination_workload)",
+            "refresh": 2,
+            "includeAll": true,
+            "multi": false,
+            "current": { "selected": false, "text": "All", "value": "$__all" }
+          }
+        ]
+      },
+      "time": { "from": "now-1h", "to": "now" },
+      "title": "Hubble HTTP / Flagger Canary Metrics",
+      "uid": "hubble-http-flagger"
+    }

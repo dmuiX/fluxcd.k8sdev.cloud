@@ -95,6 +95,20 @@ spec:
           - "httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction"
         serviceMonitor:
           enabled: true
+        dashboards:
+          enabled: true
+          namespace: monitoring
+          annotations:
+            grafana_folder: Cilium
+    dashboards:
+      enabled: true
+      namespace: monitoring
+      annotations:
+        grafana_folder: Cilium
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
     resources:
       requests:
         cpu: "100m"

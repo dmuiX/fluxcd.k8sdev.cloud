@@ -55,6 +55,9 @@ Declarative database provisioning via GitOps — define a PostgreSQL cluster or 
 | [External Secrets](https://external-secrets.io/) | Sync secrets from OpenBao into Kubernetes | Secrets live in OpenBao, not in this repo; External Secrets syncs them into Kubernetes at runtime |
 | [External DNS](https://github.com/kubernetes-sigs/external-dns) | Automatic DNS records | Creates DNS entries in Pi-hole automatically when a Gateway or Service is created |
 | [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) | Prometheus + Grafana monitoring | Full cluster observability out of the box |
+| [Loki](https://grafana.com/oss/loki/) | Log aggregation | SingleBinary mode with filesystem storage on Longhorn — queried through Grafana |
+| [Grafana Alloy](https://grafana.com/oss/alloy/) | Log collector | DaemonSet that collects logs from all pods and ships them to Loki |
+| [Flagger](https://flagger.app/) | Progressive delivery | Canary deployments with automated rollback based on Hubble HTTP metrics |
 | [OpenCost](https://www.opencost.io/) | Kubernetes cost monitoring | Track resource cost per workload |
 | [CloudNative PG](https://cloudnative-pg.io/) | PostgreSQL operator | Manages PostgreSQL clusters declaratively |
 | [Redis Operator](https://github.com/spotahome/redis-operator) | Redis operator | Manages Redis instances declaratively |
@@ -64,7 +67,7 @@ Declarative database provisioning via GitOps — define a PostgreSQL cluster or 
 | App | Stack | Why |
 | --- | ----- | --- |
 | [Nextcloud](https://nextcloud.com/) | PostgreSQL (CloudNative PG) + Redis | Self-hosted file sync, but mainly to test CloudNative PG and Redis Operator in practice |
-| [podinfo](https://github.com/stefanprodan/podinfo) | — | Smoke test — verifies DNS, certs, routing, and the overall stack work end-to-end |
+| [podinfo](https://github.com/stefanprodan/podinfo) | Flagger Canary | Smoke test with progressive delivery — verifies DNS, certs, routing, canary deployments, and the overall stack work end-to-end |
 
 ## 📁 Repository Structure
 
@@ -95,9 +98,12 @@ Flux deploys infrastructure in dependency order:
 4. OpenBao
 5. External Secrets
 6. kube-prometheus-stack
-7. OpenCost
-8. CloudNative PG
-9. Redis Operator
+7. Loki
+8. Grafana Alloy
+9. Flagger + Loadtester
+10. OpenCost
+11. CloudNative PG
+12. Redis Operator
 
 External DNS is deployed independently outside this order — it requires a `pihole` secret that must be created manually before bootstrapping (see [docs/external-dns.md](docs/external-dns.md)).
 
@@ -174,3 +180,5 @@ Started with HashiCorp Vault, switched after the BSL license change. Tried Seale
 - [cert-manager & Gateway API](docs/cert-manager%20and%20gateway-api.md)
 - [External DNS](docs/external-dns.md)
 - [OpenBao](docs/openbao.md)
+- [Flagger Canary Deployment](docs/flagger%20canary%20deployment%20ci-cd.md)
+- [Monitoring & Observability](docs/monitoring.md)

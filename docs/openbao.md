@@ -40,6 +40,10 @@ kubectl create secret generic openbao-unseal-key \
 
 ## 2. Initialize Cluster
 
+## need to run that script to initialize the raft backend
+
+script doesnt work very well here the manual approach:
+
 ```bash
 # Check if already initialized
 kubectl exec -n openbao openbao-0 -- bao status
@@ -63,6 +67,8 @@ grep "Recovery Key" openbao-keys.txt | awk '{print $NF}'
 > After init, the leader auto-unseals via the static key in `seal "static"`.
 > Other nodes auto-join via `retry_join` and auto-unseal as well.
 > No manual unseal or raft join needed.
+
+
 
 ## 3. Verify Cluster
 

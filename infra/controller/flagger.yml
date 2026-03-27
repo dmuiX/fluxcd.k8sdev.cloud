@@ -38,7 +38,7 @@ spec:
     podDisruptionBudget.enabled: true
     prometheus.install: false
     meshProvider: gatewayapi
-    metricsServer: http://monitoring-prometheus:9090
+    metricsServer: http://monitoring-prometheus.monitoring:9090
   dependsOn:
     - name: cert-manager
     - name: cilium

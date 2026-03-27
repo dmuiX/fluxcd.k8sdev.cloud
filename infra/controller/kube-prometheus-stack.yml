@@ -49,6 +49,7 @@ spec:
           requests:
             cpu: 200m
             memory: 512Mi
+        serviceName: prometheus
     grafana:
       resources:
         requests:
@@ -60,6 +61,7 @@ spec:
           requests:
             cpu: 50m
             memory: 64Mi
+        serviceName: altermanager
   dependsOn:
     - name: cert-manager
     - name: cilium

@@ -89,7 +89,7 @@ spec:
   hostnames:
     - podinfo.k8sdev.cloud
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: podinfo-hpa

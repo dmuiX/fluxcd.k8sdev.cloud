@@ -45,6 +45,8 @@ spec:
     namespaceOverride: monitoring
     prometheus:
       prometheusSpec:
+        serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelectorNilUsesHelmValues: false
         serviceMonitorNamespaceSelector: {}
         serviceMonitorSelector: {}
         podMonitorNamespaceSelector: {}

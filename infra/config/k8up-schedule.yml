@@ -12,10 +12,10 @@ spec:
       endpoint: https://e7b3567ace974b8838999da5f1858701.r2.cloudflarestorage.com/k8sdev-backups
       bucket: k8sdev-backups
       accessKeyIDSecretRef: 
-        name: r3-credentials
+        name: r2-credentials
         key: access-key-id
       secretAccessKeySecretRef:
-        name: r3-credentials
+        name: r2-credentials
         key: secret-access-key
   backup:
     schedule: "0 2 * * *" # daily @2:00

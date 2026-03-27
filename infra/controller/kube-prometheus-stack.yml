@@ -57,6 +57,56 @@ spec:
             memory: 512Mi
         serviceName: prometheus
     grafana:
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+            - name: grafana-dashboards
+              orgId: 1
+              folder: ""
+              type: file
+              disableDeletion: false
+              editable: true
+              options:
+                path: /var/lib/grafana/dashboards/grafana-dashboards
+      dashboards:
+        grafana-dashboards:
+          cert-manager: # https://grafana.com/grafana/dashboards/20842
+            gnetId: 20842
+            revision: 3
+            datasource: Prometheus
+          longhorn: # https://grafana.com/grafana/dashboards/16888
+            gnetId: 16888
+            revision: 11
+            datasource: Prometheus
+          loki-metrics: # https://grafana.com/grafana/dashboards/17781
+            gnetId: 17781
+            revision: 1
+            datasource: Prometheus
+          external-secrets: # https://grafana.com/grafana/dashboards/21640
+            gnetId: 21640
+            revision: 4
+            datasource: Prometheus
+          cloudnative-pg: # https://grafana.com/grafana/dashboards/20417
+            gnetId: 20417
+            revision: 4
+            datasource: Prometheus
+          flagger: # https://grafana.com/grafana/dashboards/15158
+            gnetId: 15158
+            revision: 5
+            datasource: Prometheus
+          k8up: # https://grafana.com/grafana/dashboards/20166
+            gnetId: 20166
+            revision: 4
+            datasource: Prometheus
+          openbao: # https://grafana.com/grafana/dashboards/23725
+            gnetId: 23725
+            revision: 1
+            datasource: Prometheus
+          hubble-l7-http-by-workload: # https://grafana.com/grafana/dashboards/19423 (Isovalent official)
+            gnetId: 19423
+            revision: 1
+            datasource: Prometheus
       additionalDataSources:
         - name: Loki
           type: loki

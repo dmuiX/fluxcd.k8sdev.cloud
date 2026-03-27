@@ -79,6 +79,9 @@ spec:
         name: cilium
     l2announcements:
       enabled: true
+    operator:
+      dashboards:
+        enabled: true
     hubble:
       ui:
         enabled: true

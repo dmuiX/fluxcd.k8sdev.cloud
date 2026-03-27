@@ -110,4 +110,5 @@ spec:
     - name: longhorn
     - name: openbao
     - name: external-secrets
+    - name: external-dns
     - name: kube-prometheus-stack

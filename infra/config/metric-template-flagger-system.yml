@@ -1,8 +1,9 @@
+---
 apiVersion: flagger.app/v1beta1
 kind: MetricTemplate
 metadata:
   name: latency
-  namespace: flagger-system
+  namespace: flagger
 spec:
   provider:
     type: prometheus
@@ -24,7 +25,7 @@ apiVersion: flagger.app/v1beta1
 kind: MetricTemplate
 metadata:
   name: error-rate
-  namespace: flagger-system
+  namespace: flagger
 spec:
   provider:
     type: prometheus

@@ -128,6 +128,7 @@ spec:
     apiVersion: autoscaling/v2
     kind: HorizontalPodAutoscaler
     name: podinfo
+  provider: "gatewayapi:v1"
   service:
     # service port number
     port: 9898
@@ -179,7 +180,7 @@ spec:
         timeout: 15s
         metadata:
           type: bash
-          cmd: "curl -sd 'anon' http://podinfo-canary.test:9898/token | grep token"
+          cmd: "curl -sd 'anon' http://podinfo.podinfo:9898/token | grep token"
       - name: load-test
         url: http://flagger-loadtester.flagger/
         timeout: 5s

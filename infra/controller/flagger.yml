@@ -37,7 +37,7 @@ spec:
       replicaCount: 3
     podDisruptionBudget.enabled: true
     prometheus.install: false
-    meshProvider: gatewayapi
+    meshProvider: "gatewayapi:v1"
     metricsServer: http://monitoring-prometheus.monitoring:9090
   dependsOn:
     - name: cert-manager

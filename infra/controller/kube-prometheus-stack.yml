@@ -50,6 +50,10 @@ spec:
             cpu: 200m
             memory: 512Mi
     grafana:
+      admin:
+        existingsecret: grafana
+        userKey: user
+        passwordKey: password
       dashboardProviders:
         dashboardproviders.yaml:
           apiVersion: 1

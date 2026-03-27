@@ -30,7 +30,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 82.11.0
+      version: 82.15.0
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus-stack
@@ -61,7 +61,7 @@ spec:
           requests:
             cpu: 50m
             memory: 64Mi
-        serviceName: altermanager
+        serviceName: alertmanager
   dependsOn:
     - name: cert-manager
     - name: cilium

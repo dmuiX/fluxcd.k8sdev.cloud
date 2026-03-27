@@ -33,6 +33,8 @@ spec:
       interval: 6h
   values:
     replicaCount: 3
+    monitoring:
+      podMonitorEnabled: true
   dependsOn:
     - name: cert-manager
     - name: cilium

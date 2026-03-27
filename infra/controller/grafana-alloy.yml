@@ -18,6 +18,8 @@ spec:
         name: grafana
       interval: 6h
   values:
+    serviceMonitor:
+      enabled: true
     alloy:
       configMap:
         content: |

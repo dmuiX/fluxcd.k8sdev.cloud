@@ -49,6 +49,9 @@ spec:
         enabled: true
         storageClass: longhorn
         size: 10Gi
+    monitoring:
+      serviceMonitor:
+        enabled: true
     chunksCache:
       enabled: false
     resultsCache:

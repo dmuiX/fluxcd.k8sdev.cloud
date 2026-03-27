@@ -32,6 +32,12 @@ spec:
         name: openbao
       interval: 1m0s
   values:
+    global:
+      serverTelemetry:
+        prometheusOperator: true
+    serverTelemetry:
+      serviceMonitor:
+        enabled: true
     server:
       auditStorage:
         accessMode: ReadWriteMany
@@ -72,6 +78,7 @@ spec:
               tls_disable = 1
               address = "[::]:8200"
               cluster_address = "[::]:8201"
+              unauthenticated_metrics_access = "true"
             }
 
             service_registration "kubernetes" {}

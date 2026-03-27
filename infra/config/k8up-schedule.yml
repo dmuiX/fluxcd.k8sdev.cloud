@@ -21,12 +21,10 @@ spec:
     schedule: "0 2 * * *" # daily @2:00
     failedJobsHistoryLimit: 2
     successfulJobsHistoryLimit: 2
-    # optional
-    #promURL: https://prometheus-io-instance:8443
+    promURL: http://prometheus-pushgateway.monitoring:9091
   check:
     schedule: "0 1 * * 1" # on each monday @ 1:00
-    # optional
-    #promURL: https://prometheus-io-instance:8443
+    promURL: http://prometheus-pushgateway.monitoring:9091
   prune:
     schedule: "0 1 * * 0" # on each sunday @ 1:00
     retention:

@@ -38,6 +38,8 @@ spec:
     podDisruptionBudget.enabled: true
     prometheus.install: false
     meshProvider: "gatewayapi:v1"
+    serviceMonitor:
+      enabled: true
     metricsServer: http://monitoring-prometheus.monitoring:9090
   dependsOn:
     - name: cert-manager

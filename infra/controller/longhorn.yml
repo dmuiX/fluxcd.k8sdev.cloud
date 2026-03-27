@@ -48,6 +48,9 @@ spec:
     service:
       ui:
         type: ClusterIP
+    metrics:
+      serviceMonitor:
+        enabled: true
     longhornManager:
       resources:
         requests:

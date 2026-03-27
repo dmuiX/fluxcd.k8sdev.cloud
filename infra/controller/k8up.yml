@@ -33,3 +33,6 @@ spec:
       interval: 6h
   values:
     replicaCount: 3
+    metrics:
+      serviceMonitor:
+        enabled: true

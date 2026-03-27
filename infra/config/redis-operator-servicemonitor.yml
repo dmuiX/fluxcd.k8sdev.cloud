@@ -4,6 +4,8 @@ kind: ServiceMonitor
 metadata:
   name: redis-operator
   namespace: redis-operator
+  labels:
+    release: kube-prometheus-stack
 spec:
   selector:
     matchLabels:

@@ -45,12 +45,6 @@ spec:
     namespaceOverride: monitoring
     prometheus:
       prometheusSpec:
-        serviceMonitorSelectorNilUsesHelmValues: false
-        podMonitorSelectorNilUsesHelmValues: false
-        serviceMonitorNamespaceSelector: {}
-        serviceMonitorSelector: {}
-        podMonitorNamespaceSelector: {}
-        podMonitorSelector: {}
         resources:
           requests:
             cpu: 200m

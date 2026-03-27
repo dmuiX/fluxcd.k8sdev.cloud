@@ -24,7 +24,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  timeout: 5m0s
+  timeout: 15m0s
   releaseName: kube-prometheus-stack
   targetNamespace: monitoring
   chart:
@@ -55,7 +55,6 @@ spec:
           requests:
             cpu: 200m
             memory: 512Mi
-        serviceName: prometheus
     grafana:
       dashboardProviders:
         dashboardproviders.yaml:
@@ -123,7 +122,6 @@ spec:
           requests:
             cpu: 50m
             memory: 64Mi
-        serviceName: alertmanager
   dependsOn:
     - name: cert-manager
     - name: cilium

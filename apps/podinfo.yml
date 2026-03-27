@@ -138,8 +138,10 @@ spec:
       - podinfo.k8sdev.cloud
     # Reference to the Gateway that the generated HTTPRoute would attach to.
     gatewayRefs:
-      - name: gateway
+      - name: podinfo
         namespace: podinfo
+        group: gateway.networking.k8s.io
+        kind: Gateway
   analysis:
     # schedule interval (default 60s)
     interval: 1m
@@ -182,4 +184,4 @@ spec:
         url: http://flagger-loadtester.flagger/
         timeout: 5s
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -host podinfo.k8sdev.cloud http://podinfo-gateway.podinfo"
+          cmd: "hey -z 2m -q 10 -c 2 -host podinfo.k8sdev.cloud http://podinfo.podinfo"

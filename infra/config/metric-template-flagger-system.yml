@@ -7,7 +7,7 @@ metadata:
 spec:
   provider:
     type: prometheus
-    address: http://prometheus.monitoring:9090
+    address: http://monitoring-prometheus.monitoring:9090
   query: |
     histogram_quantile(0.99,
       sum(
@@ -29,7 +29,7 @@ metadata:
 spec:
   provider:
     type: prometheus
-    address: http://prometheus.monitoring:9090
+    address: http://monitoring-prometheus.monitoring:9090
   query: |
     100 - sum(
       rate(

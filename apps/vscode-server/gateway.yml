@@ -1,0 +1,43 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: vscode-server
+  namespace: vscode-server
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: vscode-server.k8sdev.cloud
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - protocol: HTTPS
+      port: 443
+      name: vscode-server
+      hostname: vscode-server.k8sdev.cloud
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: vscode-server-tls
+      allowedRoutes:
+        namespaces:
+          from: Same
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vscode-server
+  namespace: vscode-server
+spec:
+  parentRefs:
+    - name: vscode-server
+      namespace: vscode-server
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vscode-server
+          port: 8000
+  hostnames:
+    - vscode-server.k8sdev.cloud

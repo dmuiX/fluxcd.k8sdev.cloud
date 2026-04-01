@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vscode-server
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: vscode-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://dmuiX.github.io/vscode-server-dockerized
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vscode-server
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  timeout: 5m0s
+  chart:
+    spec:
+      chart: vscode-server
+      version: 2026.04.01-fc23f2d
+      sourceRef:
+        kind: HelmRepository
+        name: vscode-server
+      interval: 6h
+  values:
+    imagePullSecrets: 
+      - name: ghcr-credentials
+    limits:
+      cpu: 1000m
+  releaseName: vscode-server
+  targetNamespace: vscode-server
+  install:
+    remediation:
+      retries: 3
+    createNamespace: true
+  upgrade:
+    remediation:
+      retries: 3
+  driftDetection:
+    mode: enabled
+    ignore:
+      - paths: ["/spec/replicas"]

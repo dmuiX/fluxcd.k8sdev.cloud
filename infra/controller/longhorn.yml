@@ -43,7 +43,7 @@ spec:
       guaranteedInstanceManagerCPU: 12
     persistence:
       defaultClass: true
-      defaultClassReplicaCount: 2
+      defaultClassReplicaCount: 3
       reclaimPolicy: Retain
     service:
       ui:

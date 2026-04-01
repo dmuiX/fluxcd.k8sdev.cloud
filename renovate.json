@@ -1,0 +1,60 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "flux": {
+    "enabled": true
+  },
+  "helm-values": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Group Grafana/monitoring stack updates",
+      "matchPackageNames": [
+        "kube-prometheus-stack",
+        "prometheus-pushgateway",
+        "loki",
+        "alloy"
+      ],
+      "groupName": "monitoring stack",
+      "groupSlug": "monitoring-stack"
+    },
+    {
+      "description": "Group Grafana alloy chart (named 'alloy' in the repo)",
+      "matchPackageNames": ["alloy"],
+      "registryUrls": ["https://grafana.github.io/helm-charts"]
+    },
+    {
+      "description": "Automerge patch updates for stable infra",
+      "matchUpdateTypes": ["patch"],
+      "matchPackageNames": [
+        "cert-manager",
+        "external-dns",
+        "external-secrets",
+        "cloudnative-pg",
+        "longhorn",
+        "k8up"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Require manual approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Skip vscode-server - uses CalVer from CI, not semver",
+      "matchPackageNames": ["vscode-server-dockerized"],
+      "enabled": false
+    },
+    {
+      "description": "Keep podinfo on 6.x range",
+      "matchPackageNames": ["podinfo"],
+      "allowedVersions": "6.x"
+    }
+  ]
+}

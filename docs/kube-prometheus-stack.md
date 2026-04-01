@@ -1,3 +1,19 @@
+## upgrade crds manually
+
+With Helm v3, CRDs created by this chart are not updated by default and should be manually updated. Consult also the Helm Documentation on CRDs.
+
+CRDs update lead to a major version bump. The Chart's appVersion refers to the prometheus-operator's version with matching CRDs.
+
+See helm upgrade for command documentation.
+
+ergo 
+
+curl -s "https://api.github.com/repos/prometheus-community/helm-charts/contents/charts/kube-prometheus-stack/charts/crds/crds" \                                                                                                         ─╯
+  | grep '"download_url"' \
+  | cut -d'"' -f4 \
+  | while read url; do curl -sL "$url"; echo "---"; done \
+  > infra/crds/kube-prometheus-stack.yaml
+
 # Monitoring & Observability Setup
 
 ## Stack
@@ -12,24 +28,19 @@
 
 ---
 
-## Prometheus: ServiceMonitors aus allen Namespaces scrapen
+## Prometheus: ServiceMonitor Discovery
 
-kube-prometheus-stack injiziert per Default `release: kube-prometheus-stack` als Label-Selector auf die Prometheus CR. Damit werden nur ServiceMonitors mit diesem Label gescrapt — alles aus anderen Namespaces (Cilium, Hubble, External DNS, OpenCost) wird ignoriert.
+kube-prometheus-stack injiziert per Default `release: kube-prometheus-stack` als Label-Selector auf die Prometheus CR. Damit werden nur ServiceMonitors mit diesem Label gescrapt.
 
-**Fix:** Zwei Helm Values setzen:
+**Richtiger Ansatz:** Jedes Helm-Chart erstellt seinen ServiceMonitor mit `release: kube-prometheus-stack` Label automatisch (via `serviceMonitor.enabled: true` in den jeweiligen Chart-Values). Default-Selector in kube-prometheus-stack unveraendert lassen.
+
+Manuelle ServiceMonitors (nicht von Helm verwaltet) brauchen das Label explizit:
 
 ```yaml
-prometheus:
-  prometheusSpec:
-    serviceMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorNamespaceSelector: {}
-    serviceMonitorSelector: {}
-    podMonitorNamespaceSelector: {}
-    podMonitorSelector: {}
+metadata:
+  labels:
+    release: kube-prometheus-stack
 ```
-
-`serviceMonitorSelectorNilUsesHelmValues: false` verhindert, dass der Chart den Label-Filter injiziert. `{}` bedeutet dann tatsaechlich "alles matchen".
 
 **Verifizieren:**
 
@@ -41,6 +52,47 @@ kubectl get prometheus -n monitoring -o yaml | grep -A 5 "serviceMonitor"
 kubectl port-forward -n monitoring svc/monitoring-prometheus 9090:9090
 # → http://localhost:9090/targets
 ```
+
+---
+
+## Bekannte Fallstricke
+
+### Leere ServiceMonitor-Selektoren (`{}`) nicht verwenden
+
+```yaml
+# FALSCH — patcht beim Upgrade alle ServiceMonitors cluster-weit → Timeout
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
+```
+
+Mit `{}` selektiert Prometheus alles im Cluster. Beim Helm-Upgrade muss der helm-controller dann alle ServiceMonitors in allen Namespaces patchen — das fuehrt bei 5 Minuten Timeout zu `context deadline exceeded`. Stattdessen den Default-Selektor (Label-basiert) nutzen.
+
+### `serviceName` in `prometheusSpec`/`alertmanagerSpec` nicht setzen
+
+`serviceName` ist ein Feld der Prometheus/Alertmanager-CRD, das vom Operator verwaltet wird. Wenn es ueber Helm-Values gesetzt wird, kaempfen Helm und der Prometheus-Operator gegeneinander — das fuehrt zu perpetuellem `DriftDetected` (1 addition) auf der Alertmanager-Ressource.
+
+### Upgrade-Timeout
+
+kube-prometheus-stack benoetigt bei Erstinstallation oder nach groesseren Aenderungen mehr als 5 Minuten. Timeout auf mindestens `15m0s` setzen:
+
+```yaml
+spec:
+  timeout: 15m0s
+```
+
+### Loki Helm Repository (Stand Maerz 2026)
+
+Grafana hat den Loki-Chart am 16. Maerz 2026 in die Community geforkt. Neue URL:
+
+```yaml
+# loki.yml HelmRepository
+url: https://grafana-community.github.io/helm-charts
+```
+
+Die alte URL `https://grafana.github.io/helm-charts` ist fuer Loki deprecated (nur noch GEL/Enterprise).
 
 ---
 

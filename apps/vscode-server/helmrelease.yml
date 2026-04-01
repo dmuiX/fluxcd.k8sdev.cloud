@@ -32,7 +32,9 @@ spec:
         name: vscode-server
       interval: 6h
   values:
-    imagePullSecrets: 
+    image:
+      repository: ghcr.io/dmuix/vscode-server-dockerized
+    imagePullSecrets:
       - name: ghcr-credentials
     limits:
       cpu: 1000m

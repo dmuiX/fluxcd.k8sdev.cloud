@@ -38,6 +38,10 @@ spec:
       - name: ghcr-credentials
     limits:
       cpu: 1000m
+    user:
+      existingSecret: ghcr-credentials
+      userKey: username
+      passwordKey: password
   releaseName: vscode-server
   targetNamespace: vscode-server
   install:

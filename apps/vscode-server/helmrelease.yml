@@ -39,7 +39,7 @@ spec:
     limits:
       cpu: 1000m
     user:
-      existingSecret: ghcr-credentials
+      existingSecret: vscode-server-credentials
       userKey: username
       passwordKey: password
   releaseName: vscode-server

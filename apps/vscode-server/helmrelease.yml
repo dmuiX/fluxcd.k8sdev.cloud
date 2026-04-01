@@ -11,7 +11,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  url: https://dmuiX.github.io/vscode-server-dockerized
+  url: https://raw.githubusercontent.com/dmuiX/vscode-server-dockerized/main/charts
   secretRef:
     name: ghcr-credentials
 ---
@@ -25,7 +25,7 @@ spec:
   timeout: 5m0s
   chart:
     spec:
-      chart: vscode-server-dockerized
+      chart: vscode-server
       version: 2026.04.01-fc23f2d # renovate: skip
       sourceRef:
         kind: HelmRepository

@@ -38,9 +38,6 @@ spec:
   values:
     crds:
       enabled: true
-    route:
-      main:
-        enabled: true
     fullnameOverride: monitoring
     namespaceOverride: monitoring
     prometheus:

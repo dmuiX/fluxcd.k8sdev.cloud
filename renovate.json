@@ -5,6 +5,12 @@
     ":dependencyDashboard",
     ":semanticCommits"
   ],
+  "hostRules": [
+    {
+      "matchHost": "raw.githubusercontent.com",
+      "token": "{{ secrets.GHCR_TOKEN }}"
+    }
+  ],
   "flux": {
     "enabled": true,
     "fileMatch": ["(^|/)infra/.+\\.yml$", "(^|/)apps/.+\\.yml$", "(^|/)clusters/.+\\.yml$"]

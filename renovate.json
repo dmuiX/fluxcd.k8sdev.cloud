@@ -58,7 +58,7 @@
       "description": "Group FluxCD ecosystem updates",
       "matchPackageNames": [
         "flagger",
-        "flagger-loadtester"
+        "loadtester"
       ],
       "groupName": "fluxcd",
       "groupSlug": "fluxcd",

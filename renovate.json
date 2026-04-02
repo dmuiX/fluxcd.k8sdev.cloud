@@ -28,6 +28,7 @@
       "groupSlug": "monitoring-stack",
       "registryUrls": [
         "https://grafana.github.io/helm-charts",
+        "https://grafana-community.github.io/helm-charts",
         "https://prometheus-community.github.io/helm-charts"
       ]
     },
@@ -55,7 +56,10 @@
         "flagger-loadtester"
       ],
       "groupName": "fluxcd",
-      "groupSlug": "fluxcd"
+      "groupSlug": "fluxcd",
+      "registryUrls": [
+        "https://flagger.app"
+      ]
     },
     {
       "description": "Longhorn and OpenBao updates separately - high risk on upgrade",

@@ -27,7 +27,8 @@
       "groupName": "monitoring stack",
       "groupSlug": "monitoring-stack",
       "registryUrls": [
-        "https://grafana.github.io/helm-charts"
+        "https://grafana.github.io/helm-charts",
+        "https://prometheus-community.github.io/helm-charts"
       ]
     },
     {

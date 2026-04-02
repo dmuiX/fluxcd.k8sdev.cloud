@@ -17,20 +17,25 @@
   },
   "packageRules": [
     {
-      "description": "Group Grafana/monitoring stack updates",
-      "matchPackageNames": [
-        "kube-prometheus-stack",
-        "prometheus-pushgateway",
-        "loki",
-        "alloy"
-      ],
+      "description": "Alloy registry (grafana.github.io)",
+      "matchPackageNames": ["alloy"],
+      "registryUrls": ["https://grafana.github.io/helm-charts"],
       "groupName": "monitoring stack",
-      "groupSlug": "monitoring-stack",
-      "registryUrls": [
-        "https://grafana.github.io/helm-charts",
-        "https://grafana-community.github.io/helm-charts",
-        "https://prometheus-community.github.io/helm-charts"
-      ]
+      "groupSlug": "monitoring-stack"
+    },
+    {
+      "description": "Loki registry (grafana-community)",
+      "matchPackageNames": ["loki"],
+      "registryUrls": ["https://grafana-community.github.io/helm-charts"],
+      "groupName": "monitoring stack",
+      "groupSlug": "monitoring-stack"
+    },
+    {
+      "description": "Prometheus stack registry (prometheus-community)",
+      "matchPackageNames": ["kube-prometheus-stack", "prometheus-pushgateway"],
+      "registryUrls": ["https://prometheus-community.github.io/helm-charts"],
+      "groupName": "monitoring stack",
+      "groupSlug": "monitoring-stack"
     },
     {
       "description": "Group stable infra patch updates",
@@ -80,14 +85,11 @@
       "dependencyDashboardApproval": true
     },
     {
-      "description": "vscode-server-dockerized patch updates",
-      "matchUpdateTypes": [
-        "patch"
-      ],
+      "description": "vscode-server-dockerized updates",
       "matchPackageNames": [
-        "vscode-server-dockerized"
+        "vscode-server"
       ],
-      "automerge": true
+      "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})-(?<build>.+)$"
     },
     {
       "description": "Keep podinfo on 6.x range",

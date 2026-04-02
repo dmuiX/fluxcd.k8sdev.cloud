@@ -8,6 +8,7 @@
   "hostRules": [
     {
       "matchHost": "raw.githubusercontent.com",
+      "hostType": "helm",
       "token": "{{ secrets.GHCR_TOKEN }}"
     }
   ],
@@ -92,6 +93,9 @@
       "description": "vscode-server-dockerized updates",
       "matchPackageNames": [
         "vscode-server"
+      ],
+      "registryUrls": [
+        "https://raw.githubusercontent.com/dmuiX/vscode-server-dockerized/main/charts"
       ],
       "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})-(?<build>.+)$"
     },

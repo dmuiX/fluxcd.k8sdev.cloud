@@ -48,7 +48,7 @@ spec:
             memory: 512Mi
     grafana:
       admin:
-        existingSecret: grafana-password
+        existingSecret: grafana-credentials
         userKey: user
         passwordKey: password
       dashboardProviders:

@@ -93,7 +93,7 @@
       "matchPackageNames": [
         "vscode-server"
       ],
-      "versioning": "regex:^(?<major>\d{4})\.(?<minor>\d{2})\.(?<patch>\d{2})-(?<build>.+)$"
+      "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})-(?<build>.+)$"
     },
     {
       "description": "Keep podinfo on 6.x range",

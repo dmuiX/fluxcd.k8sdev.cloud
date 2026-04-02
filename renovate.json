@@ -8,9 +8,6 @@
   "flux": {
     "enabled": true
   },
-  "helm-values": {
-    "enabled": true
-  },
   "packageRules": [
     {
       "description": "Group Grafana/monitoring stack updates",
@@ -21,39 +18,70 @@
         "alloy"
       ],
       "groupName": "monitoring stack",
-      "groupSlug": "monitoring-stack"
+      "groupSlug": "monitoring-stack",
+      "registryUrls": [
+        "https://grafana.github.io/helm-charts"
+      ]
     },
     {
-      "description": "Group Grafana alloy chart (named 'alloy' in the repo)",
-      "matchPackageNames": ["alloy"],
-      "registryUrls": ["https://grafana.github.io/helm-charts"]
-    },
-    {
-      "description": "Automerge patch updates for stable infra",
-      "matchUpdateTypes": ["patch"],
+      "description": "Group stable infra patch updates",
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "matchPackageNames": [
         "cert-manager",
         "external-dns",
         "external-secrets",
         "cloudnative-pg",
+        "k8up",
+        "cilium",
+        "redis-operator"
+      ],
+      "groupName": "stable infra patches",
+      "groupSlug": "stable-infra-patches"
+    },
+    {
+      "description": "Group FluxCD ecosystem updates",
+      "matchPackageNames": [
+        "flagger",
+        "flagger-loadtester"
+      ],
+      "groupName": "fluxcd",
+      "groupSlug": "fluxcd"
+    },
+    {
+      "description": "Longhorn and OpenBao updates separately - high risk on upgrade",
+      "matchPackageNames": [
         "longhorn",
-        "k8up"
+        "openbao",
+        "opencost"
+      ],
+      "groupName": "stateful services",
+      "groupSlug": "stateful-services",
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Require manual approval for major updates",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "vscode-server-dockerized patch updates",
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "matchPackageNames": [
+        "vscode-server-dockerized"
       ],
       "automerge": true
     },
     {
-      "description": "Require manual approval for major updates",
-      "matchUpdateTypes": ["major"],
-      "dependencyDashboardApproval": true
-    },
-    {
-      "description": "Skip vscode-server - uses CalVer from CI, not semver",
-      "matchPackageNames": ["vscode-server-dockerized"],
-      "enabled": false
-    },
-    {
       "description": "Keep podinfo on 6.x range",
-      "matchPackageNames": ["podinfo"],
+      "matchPackageNames": [
+        "podinfo"
+      ],
       "allowedVersions": "6.x"
     }
   ]

@@ -6,7 +6,8 @@
     ":semanticCommits"
   ],
   "flux": {
-    "enabled": true
+    "enabled": true,
+    "fileMatch": ["(^|/)infra/.+\\.yml$", "(^|/)apps/.+\\.yml$", "(^|/)clusters/.+\\.yml$"]
   },
   "packageRules": [
     {

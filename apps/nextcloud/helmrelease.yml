@@ -32,7 +32,7 @@ spec:
   values:
     replicaCount: 3
     nextcloud:
-      trustedDomains: nextcloud:k8sdev.cloud
+      trustedDomains: nextcloud.k8sdev.cloud
   releaseName: nextcloud
   targetNamespace: nextcloud
   install:

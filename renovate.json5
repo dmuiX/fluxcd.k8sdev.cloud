@@ -5,13 +5,6 @@
     ":dependencyDashboard",
     ":semanticCommits"
   ],
-  "hostRules": [
-    {
-      "matchHost": "raw.githubusercontent.com",
-      "hostType": "helm",
-      "token": "{{ secrets.GHCR_TOKEN }}"
-    }
-  ],
   "flux": {
     "enabled": true,
     "managerFilePatterns": [
@@ -95,7 +88,7 @@
         "vscode-server"
       ],
       "registryUrls": [
-        "https://raw.githubusercontent.com/dmuiX/vscode-server-dockerized/main/charts"
+        "https://dmuix.github.io/vscode-server-dockerized/"
       ],
       "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})-(?<build>.+)$"
     },

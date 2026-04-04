@@ -46,6 +46,7 @@ spec:
           requests:
             cpu: 200m
             memory: 512Mi
+        serviceMonitorSelector: {} # accept any serviceMonitor that has serviceMonitor: enabled
     grafana:
       admin:
         existingSecret: grafana-credentials

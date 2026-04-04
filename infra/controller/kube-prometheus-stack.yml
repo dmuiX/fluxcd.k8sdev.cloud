@@ -121,7 +121,6 @@ spec:
               - name: DS_PROMETHEUS
                 value: Prometheus
       additionalDataSources:
-        - name: 
         - name: Loki
           type: loki
           url: http://loki.monitoring:3100

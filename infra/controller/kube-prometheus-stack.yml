@@ -67,6 +67,12 @@ spec:
                 path: /var/lib/grafana/dashboards/grafana-dashboards
       dashboards:
         grafana-dashboards:
+          k8s-dashboard: # https://grafana.com/grafana/dashboards/15661
+            gnetId: 15661
+            revision: 4
+            datasource:
+              - name: "DS__VICTORIAMETRICS-PROD-ALL"
+                value: Prometheus
           external-dns: 
             gnetId: 15038
             revision: 3

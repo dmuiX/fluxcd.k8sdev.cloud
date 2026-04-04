@@ -1,15 +1,17 @@
 apiVersion: k8up.io/v1
 kind: Schedule
 metadata:
-  name: k8up-schedule
-  namespace: k8up
+  name: openbao-k8up-schedule
+  namespace: openbao
 spec:
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 2
   backend:
     repoPasswordSecretRef:
-      name: repo-password
+      name: k8up-repo-passwordk g
       key: password
     s3:
-      endpoint: https://e7b3567ace974b8838999da5f1858701.eu.r2.cloudflarestorage.com/k8sdev-backups
+      endpoint: https://e7b3567ace974b8838999da5f1858701.eu.r2.cloudflarestorage.com
       bucket: k8sdev-backups
       accessKeyIDSecretRef:
         name: r2-credentials

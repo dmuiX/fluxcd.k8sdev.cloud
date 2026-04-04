@@ -37,7 +37,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: prometheus-frontend
-          port: 80
+        - name: monitoring-prometheus
+          port: 9090
   hostnames:
     - prometheus.k8sdev.cloud

@@ -9,9 +9,9 @@ spec:
       name: repo-password
       key: password
     s3:
-      endpoint: https://e7b3567ace974b8838999da5f1858701.r2.cloudflarestorage.com/k8sdev-backups
+      endpoint: https://e7b3567ace974b8838999da5f1858701.eu.r2.cloudflarestorage.com/k8sdev-backups
       bucket: k8sdev-backups
-      accessKeyIDSecretRef: 
+      accessKeyIDSecretRef:
         name: r2-credentials
         key: access-key-id
       secretAccessKeySecretRef:

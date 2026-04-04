@@ -67,12 +67,12 @@ spec:
                 path: /var/lib/grafana/dashboards/grafana-dashboards
       dashboards:
         grafana-dashboards:
+          external-dns: 
+            gnetId: 15038
+            revision: 3
           cert-manager: # https://grafana.com/grafana/dashboards/20842
             gnetId: 20842
             revision: 3
-            datasource:
-              - name: DS_PROMETHEUS
-                value: Prometheus
           longhorn: # https://grafana.com/grafana/dashboards/16888
             gnetId: 16888
             revision: 11
@@ -97,6 +97,8 @@ spec:
             datasource:
               - name: DS_PROMETHEUS
                 value: Prometheus
+              - name: DS_EXPRESSION
+                value: __expr__
           flagger: # https://grafana.com/grafana/dashboards/15158
             gnetId: 15158
             revision: 5
@@ -112,15 +114,12 @@ spec:
           openbao: # https://grafana.com/grafana/dashboards/23725
             gnetId: 23725
             revision: 1
-            datasource:
-              - name: DS_PROMETHEUS
+            datasource:  
+              - name: DS_PROMXY
                 value: Prometheus
           hubble-l7-http-by-workload: # https://grafana.com/grafana/dashboards/19423 (Isovalent official)
             gnetId: 19423
             revision: 1
-            datasource:
-              - name: DS_PROMETHEUS
-                value: Prometheus
       additionalDataSources:
         - name: Loki
           type: loki

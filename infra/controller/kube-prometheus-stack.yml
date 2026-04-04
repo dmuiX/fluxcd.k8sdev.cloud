@@ -47,6 +47,7 @@ spec:
             cpu: 200m
             memory: 512Mi
         serviceMonitorSelector: {} # accept any serviceMonitor that has serviceMonitor: enabled
+        serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
       admin:
         existingSecret: grafana-credentials

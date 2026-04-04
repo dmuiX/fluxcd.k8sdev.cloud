@@ -67,6 +67,12 @@ spec:
                 path: /var/lib/grafana/dashboards/grafana-dashboards
       dashboards:
         grafana-dashboards:
+          flux2: # https://grafana.com/grafana/dashboards/16714
+            gnetId: 16714
+            revision: 1
+            datasource:
+              - name: DS_PROMETHEUS
+                value: Prometheus
           k8s-dashboard: # https://grafana.com/grafana/dashboards/15661
             gnetId: 15661
             revision: 4

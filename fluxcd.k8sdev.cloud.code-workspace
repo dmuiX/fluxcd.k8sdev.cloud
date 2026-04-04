@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../vscode-server-dockerized"
+		}
+	],
+	"settings": {
+		"yaml.schemas": {
+			"kubernetes": [
+				"**/*.yaml",
+				"**/*.yml"
+			],
+			"file:///Users/daniel/.vscode-insiders/extensions/continue.continue-1.3.32-darwin-arm64/config-yaml-schema.json": [
+				".continue/**/*.yaml"
+			],
+			"file:///Users/daniel/.vscode-insiders/extensions/continue.continue-1.3.33-darwin-arm64/config-yaml-schema.json": [
+				".continue/**/*.yaml"
+			],
+			"file:///Users/daniel/.vscode-insiders/extensions/continue.continue-1.3.35-darwin-arm64/config-yaml-schema.json": [
+				".continue/**/*.yaml"
+			],
+			"kubernetes://schema/source.toolkit.fluxcd.io/v1@helmrepository": "file:///Users/daniel/fluxcd.k8sdev.cloud/infra/controller/loki.yml",
+			"kubernetes://schema/helm.toolkit.fluxcd.io/v2@helmrelease": "file:///Users/daniel/fluxcd.k8sdev.cloud/infra/controller/k8up.yml"
+		}
+	}
+}

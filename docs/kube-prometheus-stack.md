@@ -6,9 +6,9 @@ CRDs update lead to a major version bump. The Chart's appVersion refers to the p
 
 See helm upgrade for command documentation.
 
-ergo 
+ergo
 
-curl -s "https://api.github.com/repos/prometheus-community/helm-charts/contents/charts/kube-prometheus-stack/charts/crds/crds" \                                                                                                         ─╯
+curl -s "<https://api.github.com/repos/prometheus-community/helm-charts/contents/charts/kube-prometheus-stack/charts/crds/crds>" \
   | grep '"download_url"' \
   | cut -d'"' -f4 \
   | while read url; do curl -sL "$url"; echo "---"; done \
@@ -32,43 +32,77 @@ curl -s "https://api.github.com/repos/prometheus-community/helm-charts/contents/
 
 kube-prometheus-stack injiziert per Default `release: kube-prometheus-stack` als Label-Selector auf die Prometheus CR. Damit werden nur ServiceMonitors mit diesem Label gescrapt.
 
-**Richtiger Ansatz:** Jedes Helm-Chart erstellt seinen ServiceMonitor mit `release: kube-prometheus-stack` Label automatisch (via `serviceMonitor.enabled: true` in den jeweiligen Chart-Values). Default-Selector in kube-prometheus-stack unveraendert lassen.
-
-Manuelle ServiceMonitors (nicht von Helm verwaltet) brauchen das Label explizit:
+**Problem:** Der Default-Value `serviceMonitorSelectorNilUsesHelmValues` ist `true`. Das bedeutet: selbst wenn man `serviceMonitorSelector: {}` setzt, ueberschreibt das Chart es mit `release: <releaseName>`. Um wirklich alle ServiceMonitors cluster-weit zu matchen:
 
 ```yaml
-metadata:
-  labels:
-    release: kube-prometheus-stack
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelector: {}
+    serviceMonitorSelectorNilUsesHelmValues: false
 ```
+
+**Hintergrund:** `serviceMonitorSelector:` ohne Wert ist YAML `nil` — das Chart interpretiert das als "nicht gesetzt" und faellt auf den Helm-Release-Label zurueck. `serviceMonitorSelector: {}` ist ein leeres Objekt und bedeutet "matche alles". Aber nur in Kombination mit `serviceMonitorSelectorNilUsesHelmValues: false` wird der Selector auch wirklich leer uebernommen.
+
+Die Steuerung, welche Services gemonitort werden, erfolgt ueber `serviceMonitor.enabled: true/false` in den jeweiligen Helm-Chart-Values — nicht ueber den Prometheus-Selector. Wenn ein Chart keinen ServiceMonitor erstellt, gibt es nichts zu discovern.
 
 **Verifizieren:**
 
 ```bash
-# Prometheus CR pruefen
+# Prometheus CR pruefen — matchLabels sollte LEER sein
 kubectl get prometheus -n monitoring -o yaml | grep -A 5 "serviceMonitor"
+
+# Alle ServiceMonitors im Cluster
+kubectl get servicemonitor -A
 
 # Targets checken
 kubectl port-forward -n monitoring svc/monitoring-prometheus 9090:9090
 # → http://localhost:9090/targets
+# Query: up
 ```
 
 ---
 
-## Bekannte Fallstricke
+## Grafana Dashboard Datasource Mapping
 
-### Leere ServiceMonitor-Selektoren (`{}`) nicht verwenden
+Community-Dashboards von grafana.com nutzen `__inputs`-Variablen fuer Datasources (z.B. `DS_PROMETHEUS`, `DS_METRICS`). Der Variablenname ist pro Dashboard unterschiedlich. In den kube-prometheus-stack Values muss das Mapping als Liste angegeben werden:
 
 ```yaml
-# FALSCH — patcht beim Upgrade alle ServiceMonitors cluster-weit → Timeout
-prometheus:
-  prometheusSpec:
-    serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorNamespaceSelector: {}
-    serviceMonitorSelector: {}
+grafana:
+  dashboards:
+    grafana-dashboards:
+      cert-manager: # https://grafana.com/grafana/dashboards/20842
+        gnetId: 20842
+        revision: 3
+        datasource:
+          - name: DS_PROMETHEUS
+            value: Prometheus
+      external-secrets: # https://grafana.com/grafana/dashboards/21640
+        gnetId: 21640
+        revision: 4
+        datasource:
+          - name: DS_METRICS
+            value: Prometheus
 ```
 
-Mit `{}` selektiert Prometheus alles im Cluster. Beim Helm-Upgrade muss der helm-controller dann alle ServiceMonitors in allen Namespaces patchen — das fuehrt bei 5 Minuten Timeout zu `context deadline exceeded`. Stattdessen den Default-Selektor (Label-basiert) nutzen.
+**Falsch** (funktioniert nicht bei allen Dashboards):
+
+```yaml
+datasource: Prometheus
+```
+
+**Richtig:**
+
+```yaml
+datasource:
+  - name: DS_PROMETHEUS
+    value: Prometheus
+```
+
+Den korrekten Variablennamen findet man im Dashboard-JSON unter `__inputs` (auf grafana.com → Download JSON).
+
+---
+
+## Bekannte Fallstricke
 
 ### `serviceName` in `prometheusSpec`/`alertmanagerSpec` nicht setzen
 
@@ -81,6 +115,18 @@ kube-prometheus-stack benoetigt bei Erstinstallation oder nach groesseren Aender
 ```yaml
 spec:
   timeout: 15m0s
+```
+
+### Grafana Datasource Provisioning Fehler
+
+```
+Datasource provisioning error: unique identifier and org id are needed
+```
+
+Tritt auf wenn eine Datasource-ConfigMap eine doppelte oder fehlende UID hat. Haeufig durch Tippfehler im YAML (z.B. `-name` statt `- name` in der Datasource-Liste). Check:
+
+```bash
+kubectl get configmap -n monitoring -l grafana_datasource=1 -o yaml
 ```
 
 ### Loki Helm Repository (Stand Maerz 2026)
@@ -120,6 +166,7 @@ hubble:
 `httpV2` mit `labelsContext` ist entscheidend — ohne die Workload-Labels kann Flagger nicht pro Canary filtern.
 
 **Exportierte Metriken:**
+
 - `hubble_http_requests_total` — Request Counter mit `response_code`, `destination_workload`, etc.
 - `hubble_http_request_duration_seconds_bucket` — Latency Histogram
 
@@ -177,6 +224,7 @@ hubble:
 Erstellt automatisch ConfigMaps mit `grafana_dashboard: "1"` Label. Grafana Sidecar laedt sie.
 
 Enthaltene Dashboards:
+
 - **Cilium Dashboard** — Agent Internals (BPF, Conntrack, API, Memory)
 - **Cilium Operator Dashboard** — Operator Reconciliation, CRD Processing
 - **Hubble Dashboard** — Flows, Drops
@@ -187,6 +235,7 @@ Enthaltene Dashboards:
 ### 2. Custom Flagger Canary Dashboard
 
 `infra/config/grafana-dashboard-hubble-http.yml` — zeigt exakt die Metriken die Flagger fuer Canary-Analyse nutzt:
+
 - Request Rate pro Workload + Response Code
 - Error Rate (5xx) mit Threshold bei 1% (Flagger Limit)
 - Latency P99 mit Threshold bei 0.5s (Flagger Limit)
@@ -294,10 +343,12 @@ query: |
 ### Dashboards zeigen keine Daten
 
 1. **Prometheus Targets checken** — `http://localhost:9090/targets` nach Port-Forward
-2. **ServiceMonitors vorhanden?** — `kubectl get servicemonitor -A`
-3. **Metriken exportiert?** — `curl http://<pod-ip>:<port>/metrics | grep <metric>`
-4. **Label-Selector Problem?** — `kubectl get prometheus -n monitoring -o yaml | grep -A 5 serviceMonitor`
-5. **Pods neu gestartet nach Config-Aenderung?** — `kubectl rollout restart daemonset/cilium -n cilium`
+2. **`up` Query** — zeigt alle gescrapten Targets. Wenn nur `monitoring` und `kube-system` Namespaces auftauchen, greift noch der alte Label-Selector
+3. **ServiceMonitors vorhanden?** — `kubectl get servicemonitor -A`
+4. **Metriken exportiert?** — `curl http://<pod-ip>:<port>/metrics | grep <metric>`
+5. **Label-Selector Problem?** — `kubectl get prometheus -n monitoring -o yaml | grep -A 5 serviceMonitor` — `matchLabels` sollte leer sein
+6. **Dashboard Datasource Variable?** — Fehler wie `DS_METRICS not found` oder `DS_PROMETHEUS not found` bedeuten falsches Datasource-Mapping in den Dashboard-Values (siehe oben)
+7. **Pods neu gestartet nach Config-Aenderung?** — `kubectl rollout restart daemonset/cilium -n cilium`
 
 ### Flagger DestinationRule Fehler
 
@@ -306,6 +357,7 @@ reconcileDestinationRule failed: DestinationRule podinfo-canary.podinfo create e
 ```
 
 Flagger faellt auf Istio zurueck. Checkliste:
+
 - `meshProvider: "gatewayapi:v1"` in Flagger Helm Values
 - `provider: "gatewayapi:v1"` in Canary Resource
 - `gatewayRefs` mit `group: gateway.networking.k8s.io` und `kind: Gateway`

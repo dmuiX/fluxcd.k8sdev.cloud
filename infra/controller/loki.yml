@@ -62,6 +62,9 @@ spec:
       replicas: 0
     backend:
       replicas: 0
+    ressources:
+      limits: 
+        memory: 256Mi
   dependsOn:
     - name: kube-prometheus-stack
     - name: longhorn

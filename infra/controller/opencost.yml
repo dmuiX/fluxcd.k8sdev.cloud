@@ -59,6 +59,8 @@ spec:
           requests:
             cpu: 10m
             memory: 55Mi
+          limits:
+            memory: 256Mi
         persistence:
           enabled: true
           storageClass: longhorn # adjust based on your environment

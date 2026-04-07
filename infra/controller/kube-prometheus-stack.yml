@@ -46,6 +46,8 @@ spec:
           requests:
             cpu: 200m
             memory: 512Mi
+          limits:
+            memory: 2Gi
         serviceMonitorSelector: {} # accept any serviceMonitor that has serviceMonitor: enabled
         serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
@@ -142,12 +144,16 @@ spec:
         requests:
           cpu: 100m
           memory: 128Mi
+        limits:
+          memory: 512Mi
     alertmanager:
       alertmanagerSpec:
         resources:
           requests:
             cpu: 50m
             memory: 64Mi
+          limits:
+            memory: 256Mi
   dependsOn:
     - name: cert-manager
     - name: cilium

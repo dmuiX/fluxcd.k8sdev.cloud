@@ -103,6 +103,8 @@ spec:
           namespace: monitoring
           annotations:
             grafana_folder: Cilium
+      ressources:
+        limits: 256Mi
     dashboards:
       enabled: true
       namespace: monitoring
@@ -114,5 +116,7 @@ spec:
         enabled: true
     resources:
       requests:
-        cpu: "100m"
-        memory: "128Mi"
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 1Gi

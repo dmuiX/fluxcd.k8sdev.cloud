@@ -82,6 +82,12 @@ spec:
     operator:
       dashboards:
         enabled: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
     hubble:
       ui:
         enabled: true
@@ -103,8 +109,12 @@ spec:
           namespace: monitoring
           annotations:
             grafana_folder: Cilium
-      ressources:
-        limits: 256Mi
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
     dashboards:
       enabled: true
       namespace: monitoring

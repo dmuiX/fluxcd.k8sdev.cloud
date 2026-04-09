@@ -62,7 +62,7 @@ spec:
       replicas: 0
     backend:
       replicas: 0
-    ressources:
+    resources:
       limits: 
         memory: 256Mi
   dependsOn:

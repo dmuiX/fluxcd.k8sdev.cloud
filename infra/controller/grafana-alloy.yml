@@ -29,6 +29,9 @@ spec:
   values:
     serviceMonitor:
       enabled: true
+    ressources:
+      limits:
+        memory: 256Mi
     alloy:
       configMap:
         content: |

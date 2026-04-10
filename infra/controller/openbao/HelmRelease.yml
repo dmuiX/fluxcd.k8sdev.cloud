@@ -20,10 +20,11 @@ spec:
       interval: 1m0s
   values:
     global:
+      serverTelemetry:
+        prometheusOperator: true
+    serverTelemetry:
       serviceMonitor:
         enabled: true
-    serverTelemetry:
-      prometheusOperator: true
     server:
       auditStorage:
         accessMode: ReadWriteMany

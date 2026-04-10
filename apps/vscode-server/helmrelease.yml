@@ -24,7 +24,7 @@ spec:
   chart:
     spec:
       chart: vscode-server
-      version: 2026.04.04-3d70aab
+      version: 2026.04.10-1ec46de
       sourceRef:
         kind: HelmRepository
         name: vscode-server

@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Validate HelmReleases",
+      "type": "shell",
+      "command": "python3",
+      "args": ["validate-helm-schemas.py"],
+      "group": "build",
+      "problemMatcher": {
+        "owner": "helm-schema",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.+):(\\d+):\\s+error:\\s+(.+)$",
+          "file": 1,
+          "line": 2,
+          "message": 3
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    }
+  ]
+}

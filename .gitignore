@@ -1,3 +1,5 @@
 .DS_Store
 
 cloudflare-token and pihole-token
+
+values-schemas/*

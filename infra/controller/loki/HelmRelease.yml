@@ -24,6 +24,7 @@ spec:
       resources:
         limits:
           memory: 256Mi
+    loki:
       auth_enabled: false
       commonConfig:
         replication_factor: 1

@@ -32,14 +32,11 @@ spec:
               \  value: keep\n"
   values:
     opencost:
-      replicas: 3
       prometheus:
         internal:
           namespaceName: monitoring
           serviceName: monitoring-prometheus
           port: 9090
-      dataRetention:
-        dailyResolutionDays: 30
       exporter:
         defaultClusterId: talos-k8sdev
         replicas: 3
@@ -57,29 +54,6 @@ spec:
       customPricing:
         enabled: true
         provider: aws
-        costModel:
-          description: Modified pricing configuration.
-          CPU: 0.031611
-          spotCPU: 0.006655
-          RAM: 0.004237
-          spotRAM: 0.000892
-          GPU: 0.95
-          storage: 5.479452e-5
-          zoneNetworkEgress: 0.01
-          regionNetworkEgress: 0.01
-          internetNetworkEgress: 0.143
-          spotLabel: ""
-          spotLabelValue: ""
-          awsServiceKeyName: ""
-          awsServiceKeySecret: ""
-          awsSpotDataRegion: ""
-          awsSpotDataBucket: ""
-          awsSpotDataPrefix: ""
-          athenaBucketName: ""
-          athenaRegion: ""
-          athenaDatabase: ""
-          athenaTable: ""
-          projectID: ${ACCOUNT_ID}
       metrics:
         kubeStateMetrics:
           emitKsmV1Metrics: false

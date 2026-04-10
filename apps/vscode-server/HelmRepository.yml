@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: vscode-server
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://dmuix.github.io/vscode-server-dockerized/

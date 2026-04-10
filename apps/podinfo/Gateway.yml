@@ -1,0 +1,24 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: podinfo
+  namespace: podinfo
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: podinfo.k8sdev.cloud
+spec:
+  gatewayClassName: cilium
+  listeners:
+  - protocol: HTTPS
+    port: 443
+    name: podinfo-https
+    hostname: podinfo.k8sdev.cloud
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: podinfo-tls
+        kind: Secret
+    allowedRoutes:
+      namespaces:
+        from: Same

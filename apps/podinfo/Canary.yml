@@ -1,0 +1,60 @@
+---
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: podinfo
+  namespace: podinfo
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  progressDeadlineSeconds: 60
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    name: podinfo
+  provider: gatewayapi:v1
+  service:
+    port: 9898
+    targetPort: 9898
+    hosts:
+    - podinfo.k8sdev.cloud
+    gatewayRefs:
+    - name: podinfo
+      namespace: podinfo
+      group: gateway.networking.k8s.io
+      kind: Gateway
+  analysis:
+    interval: 1m
+    threshold: 5
+    maxWeight: 50
+    stepWeight: 10
+    metrics:
+    - name: error-rate
+      templateRef:
+        name: error-rate
+        namespace: flagger
+      thresholdRange:
+        max: 1
+      interval: 1m
+    - name: latency
+      templateRef:
+        name: latency
+        namespace: flagger
+      thresholdRange:
+        max: 0.5
+      interval: 30s
+    webhooks:
+    - name: smoke-test
+      type: pre-rollout
+      url: http://flagger-loadtester.flagger/
+      timeout: 15s
+      metadata:
+        type: bash
+        cmd: curl -sd 'anon' http://podinfo.podinfo:9898/token | grep token
+    - name: load-test
+      url: http://flagger-loadtester.flagger/
+      timeout: 5s
+      metadata:
+        cmd: hey -z 2m -q 10 -c 2 -host podinfo.k8sdev.cloud http://podinfo.podinfo

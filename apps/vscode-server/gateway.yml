@@ -10,17 +10,17 @@ metadata:
 spec:
   gatewayClassName: cilium
   listeners:
-    - protocol: HTTPS
-      port: 443
-      name: vscode-server
-      hostname: vscode-server.k8sdev.cloud
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - name: vscode-server-tls
-      allowedRoutes:
-        namespaces:
-          from: Same
+  - protocol: HTTPS
+    port: 443
+    name: vscode-server
+    hostname: vscode-server.k8sdev.cloud
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: vscode-server-tls
+    allowedRoutes:
+      namespaces:
+        from: Same
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -29,15 +29,15 @@ metadata:
   namespace: vscode-server
 spec:
   parentRefs:
-    - name: vscode-server
-      namespace: vscode-server
+  - name: vscode-server
+    namespace: vscode-server
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: vscode-server
-          port: 8000
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: vscode-server
+      port: 8000
   hostnames:
-    - vscode-server.k8sdev.cloud
+  - vscode-server.k8sdev.cloud

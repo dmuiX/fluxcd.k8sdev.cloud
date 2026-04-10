@@ -1,17 +1,4 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: cilium
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: cilium
-  namespace: flux-system
-spec:
-  interval: 24h
-  url: https://helm.cilium.io/
+# yaml-language-server: $schema=../../../values-schemas/cilium/helmrelease.schema.json
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -61,9 +48,6 @@ spec:
     k8sServicePort: 7445
     sysctlfix:
       enabled: false
-    installCRDs: true
-    externalIPs:
-      enabled: true
     gatewayAPI:
       enabled: true
       enableAlpn: true
@@ -75,8 +59,6 @@ spec:
     loadBalancer:
       l7:
         backend: envoy
-      secretsNamespace:
-        name: cilium
     l2announcements:
       enabled: true
     operator:
@@ -91,6 +73,20 @@ spec:
     hubble:
       ui:
         enabled: true
+        frontend:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+        backend:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
       relay:
         enabled: true
       metrics:
@@ -101,7 +97,7 @@ spec:
           - tcp
           - flow
           - icmp
-          - "httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction"
+          - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
         serviceMonitor:
           enabled: true
         dashboards:
@@ -109,12 +105,6 @@ spec:
           namespace: monitoring
           annotations:
             grafana_folder: Cilium
-      resources:
-        requests:
-          cpu: 50m
-          memory: 64Mi
-        limits:
-          memory: 256Mi
     dashboards:
       enabled: true
       namespace: monitoring

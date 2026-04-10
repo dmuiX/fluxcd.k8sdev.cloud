@@ -1,17 +1,4 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: k8up
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: k8up
-  namespace: flux-system
-spec:
-  interval: 24h
-  url: https://k8up-io.github.io/k8up
+# yaml-language-server: $schema=../../../values-schemas/k8up/helmrelease.schema.json
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -38,4 +25,3 @@ spec:
         enabled: true
       grafanaDashboard:
         enabled: true
-        

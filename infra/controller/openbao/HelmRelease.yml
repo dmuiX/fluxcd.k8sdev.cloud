@@ -1,0 +1,125 @@
+# yaml-language-server: $schema=../../../values-schemas/openbao/helmrelease.schema.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openbao
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  timeout: 5m0s
+  releaseName: openbao
+  targetNamespace: openbao
+  chart:
+    spec:
+      chart: openbao
+      version: 0.26.2
+      sourceRef:
+        kind: HelmRepository
+        name: openbao
+      interval: 1m0s
+  values:
+    global:
+      serviceMonitor:
+        enabled: true
+    serverTelemetry:
+      prometheusOperator: true
+    server:
+      auditStorage:
+        accessMode: ReadWriteMany
+        storageClass: longhorn
+      dataStorage:
+        accessMode: ReadWriteMany
+        storageClass: longhorn
+      volumes:
+        - name: unseal-key-volume
+          secret:
+            secretName: openbao-unseal-key
+            items:
+              - key: unseal-key
+                path: unseal-key
+      volumeMounts:
+        - name: unseal-key-volume
+          mountPath: /openbao/secrets
+          readOnly: true
+      ha:
+        enabled: true
+        raft:
+          enabled: true
+          setNodeId: true
+          config: "ui = true
+
+
+            listener \"tcp\" {
+
+            \  tls_disable = 1
+
+            \  address = \"[::]:8200\"
+
+            \  cluster_address = \"[::]:8201\"
+
+            \  unauthenticated_metrics_access = \"true\"
+
+            }
+
+
+            service_registration \"kubernetes\" {}
+
+
+            # Example configuration for using auto-unseal using static ENV keys.
+
+            seal \"static\" {
+
+            \  current_key_id = \"20260323\"
+
+            \  current_key = \"file:///openbao/secrets/unseal-key\"
+
+            }
+
+
+            # Example configuration for enabling Prometheus metrics.
+
+            # If you are using Prometheus Operator you can enable a
+            ServiceMonitor resource below.
+
+            # You may wish to enable unauthenticated metrics in the listener
+            block above.
+
+            telemetry {
+
+            \  prometheus_retention_time = \"30s\"
+
+            \  disable_hostname = true
+
+            }
+
+
+            # Is joining the Nodes automatically
+
+            storage \"raft\" {
+
+            \  path = \"/openbao/data\"
+
+            \  retry_join {
+
+            \    auto_join = \"provider=k8s namespace=openbao
+            label_selector=\\\"app.kubernetes.io/name=openbao,component=server\\\
+            \"\"
+
+            \    auto_join_scheme = \"http\"
+
+            \  }
+
+            }\n"
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          memory: 512Mi
+    ui:
+      enabled: true
+  dependsOn:
+    - name: cilium
+    - name: cert-manager
+    - name: longhorn

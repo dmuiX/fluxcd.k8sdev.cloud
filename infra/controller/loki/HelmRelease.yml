@@ -1,12 +1,4 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: loki
-  namespace: flux-system
-spec:
-  interval: 24h
-  url: https://grafana-community.github.io/helm-charts
+# yaml-language-server: $schema=../../../values-schemas/loki/helmrelease.schema.json
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -28,7 +20,10 @@ spec:
       interval: 6h
   values:
     deploymentMode: SingleBinary
-    loki:
+    lokiCanary:
+      resources:
+        limits:
+          memory: 256Mi
       auth_enabled: false
       commonConfig:
         replication_factor: 1
@@ -62,9 +57,7 @@ spec:
       replicas: 0
     backend:
       replicas: 0
-    resources:
-      limits: 
-        memory: 256Mi
+
   dependsOn:
     - name: kube-prometheus-stack
     - name: longhorn

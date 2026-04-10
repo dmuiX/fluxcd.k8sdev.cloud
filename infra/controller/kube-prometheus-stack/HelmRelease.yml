@@ -1,21 +1,4 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
-    pod-security.kubernetes.io/audit: privileged
-    pod-security.kubernetes.io/warn: privileged
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: kube-prometheus-stack
-  namespace: flux-system
-spec:
-  interval: 24h
-  url: https://prometheus-community.github.io/helm-charts
+# yaml-language-server: $schema=../../../values-schemas/kube-prometheus-stack/helmrelease.schema.json
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -38,6 +21,8 @@ spec:
   values:
     crds:
       enabled: true
+      upgradeJob:
+        enabled: true
     fullnameOverride: monitoring
     namespaceOverride: monitoring
     prometheus:
@@ -48,7 +33,7 @@ spec:
             memory: 512Mi
           limits:
             memory: 2Gi
-        serviceMonitorSelector: {} # accept any serviceMonitor that has serviceMonitor: enabled
+        serviceMonitorSelector: {}
         serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
       admin:
@@ -69,43 +54,43 @@ spec:
                 path: /var/lib/grafana/dashboards/grafana-dashboards
       dashboards:
         grafana-dashboards:
-          flux2: # https://grafana.com/grafana/dashboards/16714
+          flux2:
             gnetId: 16714
             revision: 1
             datasource:
               - name: DS_PROMETHEUS
                 value: Prometheus
-          k8s-dashboard: # https://grafana.com/grafana/dashboards/15661
+          k8s-dashboard:
             gnetId: 15661
             revision: 4
             datasource:
-              - name: "DS__VICTORIAMETRICS-PROD-ALL"
+              - name: DS__VICTORIAMETRICS-PROD-ALL
                 value: Prometheus
-          external-dns: 
+          external-dns:
             gnetId: 15038
             revision: 3
-          cert-manager: # https://grafana.com/grafana/dashboards/20842
+          cert-manager:
             gnetId: 20842
             revision: 3
-          longhorn: # https://grafana.com/grafana/dashboards/16888
+          longhorn:
             gnetId: 16888
             revision: 11
             datasource:
               - name: DS_PROMETHEUS
                 value: Prometheus
-          loki-metrics: # https://grafana.com/grafana/dashboards/17781
+          loki-metrics:
             gnetId: 17781
             revision: 1
             datasource:
               - name: DS_PROMETHEUS
                 value: Prometheus
-          external-secrets: # https://grafana.com/grafana/dashboards/21640
+          external-secrets:
             gnetId: 21640
             revision: 4
             datasource:
               - name: DS_METRICS
                 value: Prometheus
-          cloudnative-pg: # https://grafana.com/grafana/dashboards/20417
+          cloudnative-pg:
             gnetId: 20417
             revision: 4
             datasource:
@@ -113,25 +98,25 @@ spec:
                 value: Prometheus
               - name: DS_EXPRESSION
                 value: __expr__
-          flagger: # https://grafana.com/grafana/dashboards/15158
+          flagger:
             gnetId: 15158
             revision: 5
             datasource:
               - name: DS_PROMETHEUS
                 value: Prometheus
-          k8up: # https://grafana.com/grafana/dashboards/20166
+          k8up:
             gnetId: 20166
             revision: 4
             datasource:
               - name: DS_PROMETHEUS
                 value: Prometheus
-          openbao: # https://grafana.com/grafana/dashboards/23725
+          openbao:
             gnetId: 23725
             revision: 1
-            datasource:  
+            datasource:
               - name: DS_PROMXY
                 value: Prometheus
-          hubble-l7-http-by-workload: # https://grafana.com/grafana/dashboards/19423 (Isovalent official)
+          hubble-l7-http-by-workload:
             gnetId: 19423
             revision: 1
       additionalDataSources:

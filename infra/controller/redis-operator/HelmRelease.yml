@@ -19,11 +19,7 @@ spec:
         name: redis-operator
       interval: 6h
   values:
-    crds:
-      enabled: true
-    replicaCount: 3
-    podDisruptionBudget:
-      enabled: true
+    replicas: 3
     resources:
       requests:
         cpu: 10m

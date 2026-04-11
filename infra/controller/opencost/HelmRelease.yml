@@ -39,13 +39,6 @@ spec:
           port: 9090
       exporter:
         defaultClusterId: talos-k8sdev
-        replicas: 3
-        resources:
-          requests:
-            cpu: 10m
-            memory: 55Mi
-          limits:
-            memory: 256Mi
         persistence:
           enabled: true
           storageClass: longhorn
@@ -64,10 +57,6 @@ spec:
             release: prometheus
       ui:
         enabled: true
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
   dependsOn:
     - name: cert-manager
     - name: cilium

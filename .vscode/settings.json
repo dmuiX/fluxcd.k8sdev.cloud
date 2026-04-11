@@ -32,9 +32,8 @@
     "values-schemas/cilium/helmrelease.schema.json": "infra/controller/cilium.yml",
     "values-schemas/redis-operator/helmrelease.schema.json": "infra/controller/redis-operator.yml",
     "values-schemas/prometheus-pushgateway/helmrelease.schema.json": "infra/controller/prometheus-pushgateway.yml",
-    "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.32.1-standalone-strict/all.json": "file:///Users/daniel/fluxcd.k8sdev.cloud/infra/controller/cert-manager/HelmRepository.yml",
-    "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/apiextensions.k8s.io/customresourcedefinition_v1.json": "file:///Users/daniel/fluxcd.k8sdev.cloud/infra/crds/k8up.yml",
-    "file:///Users/daniel/fluxcd.k8sdev.cloud/values-schemas/kube-prometheus-stack/helmrelease.schema.json": "file:///Users/daniel/fluxcd.k8sdev.cloud/infra/controller/kube-prometheus-stack/HelmRelease.yml",
-    "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.config.k8s.io/kustomization_v1beta1.json": "file:///Users/daniel/fluxcd.k8sdev.cloud/clusters/flux-system/Kustomization.yml"
+    "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.32.1-standalone-strict/all.json": "infra/controller/cert-manager/HelmRepository.yml",
+    "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/apiextensions.k8s.io/customresourcedefinition_v1.json": "infra/crds/*.yml",
+    "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/kustomization.json": "clusters/flux-system/flux-system.yml"
   }
 }

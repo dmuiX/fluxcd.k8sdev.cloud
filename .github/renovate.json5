@@ -1,104 +1,124 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ignorePaths": ["clusters/flux-system/gotk-components.yaml"],
-  "extends": [
-    "config:recommended",
-    ":dependencyDashboard",
-    ":semanticCommits"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  ignorePaths: [
+    'clusters/flux-system/gotk-components.yaml',
   ],
-  "regexManagers": [
+  extends: [
+    'config:recommended',
+    ':dependencyDashboard',
+    ':semanticCommits',
+  ],
+  customManagers: [
     {
-      "fileMatch": ["^\\.github/workflows/.+\\.yml$"],
-      "matchStrings": ["FLUX_VERSION: (?<currentValue>v[\\d.]+) # renovate: depName=(?<depName>[^\\s]+) datasource=(?<datasource>[^\\s]+)"],
-      "datasourceTemplate": "{{datasource}}",
-      "depNameTemplate": "{{depName}}"
-    }
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/.+\\.yml$/',
+      ],
+      matchStrings: [
+        'FLUX_VERSION: (?<currentValue>v[\\d.]+) # renovate: depName=(?<depName>[^\\s]+) datasource=(?<datasource>[^\\s]+)',
+      ],
+      datasourceTemplate: '{{datasource}}',
+      depNameTemplate: '{{depName}}',
+    },
   ],
-  "flux": {
-    "enabled": true,
-    "managerFilePatterns": [
-      "/(^|/)infra/.+\.yml$/",
-      "/(^|/)apps/.+\.yml$/",
-      "/(^|/)clusters/.+\.yml$/"
-    ]
+  flux: {
+    enabled: true,
+    managerFilePatterns: [
+      '/(^|/)infra/.+.yml$/',
+      '/(^|/)apps/.+.yml$/',
+      '/(^|/)clusters/.+.yml$/',
+    ],
   },
-  "packageRules": [
+  packageRules: [
     {
-      "description": "Alloy registry (grafana.github.io)",
-      "matchPackageNames": ["alloy"],
-      "registryUrls": ["https://grafana.github.io/helm-charts"],
-      "groupName": "monitoring stack",
-      "groupSlug": "monitoring-stack"
+      description: 'Alloy registry (grafana.github.io)',
+      matchPackageNames: [
+        'alloy',
+      ],
+      registryUrls: [
+        'https://grafana.github.io/helm-charts',
+      ],
+      groupName: 'monitoring stack',
+      groupSlug: 'monitoring-stack',
     },
     {
-      "description": "Loki registry (grafana-community)",
-      "matchPackageNames": ["loki"],
-      "registryUrls": ["https://grafana-community.github.io/helm-charts"],
-      "groupName": "monitoring stack",
-      "groupSlug": "monitoring-stack"
+      description: 'Loki registry (grafana-community)',
+      matchPackageNames: [
+        'loki',
+      ],
+      registryUrls: [
+        'https://grafana-community.github.io/helm-charts',
+      ],
+      groupName: 'monitoring stack',
+      groupSlug: 'monitoring-stack',
     },
     {
-      "description": "Prometheus stack registry (prometheus-community)",
-      "matchPackageNames": ["kube-prometheus-stack", "prometheus-pushgateway"],
-      "registryUrls": ["https://prometheus-community.github.io/helm-charts"],
-      "groupName": "monitoring stack",
-      "groupSlug": "monitoring-stack"
+      description: 'Prometheus stack registry (prometheus-community)',
+      matchPackageNames: [
+        'kube-prometheus-stack',
+        'prometheus-pushgateway',
+      ],
+      registryUrls: [
+        'https://prometheus-community.github.io/helm-charts',
+      ],
+      groupName: 'monitoring stack',
+      groupSlug: 'monitoring-stack',
     },
     {
-      "description": "Group stable infra patch updates",
-      "matchUpdateTypes": [
-        "patch"
+      description: 'Group stable infra patch updates',
+      matchUpdateTypes: [
+        'patch',
       ],
-      "matchPackageNames": [
-        "cert-manager",
-        "external-dns",
-        "external-secrets",
-        "cloudnative-pg",
-        "k8up",
-        "cilium",
-        "redis-operator"
+      matchPackageNames: [
+        'cert-manager',
+        'external-dns',
+        'external-secrets',
+        'cloudnative-pg',
+        'k8up',
+        'cilium',
+        'redis-operator',
       ],
-      "groupName": "stable infra patches",
-      "groupSlug": "stable-infra-patches"
+      groupName: 'stable infra patches',
+      groupSlug: 'stable-infra-patches',
     },
     {
-      "description": "Group FluxCD ecosystem updates",
-      "matchPackageNames": [
-        "flagger",
-        "loadtester"
+      description: 'Group FluxCD ecosystem updates',
+      matchPackageNames: [
+        'flagger',
+        'loadtester',
       ],
-      "groupName": "fluxcd",
-      "groupSlug": "fluxcd",
-      "registryUrls": [
-        "https://flagger.app"
-      ]
+      groupName: 'fluxcd',
+      groupSlug: 'fluxcd',
+      registryUrls: [
+        'https://flagger.app',
+      ],
     },
     {
-      "description": "Longhorn and OpenBao updates separately - high risk on upgrade",
-      "matchPackageNames": [
-        "longhorn",
-        "openbao",
-        "opencost"
+      description: 'Longhorn and OpenBao updates separately - high risk on upgrade',
+      matchPackageNames: [
+        'longhorn',
+        'openbao',
+        'opencost',
       ],
-      "groupName": "stateful services",
-      "groupSlug": "stateful-services"
+      groupName: 'stateful services',
+      groupSlug: 'stateful-services',
     },
     {
-      "description": "vscode-server-dockerized updates",
-      "matchPackageNames": [
-        "vscode-server"
+      description: 'vscode-server-dockerized updates',
+      matchPackageNames: [
+        'vscode-server',
       ],
-      "registryUrls": [
-        "https://dmuix.github.io/vscode-server-dockerized/"
+      registryUrls: [
+        'https://dmuix.github.io/vscode-server-dockerized/',
       ],
-      "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})-(?<build>.+)$"
+      versioning: 'regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})-(?<build>.+)$',
     },
     {
-      "description": "Keep podinfo on 6.x range",
-      "matchPackageNames": [
-        "podinfo"
+      description: 'Keep podinfo on 6.x range',
+      matchPackageNames: [
+        'podinfo',
       ],
-      "allowedVersions": "6.x"
-    }
-  ]
+      allowedVersions: '6.x',
+    },
+  ],
 }

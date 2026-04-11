@@ -33,7 +33,7 @@
     "values-schemas/redis-operator/helmrelease.schema.json": "infra/controller/redis-operator.yml",
     "values-schemas/prometheus-pushgateway/helmrelease.schema.json": "infra/controller/prometheus-pushgateway.yml",
     "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.32.1-standalone-strict/all.json": "infra/controller/cert-manager/HelmRepository.yml",
-    "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/apiextensions.k8s.io/customresourcedefinition_v1.json": "infra/crds/*.yml",
-    "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/kustomization.json": "clusters/flux-system/flux-system.yml"
+    "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/apiextensions.k8s.io/customresourcedefinition_v1.json": "infra/crds/**/*.yml",
+    "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/kustomization.json": "*Kustomization*.yml"
   }
 }

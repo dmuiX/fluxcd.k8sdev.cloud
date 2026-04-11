@@ -97,21 +97,39 @@ python3 "helper scripts/validate-helm-schemas.py"
 
 ---
 
+### `fetch-crds.py`
+
+Fetches CRD manifests from upstream GitHub sources, pinned to the chart version declared in each HelmRelease. Writes one file per `CustomResourceDefinition` into `infra/crds/<operator>/`.
+
+Operators configured: `cilium`, `external-secrets`, `k8up`, `kube-prometheus-stack`.
+
+```sh
+python3 "helper scripts/fetch-crds.py" --dry-run   # preview only
+python3 "helper scripts/fetch-crds.py"              # write to infra/crds/
+```
+
+Set `GITHUB_TOKEN` to avoid the 60 req/h unauthenticated GitHub API rate limit.
+
+---
+
 ## Typical workflow
 
 ```sh
 # 1. Fetch/regenerate schemas (needs helm + internet)
 python3 "helper scripts/fetch-and-patch-helm-schemas.py"
 
-# 2. Split any new multi-doc YAML files
+# 2. Fetch CRD manifests (needs internet; re-run when chart versions change)
+python3 "helper scripts/fetch-crds.py"
+
+# 3. Split any new multi-doc YAML files
 python3 "helper scripts/split-flux-yamls.py"
 
-# 3. Organise flat config files into topic folders
+# 4. Organise flat config files into topic folders
 python3 "helper scripts/organize-flux-yamls.py"
 
-# 4. Inject schema comments into HelmRelease files
+# 5. Inject schema comments into HelmRelease files
 python3 "helper scripts/inject-schema-comments.py"
 
-# 5. Validate
+# 6. Validate
 python3 "helper scripts/validate-helm-schemas.py"
 ```

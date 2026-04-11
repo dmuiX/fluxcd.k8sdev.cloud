@@ -2,7 +2,7 @@
 apiVersion: k8up.io/v1
 kind: Restore
 metadata:
-  name: openbao-1-k8up-restore
+  name: openbao-2-k8up-restore
   namespace: openbao
 spec:
   backend:

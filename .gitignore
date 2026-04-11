@@ -3,3 +3,5 @@
 cloudflare-token and pihole-token
 
 values-schemas/*
+
+__pycache__

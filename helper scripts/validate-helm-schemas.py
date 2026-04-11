@@ -1,16 +1,28 @@
 #!/usr/bin/env python3
 """
-validate-helm-schemas.py
+validate-helm-schemas.py — Validate HelmReleases against generated schemas.
 
-Validates HelmRelease YAML files against pre-generated values schemas.
-Outputs errors in file:line: error: format for VS Code problemMatcher.
+Walks the whole repository, finds every HelmRelease, loads the matching
+values schema from `<repo>/values-schemas/<chart>/values.schema.json`, and
+prints any validation errors in `file:line: error: …` format so they can
+be surfaced by the VS Code problem matcher.
 
 Requires: pip install pyyaml jsonschema
 
-Usage: python3 validate-helm-schemas.py [repo-root] [schema-dir]
+Usage:
+    validate-helm-schemas.py [--path <dir>] [--schema-dir <path>]
+
+All arguments are optional. Defaults:
+    --path        repo root (discovered via git)
+    --schema-dir  <repo>/values-schemas
+
+Relative paths are resolved against the repo root, not the current working
+directory, so the script works from any CWD.
 """
 
+import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -26,6 +38,34 @@ except ImportError:
     print("jsonschema required. Install with: pip install jsonschema", file=sys.stderr)
     sys.exit(1)
 
+
+# ---------------------------------------------------------------------------
+# Repo-root-aware path helpers
+# ---------------------------------------------------------------------------
+
+def discover_repo_root() -> Path:
+    script_dir = Path(__file__).resolve().parent
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(script_dir), "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        print(f"ERROR: could not determine git repo root: {e}", file=sys.stderr)
+        sys.exit(1)
+    return Path(out.stdout.strip())
+
+
+def resolve_repo_path(arg: str, root: Path) -> Path:
+    p = Path(arg)
+    return p.resolve() if p.is_absolute() else (root / p).resolve()
+
+
+# ---------------------------------------------------------------------------
+# YAML scan
+# ---------------------------------------------------------------------------
 
 def find_yaml_docs(repo_root, schema_dir):
     """Yield (doc, filepath) for all YAML documents."""
@@ -46,7 +86,6 @@ def find_yaml_docs(repo_root, schema_dir):
 
 
 def find_helm_releases(repo_root, schema_dir):
-    """Find all HelmRelease docs and return (chart_name, filepath) pairs."""
     releases = []
     for doc, filepath in find_yaml_docs(repo_root, schema_dir):
         if doc.get("kind") == "HelmRelease":
@@ -143,16 +182,32 @@ def validate(repo_root, schema_dir):
     return error_count
 
 
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
 def main():
-    repo_root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(".").resolve()
-    schema_dir = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path("./values-schemas").resolve()
+    parser = argparse.ArgumentParser(description=__doc__.strip().split("\n")[0])
+    parser.add_argument("--path", help="Repo scan path (default: repo root)")
+    parser.add_argument(
+        "--schema-dir", help="Directory with values schemas (default: <repo>/values-schemas)"
+    )
+    args = parser.parse_args()
+
+    root = discover_repo_root()
+    scan_root = resolve_repo_path(args.path, root) if args.path else root
+    schema_dir = (
+        resolve_repo_path(args.schema_dir, root)
+        if args.schema_dir
+        else (root / "values-schemas")
+    )
 
     if not schema_dir.exists():
         print(f"Schema dir not found: {schema_dir}", file=sys.stderr)
         print("Run fetch-and-patch-helm-schemas.py first.", file=sys.stderr)
         sys.exit(1)
 
-    error_count = validate(repo_root, schema_dir)
+    error_count = validate(scan_root, schema_dir)
     sys.exit(1 if error_count > 0 else 0)
 
 

@@ -23,6 +23,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_LOG_FILE: /tmp/renovate-log.ndjson
+          RENOVATE_LOG_FILE_LEVEL: info
 
       - name: Summary
         if: always()
@@ -33,5 +35,24 @@ jobs:
           echo "- **Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f /tmp/renovate-log.ndjson ]; then
+            STATS=$(grep '"Dependency extraction complete"' /tmp/renovate-log.ndjson | tail -1 | python3 -c "
+          import sys, json
+          line = json.loads(sys.stdin.read())
+          stats = line.get('stats', {})
+          total = stats.get('total', {})
+          managers = stats.get('managers', {})
+          print(f'- **Files scanned:** {total.get(\"fileCount\", 0)}')
+          print(f'- **Dependencies found:** {total.get(\"depCount\", 0)}')
+          for mgr, data in managers.items():
+              print(f'  - {mgr}: {data.get(\"depCount\", 0)} deps in {data.get(\"fileCount\", 0)} files')
+          " 2>/dev/null)
+            if [ -n "$STATS" ]; then
+              echo "$STATS" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
           echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)" >> $GITHUB_STEP_SUMMARY
           echo "[Open Renovate PRs](https://github.com/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Frenovate)" >> $GITHUB_STEP_SUMMARY

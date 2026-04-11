@@ -72,15 +72,7 @@
         "opencost"
       ],
       "groupName": "stateful services",
-      "groupSlug": "stateful-services",
-      "dependencyDashboardApproval": true
-    },
-    {
-      "description": "Require manual approval for major updates",
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "dependencyDashboardApproval": true
+      "groupSlug": "stateful-services"
     },
     {
       "description": "vscode-server-dockerized updates",

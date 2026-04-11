@@ -21,47 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - name: Write log parser
-        run: |
-          cat > /tmp/parse-renovate-log.py << 'PYEOF'
-          import json, sys
-
-          lines = []
-          with open(sys.argv[1]) as f:
-              for line in f:
-                  try:
-                      lines.append(json.loads(line))
-                  except:
-                      pass
-
-          for line in lines:
-              if 'Dependency extraction complete' in line.get('msg', ''):
-                  stats = line.get('stats', {})
-                  total = stats.get('total', {})
-                  managers = stats.get('managers', {})
-                  print(f'- **Files scanned:** {total.get("fileCount", 0)}')
-                  print(f'- **Dependencies found:** {total.get("depCount", 0)}')
-                  for mgr, data in managers.items():
-                      print(f'  - {mgr}: {data.get("depCount", 0)} deps in {data.get("fileCount", 0)} files')
-                  print()
-                  break
-
-          prs_created = [l for l in lines if 'PR created' in l.get('msg', '')]
-          prs_updated = [l for l in lines if 'PR updated' in l.get('msg', '')]
-          prs_closed  = [l for l in lines if 'PR closed' in l.get('msg', '')]
-
-          if prs_created or prs_updated or prs_closed:
-              print('### PRs')
-              for l in prs_created:
-                  print(f'- created: {l.get("prTitle", l.get("title", ""))}')
-              for l in prs_updated:
-                  print(f'- updated: {l.get("prTitle", l.get("title", ""))}')
-              for l in prs_closed:
-                  print(f'- closed: {l.get("prTitle", l.get("title", ""))}')
-          else:
-              print('- No PRs created or updated')
-          PYEOF
-
       - name: Self-hosted Renovate
         id: renovate
         uses: renovatebot/github-action@v46.1.8
@@ -82,7 +41,7 @@ jobs:
           echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ -f /tmp/renovate-log.ndjson ]; then
-            python3 /tmp/parse-renovate-log.py /tmp/renovate-log.ndjson >> $GITHUB_STEP_SUMMARY
+            python3 .github/renovate-summary.py /tmp/renovate-log.ndjson >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)" >> $GITHUB_STEP_SUMMARY

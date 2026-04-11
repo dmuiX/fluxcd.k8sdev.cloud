@@ -24,5 +24,7 @@ spec:
       requests:
         cpu: 50m
         memory: 32Mi
+      limits:
+        memory: 128Mi
   dependsOn:
     - name: kube-prometheus-stack

@@ -72,21 +72,62 @@ Declarative database provisioning via GitOps — define a PostgreSQL cluster or 
 ## 📁 Repository Structure
 
 ```text
-clusters/        # Flux entrypoint — reconciles infra and apps
+clusters/
+  flux-system/
+    Kustomization.yml       Plain-kustomize bootstrap (run once: kubectl apply -k)
+    flux-controllers/       Flux itself — controllers, CRDs, RBAC
+    flux-sync/
+      GitRepository.yml     Points Flux at this Git repo
+      self-sync.yml         Tells Flux to watch clusters/ continuously
+  infra-sync.yml            Flux Kustomizations: crds → controller → config
+  apps-sync.yml             Flux Kustomization: apps (depends on infra)
+
 infra/
-  controller/    # Helm releases for infrastructure components
-  config/        # Config that depends on controllers (issuers, gateways, secret stores...)
-apps/            # Application Helm releases
-docs/            # Notes and setup guides for specific components
+  crds/                     CRD manifests, one file per CRD, grouped by operator
+  controller/               HelmReleases for platform controllers
+  config/                   Config objects (Gateways, PrometheusRules, …)
+
+apps/                       HelmReleases for workloads
+values-schemas/             JSON schemas for HelmRelease spec.values validation
+helper scripts/             Maintenance scripts (see helper scripts/README.md)
+docs/                       Notes and setup guides for specific components
 ```
 
-Flux reconciles three Kustomizations in strict order via `dependsOn`:
+Flux reconciles in strict dependency order:
 
 ```text
-infra-controller → infra-config → apps
+crds → infra-controller → infra-config → apps
 ```
 
 `infra-controller` and `infra-config` are split because config resources (e.g. `ClusterIssuer`, `ClusterSecretStore`, Gateways) depend on the CRDs that controllers install. Without the split, Flux would try to apply config before the CRDs exist and fail.
+
+## 📐 Naming Conventions
+
+### File names
+
+| Pattern | Meaning |
+| --- | --- |
+| `Kind-name.yml` | One Kubernetes object — Kind and `metadata.name` in the filename |
+| `Kind.yml` | Same, when the Kind appears only once in that folder |
+| `*-sync.yml` | A Flux `Kustomization` CR that reconciles a path in this repo |
+| `self-sync.yml` | The Flux `Kustomization` that watches `clusters/` itself |
+| `Kustomization.yml` | Plain-kustomize entry point (`kustomize.config.k8s.io`) — **not** a Flux object |
+
+### Two things called "Kustomization"
+
+Both share the name but are completely different:
+
+**`kustomize.config.k8s.io/v1beta1`** — plain Kustomize, not Flux:
+
+- Only file: `clusters/flux-system/Kustomization.yml`
+- Run once by a human: `kubectl apply -k clusters/flux-system/`
+- Assembles YAML files into a single apply — like a Makefile
+
+**`kustomize.toolkit.fluxcd.io/v1`** — Flux CRD:
+
+- Files named `*-sync.yml`
+- Lives in the cluster, reconciled by Flux continuously
+- Watches a `path:` in this repo and applies whatever it finds there
 
 ## 📋 Deployment Order
 
@@ -152,7 +193,7 @@ DNS lookups were taking unusually long. Fix: `bpf.hostLegacyRouting: true` in th
 
 ### Kustomization patches to avoid repeating yourself
 
-Every HelmRelease needed the same boilerplate: `interval`, `timeout`, `driftDetection`, `install`, `upgrade`, `test`. Instead of copying it into every file, used Kustomization-level `patches` in `clusters/infra.yml` to inject these into all HelmReleases at once. Much cleaner.
+Every HelmRelease needed the same boilerplate: `interval`, `timeout`, `driftDetection`, `install`, `upgrade`, `test`. Instead of copying it into every file, used Kustomization-level `patches` in `clusters/infra-sync.yml` to inject these into all HelmReleases at once. Much cleaner.
 
 ### CRDs: CreateReplace on install, Skip on upgrade
 
@@ -160,7 +201,7 @@ CRD handling needs different strategies depending on the operation: `crds: Creat
 
 ### Drift detection needs ignore rules
 
-Enabling `driftDetection` immediately caused false positives — Flux flagged legitimate changes as drift: `/spec/replicas` modified by HPA, and `/status` on cert-manager Certificates written back by the controller. Fix: add ignore rules for both. Also set `mode: warn` instead of `enabled` so drift is logged but doesn't block reconciliation. Both rules are now applied globally via a Kustomization patch in `clusters/infra.yml` instead of repeating them in every HelmRelease.
+Enabling `driftDetection` immediately caused false positives — Flux flagged legitimate changes as drift: `/spec/replicas` modified by HPA, and `/status` on cert-manager Certificates written back by the controller. Fix: add ignore rules for both. Also set `mode: warn` instead of `enabled` so drift is logged but doesn't block reconciliation. Both rules are now applied globally via a Kustomization patch in `clusters/infra-sync.yml` instead of repeating them in every HelmRelease.
 
 ### Longhorn storage needs ReadWriteMany
 

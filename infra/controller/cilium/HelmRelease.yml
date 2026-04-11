@@ -56,6 +56,12 @@ spec:
         name: cilium
     envoy:
       enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 25Mi
+        limits:
+          memory: 256Mi
     loadBalancer:
       l7:
         backend: envoy
@@ -89,6 +95,12 @@ spec:
               memory: 256Mi
       relay:
         enabled: true
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
       metrics:
         enableOpenMetrics: true
         enabled:

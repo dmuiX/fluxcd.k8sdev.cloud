@@ -21,7 +21,6 @@ spec:
   values:
     defaultSettings:
       defaultDataPath: /var/lib/longhorn
-      defaultReplicaCount: 3
       createDefaultDiskLabeledNodes: "false"
       guaranteedInstanceManagerCPU: 12
     persistence:

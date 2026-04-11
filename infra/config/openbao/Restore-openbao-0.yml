@@ -21,3 +21,4 @@ spec:
   restoreMethod:
     folder:
       claimName: data-openbao-0
+  paths: [ "/data/openbao-0" ]

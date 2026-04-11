@@ -21,3 +21,4 @@ spec:
   restoreMethod:
     folder:
       claimName: opencost-pvc
+  paths: [ "/data/opencost" ]

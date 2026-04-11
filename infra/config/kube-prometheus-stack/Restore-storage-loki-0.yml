@@ -21,3 +21,4 @@ spec:
   restoreMethod:
     folder:
       claimName: storage-loki-0
+  paths: [ "/data/storage-loki-0" ]

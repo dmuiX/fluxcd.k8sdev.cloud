@@ -1,8 +1,11 @@
 name: flux-update
 
 on:
-  schedule:
-    - cron: "30 * * * *"
+  push:
+    paths:
+      - .github/workflows/flux-update.yml
+    branches-ignore:
+      - main
   workflow_dispatch:
 
 env:
@@ -18,29 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - name: Check versions
-        id: versions
-        run: |
-          LATEST=${{ env.FLUX_VERSION }}
-          CURRENT=$(grep -oP '(?<=app.kubernetes.io/version: )v[\d.]+' clusters/flux-system/gotk-components.yaml | head -1)
-          echo "latest=$LATEST" >> $GITHUB_OUTPUT
-          echo "current=$CURRENT" >> $GITHUB_OUTPUT
-          echo "Pinned: $LATEST | Current: $CURRENT"
-
       - name: Cache Flux CLI
-        if: steps.versions.outputs.latest != steps.versions.outputs.current
         uses: actions/cache@v4
         id: cache-flux
         with:
           path: /usr/local/bin/flux
-          key: flux-${{ steps.versions.outputs.latest }}
+          key: flux-${{ env.FLUX_VERSION }}
 
       - name: Install Flux CLI
-        if: |
-          steps.versions.outputs.latest != steps.versions.outputs.current &&
-          steps.cache-flux.outputs.cache-hit != 'true'
+        if: steps.cache-flux.outputs.cache-hit != 'true'
         run: |
-          VERSION=${{ steps.versions.outputs.latest }}
+          VERSION=${{ env.FLUX_VERSION }}
           curl -sL "https://github.com/fluxcd/flux2/releases/download/${VERSION}/flux_${VERSION#v}_linux_amd64.tar.gz" -o flux.tar.gz
           curl -sL "https://github.com/fluxcd/flux2/releases/download/${VERSION}/flux_${VERSION#v}_checksums.txt" -o checksums.txt
           sha256sum --check --ignore-missing checksums.txt
@@ -49,35 +40,21 @@ jobs:
           rm flux.tar.gz checksums.txt
 
       - name: Update gotk-components.yaml
-        if: steps.versions.outputs.latest != steps.versions.outputs.current
         run: |
-          flux install --version=${{ steps.versions.outputs.latest }} --export > clusters/flux-system/gotk-components.yaml
+          flux install --version=${{ env.FLUX_VERSION }} --export > clusters/flux-system/gotk-components.yaml
 
-      - name: Create PR
-        if: steps.versions.outputs.latest != steps.versions.outputs.current
+      - name: Commit and push
         run: |
-          BRANCH="flux-update/${{ steps.versions.outputs.latest }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b $BRANCH
           git add clusters/flux-system/gotk-components.yaml
-          git commit -m "chore(flux): update flux to ${{ steps.versions.outputs.latest }}"
-          git push origin $BRANCH
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/pulls \
-            -d "{\"title\":\"chore(flux): update flux to ${{ steps.versions.outputs.latest }}\",\"head\":\"$BRANCH\",\"base\":\"main\",\"body\":\"Automated Flux update from ${{ steps.versions.outputs.current }} to ${{ steps.versions.outputs.latest }}.\"}"
+          git commit -m "chore(flux): update gotk-components to ${{ env.FLUX_VERSION }}"
+          git push
 
       - name: Summary
         if: always()
         run: |
-          echo "## Flux Update Check" >> $GITHUB_STEP_SUMMARY
+          echo "## Flux Update" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Current:** ${{ steps.versions.outputs.current }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Latest:** ${{ steps.versions.outputs.latest }}" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.versions.outputs.latest }}" != "${{ steps.versions.outputs.current }}" ]; then
-            echo "- **PR created** for update to ${{ steps.versions.outputs.latest }}" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- Already up to date" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "- **Version:** ${{ env.FLUX_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

@@ -5,6 +5,9 @@ on:
     - cron: "30 * * * *"
   workflow_dispatch:
 
+env:
+  FLUX_VERSION: v2.8.3 # renovate: depName=fluxcd/flux2 datasource=github-releases
+
 jobs:
   flux-update:
     runs-on: ubuntu-latest
@@ -18,11 +21,11 @@ jobs:
       - name: Check versions
         id: versions
         run: |
-          LATEST=$(curl -s https://api.github.com/repos/fluxcd/flux2/releases/latest | jq -r .tag_name)
+          LATEST=${{ env.FLUX_VERSION }}
           CURRENT=$(grep -oP '(?<=app.kubernetes.io/version: )v[\d.]+' clusters/flux-system/gotk-components.yaml | head -1)
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
           echo "current=$CURRENT" >> $GITHUB_OUTPUT
-          echo "Latest: $LATEST | Current: $CURRENT"
+          echo "Pinned: $LATEST | Current: $CURRENT"
 
       - name: Cache Flux CLI
         if: steps.versions.outputs.latest != steps.versions.outputs.current

@@ -1,10 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ignoreDeps": ["fluxcd/flux2"],
+  "ignorePaths": ["clusters/flux-system/gotk-components.yaml"],
   "extends": [
     "config:recommended",
     ":dependencyDashboard",
     ":semanticCommits"
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^\\.github/workflows/.+\\.yml$"],
+      "matchStrings": ["FLUX_VERSION: (?<currentValue>v[\\d.]+) # renovate: depName=(?<depName>[^\\s]+) datasource=(?<datasource>[^\\s]+)"],
+      "datasourceTemplate": "{{datasource}}",
+      "depNameTemplate": "{{depName}}"
+    }
   ],
   "flux": {
     "enabled": true,

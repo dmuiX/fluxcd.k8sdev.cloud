@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  FLUX_VERSION: v2.8.3 # renovate: depName=fluxcd/flux2 datasource=github-releases
+  FLUX_VERSION: v2.8.5 # renovate: depName=fluxcd/flux2 datasource=github-releases
 
 jobs:
   flux-update:

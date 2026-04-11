@@ -19,7 +19,6 @@ spec:
         name: redis-operator
       interval: 6h
   values:
-    replicas: 3
     resources:
       requests:
         cpu: 10m

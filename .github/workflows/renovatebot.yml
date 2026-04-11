@@ -15,9 +15,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
+
       - name: Self-hosted Renovate
+        id: renovate
         uses: renovatebot/github-action@v46.1.8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Renovate Run" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ steps.renovate.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)" >> $GITHUB_STEP_SUMMARY

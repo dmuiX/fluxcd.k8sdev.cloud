@@ -39,22 +39,18 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          {
-            echo "## Renovate Run"
-            echo ""
-            echo "- **Status:** ${{ steps.renovate.outcome }}"
-            echo "- **Triggered by:** ${{ github.event_name }}"
-            echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')"
-            echo ""
-            LOG_FILE="/tmp/renovate-log.ndjson"
-            if [ -f "$LOG_FILE" ]; then
-              python3 .github/renovate-summary.py "$LOG_FILE" 2>/dev/null || echo "- (log parsing failed)"
-            else
-              echo "- No log file found at \`$LOG_FILE\`"
-              echo "- Contents of /tmp:"
-              ls /tmp 2>&1 | sed 's/^/  - /' || true
-            fi
-            echo ""
-            echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)"
-            echo "[Open Renovate PRs](https://github.com/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Frenovate)"
-          } >> "$GITHUB_STEP_SUMMARY"
+          echo "## Renovate Run" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ steps.renovate.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f /tmp/renovate-log.ndjson ]; then
+            python3 .github/renovate-summary.py /tmp/renovate-log.ndjson >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo "- (log parsing failed)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- No log file found at /tmp/renovate-log.ndjson" >> $GITHUB_STEP_SUMMARY
+            ls /tmp >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)" >> $GITHUB_STEP_SUMMARY
+          echo "[Open Renovate PRs](https://github.com/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Frenovate)" >> $GITHUB_STEP_SUMMARY

@@ -4,8 +4,9 @@ on:
   push:
     paths:
       - .github/workflows/flux-update.yml
-    branches-ignore:
-      - main
+    branches:
+      - 'renovate/fluxcd*'
+      - 'renovate/flux2*'
   workflow_dispatch:
 
 env:

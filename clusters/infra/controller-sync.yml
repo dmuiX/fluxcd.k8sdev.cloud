@@ -2,26 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: crds
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: infra/crds
-  prune: false
-  # Never prune CRDs to avoid data loss
-  timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: infra-controller
+  name: controller-sync
   namespace: flux-system
 spec:
   dependsOn:
-    - name: crds
+    - name: crds-sync
   interval: 5m0s
   retryInterval: 2m0s
   timeout: 5m0s
@@ -66,20 +51,3 @@ spec:
       target:
         kind: HelmRelease
         group: helm.toolkit.fluxcd.io
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: infra-config
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: infra-controller
-  interval: 1m0s
-  retryInterval: 1m0s
-  timeout: 5m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: infra/config
-  prune: true

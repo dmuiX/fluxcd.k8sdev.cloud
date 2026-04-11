@@ -11,7 +11,7 @@ spec:
     branch: main
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/dmuiX/fluxcd.k8sdev.cloud
+  url: https://github.com/dmuiX/fluxcd.k8sdev.cloud.git
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

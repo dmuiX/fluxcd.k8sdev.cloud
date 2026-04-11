@@ -129,6 +129,32 @@ Both share the name but are completely different:
 - Lives in the cluster, reconciled by Flux continuously
 - Watches a `path:` in this repo and applies whatever it finds there
 
+## 🔥 hail mary flux-system if you need to
+
+```bash
+# remove ns
+kubectl delete ns flux-system
+# remove all finalizers deployed resources are staying in the cluster!
+kubectl get kustomizations,helmreleases,helmrepositories,helmcharts,gitrepositories -n flux-system -o name | xargs kubectl patch -n flux-system -p '{"metadata":{"finalizers":[]}}' --type=merge
+# remove all resources
+kubectl get all,secrets,configmaps,serviceaccounts,kustomizations,helmreleases,helmrepositories,helmcharts,gitrepositories -n flux-system -o name | xargs k delete -n flux-system
+# takes some minutes to be deleted! so have patience
+```
+
+## 🚀 manually bootstrap flux-system (if not done by bootstrap cluster)
+
+
+```bash
+flux bootstrap github \
+  --token-auth \
+  --owner=dmuiX \
+  --repository=fluxcd.k8sdev.cloud \
+  --branch=main \
+  --path=clusters \
+  --personal \
+  --private=true
+```
+
 ## 📋 Deployment Order
 
 Flux deploys infrastructure in dependency order:

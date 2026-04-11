@@ -5,7 +5,7 @@ on:
     - cron: "0 * * * *"
   workflow_dispatch:
   issues:
-    types: [edited]
+    types: [ edited ]
 
 jobs:
   renovatebot:
@@ -25,7 +25,7 @@ jobs:
         id: renovate
         uses: renovatebot/github-action@v46.1.8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RENOVATE_TOKEN }}
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
           RENOVATE_LOG_FILE: /tmp/renovate-log.ndjson

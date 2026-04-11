@@ -33,7 +33,7 @@ jobs:
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
           RENOVATE_GIT_AUTHOR: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
-          RENOVATE_LOG_FILE: ${{ runner.temp }}/renovate-log.ndjson
+          RENOVATE_LOG_FILE: /tmp/renovate-log.ndjson
           RENOVATE_LOG_FILE_LEVEL: info
 
       - name: Summary
@@ -46,13 +46,13 @@ jobs:
             echo "- **Triggered by:** ${{ github.event_name }}"
             echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')"
             echo ""
-            LOG_FILE="${{ runner.temp }}/renovate-log.ndjson"
+            LOG_FILE="/tmp/renovate-log.ndjson"
             if [ -f "$LOG_FILE" ]; then
               python3 .github/renovate-summary.py "$LOG_FILE" 2>/dev/null || echo "- (log parsing failed)"
             else
               echo "- No log file found at \`$LOG_FILE\`"
-              echo "- Contents of runner.temp:"
-              ls "${{ runner.temp }}" 2>&1 | sed 's/^/  - /' || true
+              echo "- Contents of /tmp:"
+              ls /tmp 2>&1 | sed 's/^/  - /' || true
             fi
             echo ""
             echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)"

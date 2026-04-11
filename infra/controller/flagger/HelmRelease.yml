@@ -19,13 +19,8 @@ spec:
         name: flagger
       interval: 6h
   values:
-    leaderElection:
-      enabled: true
-      replicaCount: 3
     podDisruptionBudget:
       enabled: true
-    prometheus:
-      install: false
     meshProvider: gatewayapi:v1
     serviceMonitor:
       enabled: true

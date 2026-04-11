@@ -5,7 +5,7 @@
       "label": "Validate HelmReleases",
       "type": "shell",
       "command": "python3",
-      "args": ["validate-helm-schemas.py"],
+      "args": ["${workspaceFolder}/helper scripts/validate-helm-schemas.py"],
       "group": "build",
       "problemMatcher": {
         "owner": "helm-schema",
@@ -21,6 +21,34 @@
         "reveal": "always",
         "panel": "shared",
         "clear": true
+      }
+    },
+    {
+      "label": "Watch & Validate HelmReleases",
+      "type": "shell",
+      "command": "fswatch -0 -l 0.5 --event Updated --event Created -i '\\.ya?ml$' -e '.*' '${workspaceFolder}' | while IFS= read -r -d '' _; do echo '=== validating ==='; python3 '${workspaceFolder}/helper scripts/validate-helm-schemas.py'; echo '=== done ==='; done",
+      "isBackground": true,
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": {
+        "owner": "helm-schema",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.+):(\\d+):\\s+error:\\s+(.+)$",
+          "file": 1,
+          "line": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^=== validating ===",
+          "endsPattern": "^=== done ==="
+        }
+      },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
       }
     }
   ]

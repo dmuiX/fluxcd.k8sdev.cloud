@@ -74,13 +74,15 @@ Declarative database provisioning via GitOps — define a PostgreSQL cluster or 
 ```text
 clusters/
   flux-system/
-    Kustomization.yml       Plain-kustomize bootstrap (run once: kubectl apply -k)
-    flux-controllers/       Flux itself — controllers, CRDs, RBAC
-    flux-sync/
-      GitRepository.yml     Points Flux at this Git repo
-      self-sync.yml         Tells Flux to watch clusters/ continuously
-  infra-sync.yml            Flux Kustomizations: crds → controller → config
-  apps-sync.yml             Flux Kustomization: apps (depends on infra)
+    gotk-components.yaml    Flux controllers, CRDs, RBAC (managed by bootstrap)
+    gotk-sync.yaml          GitRepository + self-sync Kustomization (managed by bootstrap)
+    kustomization.yaml      Plain-kustomize entry point — references gotk files + sync refs below
+  apps/
+    apps-sync.yml           Flux Kustomization: apps (depends on infra)
+  infra/
+    crds-sync.yml           Flux Kustomization: CRDs
+    controller-sync.yml     Flux Kustomization: controllers (depends on crds)
+    config-sync.yml         Flux Kustomization: config (depends on controllers)
 
 infra/
   crds/                     CRD manifests, one file per CRD, grouped by operator
@@ -110,8 +112,7 @@ crds → infra-controller → infra-config → apps
 | `Kind-name.yml` | One Kubernetes object — Kind and `metadata.name` in the filename |
 | `Kind.yml` | Same, when the Kind appears only once in that folder |
 | `*-sync.yml` | A Flux `Kustomization` CR that reconciles a path in this repo |
-| `self-sync.yml` | The Flux `Kustomization` that watches `clusters/` itself |
-| `Kustomization.yml` | Plain-kustomize entry point (`kustomize.config.k8s.io`) — **not** a Flux object |
+| `kustomization.yaml` | Plain-kustomize entry point (`kustomize.config.k8s.io`) — **not** a Flux object |
 
 ### Two things called "Kustomization"
 
@@ -119,8 +120,8 @@ Both share the name but are completely different:
 
 **`kustomize.config.k8s.io/v1beta1`** — plain Kustomize, not Flux:
 
-- Only file: `clusters/flux-system/Kustomization.yml`
-- Run once by a human: `kubectl apply -k clusters/flux-system/`
+- Only file: `clusters/flux-system/kustomization.yaml`
+- Managed by bootstrap — lists all resources Flux applies in `flux-system/`
 - Assembles YAML files into a single apply — like a Makefile
 
 **`kustomize.toolkit.fluxcd.io/v1`** — Flux CRD:
@@ -143,17 +144,24 @@ kubectl get all,secrets,configmaps,serviceaccounts,kustomizations,helmreleases,h
 
 ## 🚀 manually bootstrap flux-system (if not done by bootstrap cluster)
 
-
 ```bash
 flux bootstrap github \
   --token-auth \
   --owner=dmuiX \
   --repository=fluxcd.k8sdev.cloud \
   --branch=main \
-  --path=clusters \
+  --path=clusters/flux-system \
   --personal \
   --private=true
 ```
+
+If Flux was already bootstrapped before, this may print:
+
+```text
+✗ sync path configuration ("./clusters") would overwrite path ("./clusters/flux-system") of existing Kustomization
+```
+
+**Ignore it.** Bootstrap still installs the controllers and creates the source secret. Flux then picks up the rest from the repo automatically.
 
 ## 📋 Deployment Order
 

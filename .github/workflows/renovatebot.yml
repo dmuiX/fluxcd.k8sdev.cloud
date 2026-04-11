@@ -21,6 +21,47 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
+      - name: Write log parser
+        run: |
+          cat > /tmp/parse-renovate-log.py << 'PYEOF'
+          import json, sys
+
+          lines = []
+          with open(sys.argv[1]) as f:
+              for line in f:
+                  try:
+                      lines.append(json.loads(line))
+                  except:
+                      pass
+
+          for line in lines:
+              if 'Dependency extraction complete' in line.get('msg', ''):
+                  stats = line.get('stats', {})
+                  total = stats.get('total', {})
+                  managers = stats.get('managers', {})
+                  print(f'- **Files scanned:** {total.get("fileCount", 0)}')
+                  print(f'- **Dependencies found:** {total.get("depCount", 0)}')
+                  for mgr, data in managers.items():
+                      print(f'  - {mgr}: {data.get("depCount", 0)} deps in {data.get("fileCount", 0)} files')
+                  print()
+                  break
+
+          prs_created = [l for l in lines if 'PR created' in l.get('msg', '')]
+          prs_updated = [l for l in lines if 'PR updated' in l.get('msg', '')]
+          prs_closed  = [l for l in lines if 'PR closed' in l.get('msg', '')]
+
+          if prs_created or prs_updated or prs_closed:
+              print('### PRs')
+              for l in prs_created:
+                  print(f'- created: {l.get("prTitle", l.get("title", ""))}')
+              for l in prs_updated:
+                  print(f'- updated: {l.get("prTitle", l.get("title", ""))}')
+              for l in prs_closed:
+                  print(f'- closed: {l.get("prTitle", l.get("title", ""))}')
+          else:
+              print('- No PRs created or updated')
+          PYEOF
+
       - name: Self-hosted Renovate
         id: renovate
         uses: renovatebot/github-action@v46.1.8
@@ -34,57 +75,17 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          echo "## Renovate Run" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status:** ${{ steps.renovate.outcome }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [ -f /tmp/renovate-log.ndjson ]; then
-            python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
-          import json
-
-          lines = []
-          with open('/tmp/renovate-log.ndjson') as f:
-              for line in f:
-                  try:
-                      lines.append(json.loads(line))
-                  except:
-                      pass
-
-          # Dependency stats
-          for line in lines:
-              if 'Dependency extraction complete' in line.get('msg', ''):
-                  stats = line.get('stats', {})
-                  total = stats.get('total', {})
-                  managers = stats.get('managers', {})
-                  print(f'- **Files scanned:** {total.get("fileCount", 0)}')
-                  print(f'- **Dependencies found:** {total.get("depCount", 0)}')
-                  for mgr, data in managers.items():
-                      print(f'  - {mgr}: {data.get("depCount", 0)} deps in {data.get("fileCount", 0)} files')
-                  print()
-                  break
-
-          # PRs created / updated
-          prs_created = [l for l in lines if 'PR created' in l.get('msg', '')]
-          prs_updated = [l for l in lines if 'PR updated' in l.get('msg', '')]
-          prs_closed = [l for l in lines if 'PR closed' in l.get('msg', '')]
-
-          if prs_created or prs_updated or prs_closed:
-              print('### PRs')
-              for l in prs_created:
-                  print(f'- ✅ Created: {l.get("prTitle", l.get("title", ""))}')
-              for l in prs_updated:
-                  print(f'- 🔄 Updated: {l.get("prTitle", l.get("title", ""))}')
-              for l in prs_closed:
-                  print(f'- ❌ Closed: {l.get("prTitle", l.get("title", ""))}')
-          else:
-              print('- No PRs created or updated')
-
-          EOF
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)" >> $GITHUB_STEP_SUMMARY
-          echo "[Open Renovate PRs](https://github.com/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Frenovate)" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Renovate Run"
+            echo ""
+            echo "- **Status:** ${{ steps.renovate.outcome }}"
+            echo "- **Triggered by:** ${{ github.event_name }}"
+            echo "- **Run at:** $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo ""
+            if [ -f /tmp/renovate-log.ndjson ]; then
+              python3 /tmp/parse-renovate-log.py /tmp/renovate-log.ndjson
+            fi
+            echo ""
+            echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)"
+            echo "[Open Renovate PRs](https://github.com/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Frenovate)"
+          } >> $GITHUB_STEP_SUMMARY

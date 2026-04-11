@@ -35,3 +35,10 @@ if prs_created or prs_updated or prs_closed:
         print(f'- closed: {l.get("prTitle", l.get("title", ""))}')
 else:
     print("- No PRs created or updated")
+
+errors = [l for l in lines if l.get("level", 0) >= 50]
+if errors:
+    print()
+    print("### Errors")
+    for l in errors:
+        print(f'- {l.get("msg", "")} — {l.get("err", {}).get("message", "")}')

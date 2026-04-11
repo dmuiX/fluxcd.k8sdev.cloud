@@ -15,18 +15,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - name: Install Flux CLI
-        run: |
-          curl -s https://fluxcd.io/install.sh | bash
-
       - name: Check versions
         id: versions
         run: |
-          LATEST=$(flux version --client | grep -oP 'v[\d.]+')
+          LATEST=$(curl -s https://api.github.com/repos/fluxcd/flux2/releases/latest | jq -r .tag_name)
           CURRENT=$(grep -oP '(?<=app.kubernetes.io/version: )v[\d.]+' clusters/flux-system/gotk-components.yaml | head -1)
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
           echo "current=$CURRENT" >> $GITHUB_OUTPUT
           echo "Latest: $LATEST | Current: $CURRENT"
+
+      - name: Cache Flux CLI
+        if: steps.versions.outputs.latest != steps.versions.outputs.current
+        uses: actions/cache@v4
+        id: cache-flux
+        with:
+          path: /usr/local/bin/flux
+          key: flux-${{ steps.versions.outputs.latest }}
+
+      - name: Install Flux CLI
+        if: |
+          steps.versions.outputs.latest != steps.versions.outputs.current &&
+          steps.cache-flux.outputs.cache-hit != 'true'
+        run: |
+          curl -s https://fluxcd.io/install.sh | FLUX_VERSION=${{ steps.versions.outputs.latest }} bash
 
       - name: Update gotk-components.yaml
         if: steps.versions.outputs.latest != steps.versions.outputs.current

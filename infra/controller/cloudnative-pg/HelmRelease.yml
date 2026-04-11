@@ -19,9 +19,14 @@ spec:
         name: cloudnative-pg
       interval: 6h
   values:
-    replicaCount: 3
     monitoring:
       podMonitorEnabled: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 25Mi
+      limits:
+        memory: 256Mi
   dependsOn:
     - name: cert-manager
     - name: cilium

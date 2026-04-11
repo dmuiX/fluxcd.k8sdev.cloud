@@ -21,7 +21,6 @@ spec:
   values:
     crds:
       enabled: true
-    replicaCount: 3
     podDisruptionBudget:
       enabled: true
     enableCertificateOwnerRef: true

@@ -4,4 +4,4 @@ apt update
 
 apt install -y build-essential libpq-dev
 
-runuser -u ubuntu renovate
+runuser --preserve-env=RENOVATE_REPOSITORIES -u ubuntu renovate

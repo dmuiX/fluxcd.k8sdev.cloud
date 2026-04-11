@@ -35,6 +35,13 @@ spec:
             memory: 2Gi
         serviceMonitorSelector: {}
         serviceMonitorSelectorNilUsesHelmValues: false
+    prometheusOperator:
+      resources:
+        requests:
+          cpu: 20m
+          memory: 25Mi
+        limits:
+          memory: 256Mi
     grafana:
       admin:
         existingSecret: grafana-credentials
@@ -139,6 +146,13 @@ spec:
             memory: 64Mi
           limits:
             memory: 256Mi
+    prometheus-node-exporter:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 25Mi
+        limits:
+          memory: 256Mi
   dependsOn:
     - name: cert-manager
     - name: cilium

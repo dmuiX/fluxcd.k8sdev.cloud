@@ -1,0 +1,20 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-alloy
+  namespace: monitoring
+spec:
+  parentRefs:
+  - name: grafana-alloy
+    namespace: monitoring
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: grafana-alloy
+      port: 12345
+  hostnames:
+  - grafana-alloy.k8sdev.cloud

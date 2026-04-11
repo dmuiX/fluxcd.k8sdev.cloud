@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-dashboard-hubble-http
+  name: dashboard-hubble-http
   namespace: monitoring
   labels:
     grafana_dashboard: "1"

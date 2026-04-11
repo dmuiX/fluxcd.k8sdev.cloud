@@ -1,0 +1,29 @@
+---
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: latency
+  namespace: flagger
+spec:
+  provider:
+    type: prometheus
+    address: http://monitoring-prometheus.monitoring:9090
+  query: "histogram_quantile(0.99,
+
+    \  sum(
+
+    \    rate(
+
+    \      hubble_http_request_duration_seconds_bucket{
+
+    \        destination_workload_namespace=~\"{{ namespace }}\",
+
+    \        destination_workload=~\"{{ target }}\",
+
+    \      }[{{ interval }}]
+
+    \    )
+
+    \  ) by (le)
+
+    )\n"

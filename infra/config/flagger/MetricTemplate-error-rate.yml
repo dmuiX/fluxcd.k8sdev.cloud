@@ -1,0 +1,15 @@
+---
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: error-rate
+  namespace: flagger
+spec:
+  provider:
+    type: prometheus
+    address: http://monitoring-prometheus.monitoring:9090
+  query: "100 - sum(\n  rate(\n    hubble_http_requests_total{\n      destination_workload_namespace=~\"\
+    {{ namespace }}\",\n      destination_workload=~\"{{ target }}\",\n      response_code!~\"\
+    5.*\",\n    }[{{ interval }}]\n  )\n)\n/\nsum(\n  rate(\n    hubble_http_requests_total{\n\
+    \      destination_workload_namespace=~\"{{ namespace }}\",\n      destination_workload=~\"\
+    {{ target }}\",\n    }[{{ interval }}]\n  )\n)\n* 100\n"

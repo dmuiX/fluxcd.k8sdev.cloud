@@ -1,8 +1,9 @@
+---
 apiVersion: k8up.io/v1
 kind: Schedule
 metadata:
-  name: opencost-k8up-schedule
-  namespace: opencost
+  name: monitoring-k8up-schedule
+  namespace: monitoring
 spec:
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2

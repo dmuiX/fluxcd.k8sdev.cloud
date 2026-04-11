@@ -1,8 +1,9 @@
+---
 apiVersion: k8up.io/v1
 kind: Restore
 metadata:
-  name: openbao-1-k8up-restore
-  namespace: openbao
+  name: monitoring-k8up-restore
+  namespace: monitoring
 spec:
   backend:
     repoPasswordSecretRef:
@@ -19,4 +20,4 @@ spec:
         key: secret-access-key
   restoreMethod:
     folder:
-      claimName: data-openbao-1
+      claimName: storage-loki-0

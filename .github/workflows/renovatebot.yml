@@ -42,22 +42,49 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ -f /tmp/renovate-log.ndjson ]; then
-            STATS=$(grep '"Dependency extraction complete"' /tmp/renovate-log.ndjson | tail -1 | python3 -c "
-          import sys, json
-          line = json.loads(sys.stdin.read())
-          stats = line.get('stats', {})
-          total = stats.get('total', {})
-          managers = stats.get('managers', {})
-          print(f'- **Files scanned:** {total.get(\"fileCount\", 0)}')
-          print(f'- **Dependencies found:** {total.get(\"depCount\", 0)}')
-          for mgr, data in managers.items():
-              print(f'  - {mgr}: {data.get(\"depCount\", 0)} deps in {data.get(\"fileCount\", 0)} files')
-          " 2>/dev/null)
-            if [ -n "$STATS" ]; then
-              echo "$STATS" >> $GITHUB_STEP_SUMMARY
-              echo "" >> $GITHUB_STEP_SUMMARY
-            fi
+            python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
+          import json
+
+          lines = []
+          with open('/tmp/renovate-log.ndjson') as f:
+              for line in f:
+                  try:
+                      lines.append(json.loads(line))
+                  except:
+                      pass
+
+          # Dependency stats
+          for line in lines:
+              if 'Dependency extraction complete' in line.get('msg', ''):
+                  stats = line.get('stats', {})
+                  total = stats.get('total', {})
+                  managers = stats.get('managers', {})
+                  print(f'- **Files scanned:** {total.get("fileCount", 0)}')
+                  print(f'- **Dependencies found:** {total.get("depCount", 0)}')
+                  for mgr, data in managers.items():
+                      print(f'  - {mgr}: {data.get("depCount", 0)} deps in {data.get("fileCount", 0)} files')
+                  print()
+                  break
+
+          # PRs created / updated
+          prs_created = [l for l in lines if 'PR created' in l.get('msg', '')]
+          prs_updated = [l for l in lines if 'PR updated' in l.get('msg', '')]
+          prs_closed = [l for l in lines if 'PR closed' in l.get('msg', '')]
+
+          if prs_created or prs_updated or prs_closed:
+              print('### PRs')
+              for l in prs_created:
+                  print(f'- ✅ Created: {l.get("prTitle", l.get("title", ""))}')
+              for l in prs_updated:
+                  print(f'- 🔄 Updated: {l.get("prTitle", l.get("title", ""))}')
+              for l in prs_closed:
+                  print(f'- ❌ Closed: {l.get("prTitle", l.get("title", ""))}')
+          else:
+              print('- No PRs created or updated')
+
+          EOF
           fi
 
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "[Dependency Dashboard](https://github.com/${{ github.repository }}/issues?q=is%3Aissue+Dependency+Dashboard)" >> $GITHUB_STEP_SUMMARY
           echo "[Open Renovate PRs](https://github.com/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Frenovate)" >> $GITHUB_STEP_SUMMARY

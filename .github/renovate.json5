@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "ignoreDeps": ["fluxcd/flux2"],
   "extends": [
     "config:recommended",
     ":dependencyDashboard",

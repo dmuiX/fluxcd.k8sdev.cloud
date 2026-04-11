@@ -1,0 +1,1907 @@
+{
+  "type": "object",
+  "properties": {
+    "global": {
+      "type": "object",
+      "properties": {
+        "imageRegistry": {
+          "type": "string"
+        },
+        "imagePullSecrets": {
+          "type": "array"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "tolerations": {
+          "type": "array"
+        },
+        "nodeSelector": {
+          "type": "object"
+        },
+        "cattle": {
+          "type": "object",
+          "properties": {
+            "systemDefaultRegistry": {
+              "type": "string"
+            },
+            "windowsCluster": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "tolerations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "effect": {
+                        "type": "string"
+                      },
+                      "operator": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "nodeSelector": {
+                  "type": "object",
+                  "properties": {
+                    "kubernetes.io/os": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "defaultSetting": {
+                  "type": "object",
+                  "properties": {
+                    "taintToleration": {
+                      "type": "string"
+                    },
+                    "systemManagedComponentsNodeSelector": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "networkPolicies": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "longhorn": {
+          "type": "object",
+          "properties": {
+            "engine": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "manager": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "ui": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "instanceManager": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "shareManager": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "backingImageManager": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "supportBundleKit": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "csi": {
+          "type": "object",
+          "properties": {
+            "attacher": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "provisioner": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "nodeDriverRegistrar": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "resizer": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "snapshotter": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "livenessProbe": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "openshift": {
+          "type": "object",
+          "properties": {
+            "oauthProxy": {
+              "type": "object",
+              "properties": {
+                "registry": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "pullPolicy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "ui": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "nodePort": {
+              "type": [
+                "null",
+                "string",
+                "integer",
+                "boolean",
+                "object",
+                "array"
+              ]
+            },
+            "loadBalancerClass": {
+              "type": "string"
+            },
+            "annotations": {
+              "type": "object"
+            },
+            "labels": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        },
+        "manager": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "nodePort": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "defaultClass": {
+          "type": "boolean"
+        },
+        "defaultFsType": {
+          "type": "string"
+        },
+        "defaultMkfsParams": {
+          "type": "string"
+        },
+        "defaultClassReplicaCount": {
+          "type": "integer"
+        },
+        "defaultDataLocality": {
+          "type": "string"
+        },
+        "reclaimPolicy": {
+          "type": "string"
+        },
+        "volumeBindingMode": {
+          "type": "string"
+        },
+        "migratable": {
+          "type": "boolean"
+        },
+        "disableRevisionCounter": {
+          "type": "string"
+        },
+        "nfsOptions": {
+          "type": "string"
+        },
+        "recurringJobSelector": {
+          "type": "object",
+          "properties": {
+            "enable": {
+              "type": "boolean"
+            },
+            "jobList": {
+              "type": "array"
+            }
+          },
+          "additionalProperties": false
+        },
+        "backingImage": {
+          "type": "object",
+          "properties": {
+            "enable": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": [
+                "null",
+                "string",
+                "integer",
+                "boolean",
+                "object",
+                "array"
+              ]
+            },
+            "dataSourceType": {
+              "type": [
+                "null",
+                "string",
+                "integer",
+                "boolean",
+                "object",
+                "array"
+              ]
+            },
+            "dataSourceParameters": {
+              "type": [
+                "null",
+                "string",
+                "integer",
+                "boolean",
+                "object",
+                "array"
+              ]
+            },
+            "expectedChecksum": {
+              "type": [
+                "null",
+                "string",
+                "integer",
+                "boolean",
+                "object",
+                "array"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "defaultDiskSelector": {
+          "type": "object",
+          "properties": {
+            "enable": {
+              "type": "boolean"
+            },
+            "selector": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "defaultNodeSelector": {
+          "type": "object",
+          "properties": {
+            "enable": {
+              "type": "boolean"
+            },
+            "selector": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "unmapMarkSnapChainRemoved": {
+          "type": "string"
+        },
+        "dataEngine": {
+          "type": "string"
+        },
+        "backupTargetName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "preUpgradeChecker": {
+      "type": "object",
+      "properties": {
+        "jobEnabled": {
+          "type": "boolean"
+        },
+        "upgradeVersionCheck": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "csi": {
+      "type": "object",
+      "properties": {
+        "kubeletRootDir": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "podAntiAffinityPreset": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "attacherReplicaCount": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "provisionerReplicaCount": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "resizerReplicaCount": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "snapshotterReplicaCount": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "defaultSettings": {
+      "type": "object",
+      "properties": {
+        "allowRecurringJobWhileVolumeDetached": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "createDefaultDiskLabeledNodes": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultDataPath": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultDataLocality": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaSoftAntiAffinity": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaAutoBalance": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "storageOverProvisioningPercentage": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "storageMinimalAvailablePercentage": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "storageReservedPercentageForDefaultDisk": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "upgradeChecker": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "upgradeResponderURL": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "managerUrl": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultReplicaCount": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultLonghornStaticStorageClass": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "failedBackupTTL": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "backupExecutionTimeout": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "restoreVolumeRecurringJobs": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "recurringSuccessfulJobsHistoryLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "recurringFailedJobsHistoryLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "recurringJobMaxRetention": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "supportBundleFailedHistoryLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "taintToleration": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "systemManagedComponentsNodeSelector": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "systemManagedCSIComponentsResourceLimits": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "priorityClass": {
+          "type": "string"
+        },
+        "autoSalvage": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "autoDeletePodWhenVolumeDetachedUnexpectedly": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "blacklistForAutoDeletePodWhenVolumeDetachedUnexpectedly": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "disableSchedulingOnCordonedNode": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaZoneSoftAntiAffinity": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaDiskSoftAntiAffinity": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "nodeDownPodDeletionPolicy": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "nodeDrainPolicy": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "detachManuallyAttachedVolumesWhenCordoned": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaReplenishmentWaitInterval": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "concurrentReplicaRebuildPerNodeLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "rebuildConcurrentSyncLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "concurrentVolumeBackupRestorePerNodeLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "disableRevisionCounter": {
+          "type": "string"
+        },
+        "systemManagedPodsImagePullPolicy": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "allowVolumeCreationWithDegradedAvailability": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "autoCleanupSystemGeneratedSnapshot": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "autoCleanupRecurringJobBackupSnapshot": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "concurrentAutomaticEngineUpgradePerNodeLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "backingImageCleanupWaitInterval": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "backingImageRecoveryWaitInterval": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "guaranteedInstanceManagerCPU": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "kubernetesClusterAutoscalerEnabled": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "orphanResourceAutoDeletion": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "orphanResourceAutoDeletionGracePeriod": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "storageNetwork": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "endpointNetworkForRWXVolume": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "deletingConfirmationFlag": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "engineReplicaTimeout": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "snapshotDataIntegrity": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "snapshotDataIntegrityImmediateCheckAfterSnapshotCreation": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "snapshotDataIntegrityCronjob": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "snapshotHeavyTaskConcurrentLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "removeSnapshotsDuringFilesystemTrim": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "fastReplicaRebuildEnabled": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaFileSyncHttpClientTimeout": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "longGRPCTimeOut": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "logLevel": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "logPath": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "backupCompressionMethod": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "backupConcurrentLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultBackupBlockSize": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "restoreConcurrentLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "v1DataEngine": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "v2DataEngine": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "dataEngineHugepageEnabled": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "dataEngineMemorySize": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "dataEngineCPUMask": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "replicaRebuildingBandwidthLimit": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultUblkQueueDepth": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "defaultUblkNumberOfQueue": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "instanceManagerPodLivenessProbeTimeout": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "allowEmptyNodeSelectorVolume": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "allowEmptyDiskSelectorVolume": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "allowCollectingLonghornUsageMetrics": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "disableSnapshotPurge": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "snapshotMaxCount": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "dataEngineLogLevel": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "dataEngineLogFlags": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "freezeFilesystemForSnapshot": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "autoCleanupSnapshotWhenDeleteBackup": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "autoCleanupSnapshotAfterOnDemandBackupCompleted": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "rwxVolumeFastFailover": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "offlineReplicaRebuilding": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "nodeDiskHealthMonitoring": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "csiAllowedTopologyKeys": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "defaultBackupStore": {
+      "type": "object",
+      "properties": {
+        "backupTarget": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "backupTargetCredentialSecret": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "pollInterval": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "privateRegistry": {
+      "type": "object",
+      "properties": {
+        "createSecret": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "registryUrl": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "registryUser": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "registryPasswd": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "registrySecret": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "longhornManager": {
+      "type": "object",
+      "properties": {
+        "log": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "priorityClass": {
+          "type": "string"
+        },
+        "tolerations": {
+          "type": "array"
+        },
+        "resources": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "nodeSelector": {
+          "type": "object"
+        },
+        "serviceAnnotations": {
+          "type": "object"
+        },
+        "serviceLabels": {
+          "type": "object"
+        },
+        "updateStrategy": {
+          "type": "object",
+          "properties": {
+            "rollingUpdate": {
+              "type": "object",
+              "properties": {
+                "maxUnavailable": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "longhornDriver": {
+      "type": "object",
+      "properties": {
+        "log": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "priorityClass": {
+          "type": "string"
+        },
+        "tolerations": {
+          "type": "array"
+        },
+        "nodeSelector": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "longhornUI": {
+      "type": "object",
+      "properties": {
+        "replicas": {
+          "type": "integer"
+        },
+        "priorityClass": {
+          "type": "string"
+        },
+        "affinity": {
+          "type": "object",
+          "properties": {
+            "podAntiAffinity": {
+              "type": "object",
+              "properties": {
+                "preferredDuringSchedulingIgnoredDuringExecution": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "weight": {
+                        "type": "integer"
+                      },
+                      "podAffinityTerm": {
+                        "type": "object",
+                        "properties": {
+                          "labelSelector": {
+                            "type": "object",
+                            "properties": {
+                              "matchExpressions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "key": {
+                                      "type": "string"
+                                    },
+                                    "operator": {
+                                      "type": "string"
+                                    },
+                                    "values": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "topologyKey": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "tolerations": {
+          "type": "array"
+        },
+        "nodeSelector": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "ingressClassName": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "host": {
+          "type": "string"
+        },
+        "extraHosts": {
+          "type": "array"
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "secureBackends": {
+          "type": "boolean"
+        },
+        "tlsSecret": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "pathType": {
+          "type": "string"
+        },
+        "annotations": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "secrets": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "httproute": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "parentRefs": {
+          "type": "array"
+        },
+        "hostnames": {
+          "type": "array"
+        },
+        "path": {
+          "type": "string"
+        },
+        "pathType": {
+          "type": "string"
+        },
+        "annotations": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "enablePSP": {
+      "type": "boolean"
+    },
+    "namespaceOverride": {
+      "type": "string"
+    },
+    "annotations": {
+      "type": "object"
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "serviceMonitor": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "additionalLabels": {
+              "type": "object"
+            },
+            "annotations": {
+              "type": "object"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "type": "string"
+            },
+            "relabelings": {
+              "type": "array"
+            },
+            "metricRelabelings": {
+              "type": "array"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "openshift": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "ui": {
+          "type": "object",
+          "properties": {
+            "route": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "proxy": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "enableGoCoverDir": {
+      "type": "boolean"
+    },
+    "extraObjects": {
+      "type": "array"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false
+}

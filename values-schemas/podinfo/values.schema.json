@@ -1,0 +1,948 @@
+{
+  "type": "object",
+  "properties": {
+    "replicaCount": {
+      "type": "integer"
+    },
+    "logLevel": {
+      "type": "string"
+    },
+    "host": {
+      "type": [
+        "null",
+        "string",
+        "integer",
+        "boolean",
+        "object",
+        "array"
+      ]
+    },
+    "backend": {
+      "type": [
+        "null",
+        "string",
+        "integer",
+        "boolean",
+        "object",
+        "array"
+      ]
+    },
+    "backends": {
+      "type": "array"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "pullPolicy": {
+          "type": "string"
+        },
+        "pullSecrets": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "faults": {
+      "type": "object",
+      "properties": {
+        "delay": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "boolean"
+        },
+        "unhealthy": {
+          "type": "boolean"
+        },
+        "unready": {
+          "type": "boolean"
+        },
+        "testFail": {
+          "type": "boolean"
+        },
+        "testTimeout": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "additionalLabels": {
+          "type": "object"
+        },
+        "type": {
+          "type": "string"
+        },
+        "metricsPort": {
+          "type": "integer"
+        },
+        "httpPort": {
+          "type": "integer"
+        },
+        "externalPort": {
+          "type": "integer"
+        },
+        "grpcPort": {
+          "type": "integer"
+        },
+        "grpcService": {
+          "type": "string"
+        },
+        "nodePort": {
+          "type": "integer"
+        },
+        "hostPort": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "trafficDistribution": {
+          "type": "string"
+        },
+        "externalTrafficPolicy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "h2c": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "extraArgs": {
+      "type": "array"
+    },
+    "extraEnvs": {
+      "type": "array"
+    },
+    "tls": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "secretName": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "certPath": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "hostPort": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "certificate": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "issuerRef": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "dnsNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "hooks": {
+      "type": "object",
+      "properties": {
+        "preInstall": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "postInstall": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "preDelete": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "postDelete": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "preUpgrade": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "postUpgrade": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "preRollback": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "postRollback": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "hookDeletePolicy": {
+                  "type": "string"
+                },
+                "ttlSecondsAfterFinished": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "sleepSeconds": {
+                  "type": [
+                    "null",
+                    "string",
+                    "integer",
+                    "boolean",
+                    "object",
+                    "array"
+                  ]
+                },
+                "exitCode": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "hpa": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "maxReplicas": {
+          "type": "integer"
+        },
+        "cpu": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "memory": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "requests": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "cache": {
+      "type": "string"
+    },
+    "redis": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "imagePullSecrets": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": false
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "imagePullSecrets": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": false
+    },
+    "securityContext": {
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "type": "object"
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "className": {
+          "type": "string"
+        },
+        "additionalLabels": {
+          "type": "object"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string"
+              },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "pathType": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "tls": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": false
+    },
+    "httpRoute": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "additionalLabels": {
+          "type": "object"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "parentRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "sectionName": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "hostnames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "matches": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "grpcRoute": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "additionalLabels": {
+          "type": "object"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "parentRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "sectionName": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "hostnames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "serviceMonitor": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "interval": {
+          "type": "string"
+        },
+        "additionalLabels": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "limits": {
+          "type": [
+            "null",
+            "string",
+            "integer",
+            "boolean",
+            "object",
+            "array"
+          ]
+        },
+        "requests": {
+          "type": "object",
+          "properties": {
+            "cpu": {
+              "type": "string"
+            },
+            "memory": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "nodeSelector": {
+      "type": "object"
+    },
+    "tolerations": {
+      "type": "array"
+    },
+    "affinity": {
+      "type": "object"
+    },
+    "podAnnotations": {
+      "type": "object"
+    },
+    "topologySpreadConstraints": {
+      "type": "array"
+    },
+    "podDisruptionBudget": {
+      "type": "object"
+    },
+    "probes": {
+      "type": "object",
+      "properties": {
+        "readiness": {
+          "type": "object",
+          "properties": {
+            "initialDelaySeconds": {
+              "type": "integer"
+            },
+            "timeoutSeconds": {
+              "type": "integer"
+            },
+            "failureThreshold": {
+              "type": "integer"
+            },
+            "successThreshold": {
+              "type": "integer"
+            },
+            "periodSeconds": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "liveness": {
+          "type": "object",
+          "properties": {
+            "initialDelaySeconds": {
+              "type": "integer"
+            },
+            "timeoutSeconds": {
+              "type": "integer"
+            },
+            "failureThreshold": {
+              "type": "integer"
+            },
+            "successThreshold": {
+              "type": "integer"
+            },
+            "periodSeconds": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "startup": {
+          "type": "object",
+          "properties": {
+            "enable": {
+              "type": "boolean"
+            },
+            "initialDelaySeconds": {
+              "type": "integer"
+            },
+            "timeoutSeconds": {
+              "type": "integer"
+            },
+            "failureThreshold": {
+              "type": "integer"
+            },
+            "successThreshold": {
+              "type": "integer"
+            },
+            "periodSeconds": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false
+}

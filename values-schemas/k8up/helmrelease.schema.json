@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Composite schema for k8up HelmRelease",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "HelmRelease"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "$ref": "./values.schema.json"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "releaseName": {
+              "type": "string"
+            },
+            "targetNamespace": {
+              "type": "string"
+            },
+            "chart": {
+              "type": "object"
+            },
+            "chartRef": {
+              "type": "object"
+            },
+            "install": {
+              "type": "object"
+            },
+            "upgrade": {
+              "type": "object"
+            },
+            "rollback": {
+              "type": "object"
+            },
+            "uninstall": {
+              "type": "object"
+            },
+            "valuesFrom": {
+              "type": "array"
+            },
+            "dependsOn": {
+              "type": "array"
+            },
+            "suspend": {
+              "type": "boolean"
+            },
+            "maxHistory": {
+              "type": "integer"
+            },
+            "persistentClient": {
+              "type": "boolean"
+            },
+            "driftDetection": {
+              "type": "object"
+            },
+            "postRenderers": {
+              "type": "array"
+            }
+          }
+        }
+      },
+      "required": [
+        "apiVersion",
+        "kind"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "not": {
+            "const": "HelmRelease"
+          }
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "spec": {
+          "type": "object"
+        }
+      }
+    }
+  ]
+}

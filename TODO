@@ -1,7 +1,0 @@
-- crd fetch script
-- validate task must run after each HelmRelease Save not just on task run
-- clean up the files that are in git working dir
-- Dokumentation for the scripts! READMES!!!
-- Split up in config: maybe automatically by the script...oh yeah the rest of the crds must also be known by the splic script...:D
-- values schema for the rest of the flux types? or can this already work with just the kubernetes ext?
-- 

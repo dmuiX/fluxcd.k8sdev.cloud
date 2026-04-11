@@ -37,7 +37,13 @@ jobs:
           steps.versions.outputs.latest != steps.versions.outputs.current &&
           steps.cache-flux.outputs.cache-hit != 'true'
         run: |
-          curl -s https://fluxcd.io/install.sh | FLUX_VERSION=${{ steps.versions.outputs.latest }} bash
+          VERSION=${{ steps.versions.outputs.latest }}
+          curl -sL "https://github.com/fluxcd/flux2/releases/download/${VERSION}/flux_${VERSION#v}_linux_amd64.tar.gz" -o flux.tar.gz
+          curl -sL "https://github.com/fluxcd/flux2/releases/download/${VERSION}/flux_${VERSION#v}_checksums.txt" -o checksums.txt
+          sha256sum --check --ignore-missing checksums.txt
+          tar -xzf flux.tar.gz flux
+          sudo mv flux /usr/local/bin/flux
+          rm flux.tar.gz checksums.txt
 
       - name: Update gotk-components.yaml
         if: steps.versions.outputs.latest != steps.versions.outputs.current

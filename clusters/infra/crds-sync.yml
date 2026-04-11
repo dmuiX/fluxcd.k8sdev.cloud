@@ -11,5 +11,4 @@ spec:
     name: flux-system
   path: infra/crds
   prune: false
-  # Never prune CRDs to avoid data loss
   timeout: 5m

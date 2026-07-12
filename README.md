@@ -6,7 +6,8 @@ The cluster itself is built with Talos Linux and provisioned in [k8s-cluster-tal
 
 ## Current Status
 
-As I use this cluster mainly to learn now stuff, its mainly not powered on: 1 VMs consume a ton of ressoucres that I need for my docker stack and other stuff. Therefore most the apps are prettty outdated now. Renovatebot is still active. Maybe I will deactivated it until I resume to maintain the cluster/
+As I use this cluster mainly to learn new stuff, its most of the time not powered on. 3 VMs just consume too much ressoucres that I can use better for my docker stack and other stuff.
+But renovatebot was active the whole time and has created a ton of PRs. I have just disabled it today 13.07.2026. 
 
 ## 🌐 Why Cilium for everything?
 

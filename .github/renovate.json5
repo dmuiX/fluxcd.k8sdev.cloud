@@ -1,5 +1,6 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  enabled: false,  // paused 07/2026 – cluster offline, updating in batches on spin-up
   ignorePaths: [
     'clusters/flux-system/gotk-components.yaml',
   ],
@@ -22,7 +23,7 @@
     },
   ],
   flux: {
-    enabled: true,
+    enabled: false,
     managerFilePatterns: [
       '/(^|/)infra/.+.yml$/',
       '/(^|/)apps/.+.yml$/',

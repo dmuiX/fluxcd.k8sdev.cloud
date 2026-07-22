@@ -9,6 +9,8 @@ The cluster itself is built with Talos Linux and provisioned in [k8s-cluster-tal
 As I use this cluster mainly to learn new stuff, its most of the time not powered on. 3 VMs just consume too much ressoucres that I can use better for my docker stack and other stuff.
 But renovatebot was active the whole time and has created a ton of PRs. I have just disabled it today 13.07.2026. 
 
+Versions are pinned to the last verified deployment (11/2025); expect the bootstrap to need version bumps before it runs again.
+
 ## 🌐 Why Cilium for everything?
 
 One component that covers the full networking stack — no need to combine multiple tools:

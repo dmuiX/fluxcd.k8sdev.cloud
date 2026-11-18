@@ -1,15 +1,14 @@
-# 🚀 Production Grade K8s Cluster — infra & apps deployed automatically via FluxCD
+# 📚 Talos + FluxCD Kubernetes — training project and reference
 
-A GitOps-managed Kubernetes playground cluster using [FluxCD](https://fluxcd.io/) — built to learn Kubernetes and get hands-on experience with running a production-grade cluster. This repo serves as a reference for a fully automated cluster setup with secrets management, observability, storage, and networking — no manual kubectl apply after bootstrapping.
+The GitOps half of a former Kubernetes training cluster using [FluxCD](https://fluxcd.io/). This repository preserves its configuration and learning notes for secrets management, observability, storage, networking, and application deployment.
 
-The cluster itself is built with Talos Linux and provisioned in [k8s-cluster-talos](https://github.com/dmuiX/k8s-cluster-talos).
+The former cluster used Talos Linux and was provisioned in [k8s-cluster-talos](https://github.com/dmuiX/k8s-cluster-talos). Both repositories are now retained as references.
 
 ## Current Status
 
-As I use this cluster mainly to learn new stuff, its most of the time not powered on. 3 VMs just consume too much ressoucres that I can use better for my docker stack and other stuff.
-But renovatebot was active the whole time and has created a ton of PRs. I have just disabled it today 13.07.2026. 
+> **Inactive — reference only, not a production deployment.** This Talos/Flux setup is no longer active in my infrastructure; my **k3s cluster has replaced it**. The repository remains solely as a learning and configuration reference.
 
-Versions are pinned to the last verified deployment (11/2025); expect the bootstrap to need version bumps before it runs again.
+Renovate was disabled on **13 July 2026**. Versions are pinned to the last verified deployment (**November 2025**); the manifests and bootstrap instructions below are historical references that need review and version updates before reuse.
 
 ## 🌐 Why Cilium for everything?
 
